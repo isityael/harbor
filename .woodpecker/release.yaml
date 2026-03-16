@@ -1,10 +1,8 @@
 # Harbor Go components — build, push, scan & sign pipeline
 # Triggered by sm-moshi version tags (v*-sm*)
 #
-# Builds 4 Go component images, then scans and signs each image.
-# Uses a remote builder on the Mac (SSH) for native-speed Go cross-compilation.
-# Dockerfiles use --platform=$BUILDPLATFORM so Go compiles natively on the
-# builder's architecture, then cross-compiles to TARGETARCH.
+# Builds 4 Go component images via SSH remote builder on Mac for
+# native-speed Go cross-compilation, then scans and signs each image.
 #
 # Images pushed to: harbor.m0sh1.cc/apps/harbor-{core,jobservice,registryctl,exporter}
 #
@@ -14,323 +12,361 @@
 #   cosign_key, cosign_password     — cosign signing
 #   notation_key, notation_cert     — notation signing
 when:
-- event: tag
-  ref: refs/tags/v*-sm*
-
-variables:
-- &harbor_logins
-  logins:
-  - registry: harbor.m0sh1.cc
-    username:
-      from_secret: harbor_username
-    password:
-      from_secret: harbor_password
-- &build_args
-  build_args:
-  - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
-  - "RELEASE_VERSION=${CI_COMMIT_TAG}"
-- &buildx_opts
-  platforms: linux/amd64
-  provenance: mode=max
-  buildkit_driveropt: network=host
-- &remote_builder
-  ssh_key:
-    from_secret: mac_builder_ssh_key
-  remote_builders:
-  - smeya@10.0.10.4
+  - event: tag
+    ref: "refs/tags/v*-sm*"
 
 steps:
-# ── Build & push ─────────────────────────────────────────────
-- name: build-core
-  image: woodpeckerci/plugin-docker-buildx
-  privileged: true
-  settings:
-    registry: harbor.m0sh1.cc
-    repo: harbor.m0sh1.cc/apps/harbor-core
-    dockerfile: build/docker/Dockerfile.core
-    context: .
-    tags:
-    - "${CI_COMMIT_TAG}"
-    - latest
-    <<: [*harbor_logins, *build_args, *buildx_opts, *remote_builder]
-    cache_from: 'type=registry\,ref=harbor.m0sh1.cc/cache/harbor-core:buildcache'
-    cache_to: 'type=registry,ref=harbor.m0sh1.cc/cache/harbor-core:buildcache,mode=max,ignore-error=true'
+  # ── Build & push ─────────────────────────────────────────────
+  - name: build-core
+    image: woodpeckerci/plugin-docker-buildx
+    privileged: true
+    settings:
+      registry: harbor.m0sh1.cc
+      repo: harbor.m0sh1.cc/apps/harbor-core
+      dockerfile: build/docker/Dockerfile.core
+      context: .
+      tags:
+        - "${CI_COMMIT_TAG}"
+        - latest
+      platforms: linux/amd64
+      logins:
+        - registry: harbor.m0sh1.cc
+          username:
+            from_secret: harbor_username
+          password:
+            from_secret: harbor_password
+      build_args:
+        - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
+        - "RELEASE_VERSION=${CI_COMMIT_TAG}"
+      ssh_key:
+        from_secret: mac_builder_ssh_key
+      remote_builders:
+        - smeya@10.0.10.4
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+      cache_from: "type=registry,ref=harbor.m0sh1.cc/cache/harbor-core:buildcache"
+      cache_to: "type=registry,ref=harbor.m0sh1.cc/cache/harbor-core:buildcache,mode=max,ignore-error=true"
 
-- name: build-jobservice
-  image: woodpeckerci/plugin-docker-buildx
-  privileged: true
-  settings:
-    registry: harbor.m0sh1.cc
-    repo: harbor.m0sh1.cc/apps/harbor-jobservice
-    dockerfile: build/docker/Dockerfile.jobservice
-    context: .
-    tags:
-    - "${CI_COMMIT_TAG}"
-    - latest
-    <<: [*harbor_logins, *build_args, *buildx_opts, *remote_builder]
-    cache_from: 'type=registry\,ref=harbor.m0sh1.cc/cache/harbor-jobservice:buildcache'
-    cache_to: 'type=registry,ref=harbor.m0sh1.cc/cache/harbor-jobservice:buildcache,mode=max,ignore-error=true'
+  - name: build-jobservice
+    image: woodpeckerci/plugin-docker-buildx
+    privileged: true
+    settings:
+      registry: harbor.m0sh1.cc
+      repo: harbor.m0sh1.cc/apps/harbor-jobservice
+      dockerfile: build/docker/Dockerfile.jobservice
+      context: .
+      tags:
+        - "${CI_COMMIT_TAG}"
+        - latest
+      platforms: linux/amd64
+      logins:
+        - registry: harbor.m0sh1.cc
+          username:
+            from_secret: harbor_username
+          password:
+            from_secret: harbor_password
+      build_args:
+        - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
+        - "RELEASE_VERSION=${CI_COMMIT_TAG}"
+      ssh_key:
+        from_secret: mac_builder_ssh_key
+      remote_builders:
+        - smeya@10.0.10.4
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+      cache_from: "type=registry,ref=harbor.m0sh1.cc/cache/harbor-jobservice:buildcache"
+      cache_to: "type=registry,ref=harbor.m0sh1.cc/cache/harbor-jobservice:buildcache,mode=max,ignore-error=true"
 
-- name: build-registryctl
-  image: woodpeckerci/plugin-docker-buildx
-  privileged: true
-  settings:
-    registry: harbor.m0sh1.cc
-    repo: harbor.m0sh1.cc/apps/harbor-registryctl
-    dockerfile: build/docker/Dockerfile.registryctl
-    context: .
-    tags:
-    - "${CI_COMMIT_TAG}"
-    - latest
-    <<: [*harbor_logins, *build_args, *buildx_opts, *remote_builder]
-    cache_from: 'type=registry\,ref=harbor.m0sh1.cc/cache/harbor-registryctl:buildcache'
-    cache_to: 'type=registry,ref=harbor.m0sh1.cc/cache/harbor-registryctl:buildcache,mode=max,ignore-error=true'
+  - name: build-registryctl
+    image: woodpeckerci/plugin-docker-buildx
+    privileged: true
+    settings:
+      registry: harbor.m0sh1.cc
+      repo: harbor.m0sh1.cc/apps/harbor-registryctl
+      dockerfile: build/docker/Dockerfile.registryctl
+      context: .
+      tags:
+        - "${CI_COMMIT_TAG}"
+        - latest
+      platforms: linux/amd64
+      logins:
+        - registry: harbor.m0sh1.cc
+          username:
+            from_secret: harbor_username
+          password:
+            from_secret: harbor_password
+      build_args:
+        - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
+        - "RELEASE_VERSION=${CI_COMMIT_TAG}"
+      ssh_key:
+        from_secret: mac_builder_ssh_key
+      remote_builders:
+        - smeya@10.0.10.4
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+      cache_from: "type=registry,ref=harbor.m0sh1.cc/cache/harbor-registryctl:buildcache"
+      cache_to: "type=registry,ref=harbor.m0sh1.cc/cache/harbor-registryctl:buildcache,mode=max,ignore-error=true"
 
-- name: build-exporter
-  image: woodpeckerci/plugin-docker-buildx
-  privileged: true
-  settings:
-    registry: harbor.m0sh1.cc
-    repo: harbor.m0sh1.cc/apps/harbor-exporter
-    dockerfile: build/docker/Dockerfile.exporter
-    context: .
-    tags:
-    - "${CI_COMMIT_TAG}"
-    - latest
-    <<: [*harbor_logins, *build_args, *buildx_opts, *remote_builder]
-    cache_from: 'type=registry\,ref=harbor.m0sh1.cc/cache/harbor-exporter:buildcache'
-    cache_to: 'type=registry,ref=harbor.m0sh1.cc/cache/harbor-exporter:buildcache,mode=max,ignore-error=true'
+  - name: build-exporter
+    image: woodpeckerci/plugin-docker-buildx
+    privileged: true
+    settings:
+      registry: harbor.m0sh1.cc
+      repo: harbor.m0sh1.cc/apps/harbor-exporter
+      dockerfile: build/docker/Dockerfile.exporter
+      context: .
+      tags:
+        - "${CI_COMMIT_TAG}"
+        - latest
+      platforms: linux/amd64
+      logins:
+        - registry: harbor.m0sh1.cc
+          username:
+            from_secret: harbor_username
+          password:
+            from_secret: harbor_password
+      build_args:
+        - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
+        - "RELEASE_VERSION=${CI_COMMIT_TAG}"
+      ssh_key:
+        from_secret: mac_builder_ssh_key
+      remote_builders:
+        - smeya@10.0.10.4
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+      cache_from: "type=registry,ref=harbor.m0sh1.cc/cache/harbor-exporter:buildcache"
+      cache_to: "type=registry,ref=harbor.m0sh1.cc/cache/harbor-exporter:buildcache,mode=max,ignore-error=true"
 
-# ── Wait for Garage replication ──────────────────────────────
-- name: wait-for-replication
-  image: dhi.io/busybox:1.37.0-debian13@sha256:19defb1059fdfbf20742eb8057c823d9a46d2aa9c0506ada9e9e211f53b32ac6
-  commands:
-  - echo "Waiting 10s for Garage replication..."
-  - sleep 10
+  # ── Wait for Garage replication ──────────────────────────────
+  - name: wait-for-replication
+    image: "dhi.io/busybox:1.37.0-debian13@sha256:19defb1059fdfbf20742eb8057c823d9a46d2aa9c0506ada9e9e211f53b32ac6"
+    commands:
+      - echo "Waiting 10s for Garage replication..."
+      - sleep 10
 
-# ── Trivy scan (all 4 images) ───────────────────────────────
-- name: trivy-scan-core
-  failure: ignore
-  image: dhi.io/trivy:0.69.3-debian13-dev@sha256:5cb00cdc8470abcc76030811ab556dd4d1a3951c76b7295f52c0f837aca1688e
-  environment:
-    IMAGE_REF: harbor.m0sh1.cc/apps/harbor-core:${CI_COMMIT_TAG}
-    TRIVY_USERNAME:
-      from_secret: harbor_username
-    TRIVY_PASSWORD:
-      from_secret: harbor_password
-  commands:
-  - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
-  - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
+  # ── Trivy scan (all 4 images) ───────────────────────────────
+  - name: trivy-scan-core
+    failure: ignore
+    image: "dhi.io/trivy:0.69.3-debian13-dev@sha256:5cb00cdc8470abcc76030811ab556dd4d1a3951c76b7295f52c0f837aca1688e"
+    environment:
+      IMAGE_REF: "harbor.m0sh1.cc/apps/harbor-core:${CI_COMMIT_TAG}"
+      TRIVY_USERNAME:
+        from_secret: harbor_username
+      TRIVY_PASSWORD:
+        from_secret: harbor_password
+    commands:
+      - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
+      - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
 
-- name: trivy-scan-jobservice
-  failure: ignore
-  image: dhi.io/trivy:0.69.3-debian13-dev@sha256:5cb00cdc8470abcc76030811ab556dd4d1a3951c76b7295f52c0f837aca1688e
-  environment:
-    IMAGE_REF: harbor.m0sh1.cc/apps/harbor-jobservice:${CI_COMMIT_TAG}
-    TRIVY_USERNAME:
-      from_secret: harbor_username
-    TRIVY_PASSWORD:
-      from_secret: harbor_password
-  commands:
-  - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
-  - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
+  - name: trivy-scan-jobservice
+    failure: ignore
+    image: "dhi.io/trivy:0.69.3-debian13-dev@sha256:5cb00cdc8470abcc76030811ab556dd4d1a3951c76b7295f52c0f837aca1688e"
+    environment:
+      IMAGE_REF: "harbor.m0sh1.cc/apps/harbor-jobservice:${CI_COMMIT_TAG}"
+      TRIVY_USERNAME:
+        from_secret: harbor_username
+      TRIVY_PASSWORD:
+        from_secret: harbor_password
+    commands:
+      - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
+      - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
 
-- name: trivy-scan-registryctl
-  failure: ignore
-  image: dhi.io/trivy:0.69.3-debian13-dev@sha256:5cb00cdc8470abcc76030811ab556dd4d1a3951c76b7295f52c0f837aca1688e
-  environment:
-    IMAGE_REF: harbor.m0sh1.cc/apps/harbor-registryctl:${CI_COMMIT_TAG}
-    TRIVY_USERNAME:
-      from_secret: harbor_username
-    TRIVY_PASSWORD:
-      from_secret: harbor_password
-  commands:
-  - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
-  - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
+  - name: trivy-scan-registryctl
+    failure: ignore
+    image: "dhi.io/trivy:0.69.3-debian13-dev@sha256:5cb00cdc8470abcc76030811ab556dd4d1a3951c76b7295f52c0f837aca1688e"
+    environment:
+      IMAGE_REF: "harbor.m0sh1.cc/apps/harbor-registryctl:${CI_COMMIT_TAG}"
+      TRIVY_USERNAME:
+        from_secret: harbor_username
+      TRIVY_PASSWORD:
+        from_secret: harbor_password
+    commands:
+      - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
+      - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
 
-- name: trivy-scan-exporter
-  failure: ignore
-  image: dhi.io/trivy:0.69.3-debian13-dev@sha256:5cb00cdc8470abcc76030811ab556dd4d1a3951c76b7295f52c0f837aca1688e
-  environment:
-    IMAGE_REF: harbor.m0sh1.cc/apps/harbor-exporter:${CI_COMMIT_TAG}
-    TRIVY_USERNAME:
-      from_secret: harbor_username
-    TRIVY_PASSWORD:
-      from_secret: harbor_password
-  commands:
-  - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
-  - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
+  - name: trivy-scan-exporter
+    failure: ignore
+    image: "dhi.io/trivy:0.69.3-debian13-dev@sha256:5cb00cdc8470abcc76030811ab556dd4d1a3951c76b7295f52c0f837aca1688e"
+    environment:
+      IMAGE_REF: "harbor.m0sh1.cc/apps/harbor-exporter:${CI_COMMIT_TAG}"
+      TRIVY_USERNAME:
+        from_secret: harbor_username
+      TRIVY_PASSWORD:
+        from_secret: harbor_password
+    commands:
+      - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
+      - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
 
-# ── Cosign sign (all 4 images) ──────────────────────────────
-- name: cosign-sign-core
-  image: dhi.io/cosign:3.0.5-debian13-dev@sha256:75d08035bfa25d496c7de3990500f375b314de3d75e6094b6ed19d37a7b9b080
-  environment:
-    IMAGE_REF: harbor.m0sh1.cc/apps/harbor-core:${CI_COMMIT_TAG}
-    COSIGN_EXPERIMENTAL: "1"
-    COSIGN_KEY:
-      from_secret: cosign_key
-    COSIGN_PASSWORD:
-      from_secret: cosign_password
-    REGISTRY_USERNAME:
-      from_secret: harbor_username
-    REGISTRY_PASSWORD:
-      from_secret: harbor_password
-  commands:
-  - echo "$COSIGN_KEY" > /tmp/cosign.key
-  - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
-  - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
-  - rm -f /tmp/cosign.key
+  # ── Cosign sign (all 4 images) ──────────────────────────────
+  - name: cosign-sign-core
+    image: "dhi.io/cosign:3.0.5-debian13-dev@sha256:75d08035bfa25d496c7de3990500f375b314de3d75e6094b6ed19d37a7b9b080"
+    environment:
+      IMAGE_REF: "harbor.m0sh1.cc/apps/harbor-core:${CI_COMMIT_TAG}"
+      COSIGN_EXPERIMENTAL: "1"
+      COSIGN_KEY:
+        from_secret: cosign_key
+      COSIGN_PASSWORD:
+        from_secret: cosign_password
+      REGISTRY_USERNAME:
+        from_secret: harbor_username
+      REGISTRY_PASSWORD:
+        from_secret: harbor_password
+    commands:
+      - echo "$COSIGN_KEY" > /tmp/cosign.key
+      - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
+      - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
+      - rm -f /tmp/cosign.key
 
-- name: cosign-sign-jobservice
-  image: dhi.io/cosign:3.0.5-debian13-dev@sha256:75d08035bfa25d496c7de3990500f375b314de3d75e6094b6ed19d37a7b9b080
-  environment:
-    IMAGE_REF: harbor.m0sh1.cc/apps/harbor-jobservice:${CI_COMMIT_TAG}
-    COSIGN_EXPERIMENTAL: "1"
-    COSIGN_KEY:
-      from_secret: cosign_key
-    COSIGN_PASSWORD:
-      from_secret: cosign_password
-    REGISTRY_USERNAME:
-      from_secret: harbor_username
-    REGISTRY_PASSWORD:
-      from_secret: harbor_password
-  commands:
-  - echo "$COSIGN_KEY" > /tmp/cosign.key
-  - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
-  - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
-  - rm -f /tmp/cosign.key
+  - name: cosign-sign-jobservice
+    image: "dhi.io/cosign:3.0.5-debian13-dev@sha256:75d08035bfa25d496c7de3990500f375b314de3d75e6094b6ed19d37a7b9b080"
+    environment:
+      IMAGE_REF: "harbor.m0sh1.cc/apps/harbor-jobservice:${CI_COMMIT_TAG}"
+      COSIGN_EXPERIMENTAL: "1"
+      COSIGN_KEY:
+        from_secret: cosign_key
+      COSIGN_PASSWORD:
+        from_secret: cosign_password
+      REGISTRY_USERNAME:
+        from_secret: harbor_username
+      REGISTRY_PASSWORD:
+        from_secret: harbor_password
+    commands:
+      - echo "$COSIGN_KEY" > /tmp/cosign.key
+      - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
+      - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
+      - rm -f /tmp/cosign.key
 
-- name: cosign-sign-registryctl
-  image: dhi.io/cosign:3.0.5-debian13-dev@sha256:75d08035bfa25d496c7de3990500f375b314de3d75e6094b6ed19d37a7b9b080
-  environment:
-    IMAGE_REF: harbor.m0sh1.cc/apps/harbor-registryctl:${CI_COMMIT_TAG}
-    COSIGN_EXPERIMENTAL: "1"
-    COSIGN_KEY:
-      from_secret: cosign_key
-    COSIGN_PASSWORD:
-      from_secret: cosign_password
-    REGISTRY_USERNAME:
-      from_secret: harbor_username
-    REGISTRY_PASSWORD:
-      from_secret: harbor_password
-  commands:
-  - echo "$COSIGN_KEY" > /tmp/cosign.key
-  - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
-  - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
-  - rm -f /tmp/cosign.key
+  - name: cosign-sign-registryctl
+    image: "dhi.io/cosign:3.0.5-debian13-dev@sha256:75d08035bfa25d496c7de3990500f375b314de3d75e6094b6ed19d37a7b9b080"
+    environment:
+      IMAGE_REF: "harbor.m0sh1.cc/apps/harbor-registryctl:${CI_COMMIT_TAG}"
+      COSIGN_EXPERIMENTAL: "1"
+      COSIGN_KEY:
+        from_secret: cosign_key
+      COSIGN_PASSWORD:
+        from_secret: cosign_password
+      REGISTRY_USERNAME:
+        from_secret: harbor_username
+      REGISTRY_PASSWORD:
+        from_secret: harbor_password
+    commands:
+      - echo "$COSIGN_KEY" > /tmp/cosign.key
+      - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
+      - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
+      - rm -f /tmp/cosign.key
 
-- name: cosign-sign-exporter
-  image: dhi.io/cosign:3.0.5-debian13-dev@sha256:75d08035bfa25d496c7de3990500f375b314de3d75e6094b6ed19d37a7b9b080
-  environment:
-    IMAGE_REF: harbor.m0sh1.cc/apps/harbor-exporter:${CI_COMMIT_TAG}
-    COSIGN_EXPERIMENTAL: "1"
-    COSIGN_KEY:
-      from_secret: cosign_key
-    COSIGN_PASSWORD:
-      from_secret: cosign_password
-    REGISTRY_USERNAME:
-      from_secret: harbor_username
-    REGISTRY_PASSWORD:
-      from_secret: harbor_password
-  commands:
-  - echo "$COSIGN_KEY" > /tmp/cosign.key
-  - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
-  - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
-  - rm -f /tmp/cosign.key
+  - name: cosign-sign-exporter
+    image: "dhi.io/cosign:3.0.5-debian13-dev@sha256:75d08035bfa25d496c7de3990500f375b314de3d75e6094b6ed19d37a7b9b080"
+    environment:
+      IMAGE_REF: "harbor.m0sh1.cc/apps/harbor-exporter:${CI_COMMIT_TAG}"
+      COSIGN_EXPERIMENTAL: "1"
+      COSIGN_KEY:
+        from_secret: cosign_key
+      COSIGN_PASSWORD:
+        from_secret: cosign_password
+      REGISTRY_USERNAME:
+        from_secret: harbor_username
+      REGISTRY_PASSWORD:
+        from_secret: harbor_password
+    commands:
+      - echo "$COSIGN_KEY" > /tmp/cosign.key
+      - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
+      - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
+      - rm -f /tmp/cosign.key
 
-# ── Notation sign (all 4 images) ────────────────────────────
-- name: notation-sign-core
-  image: dhi.io/notation:1.3.2-debian13-dev@sha256:1837c85a13e06ab2fc739e4c760df9dd630ad8d97b8951e8f08c0abcf682862d
-  environment:
-    IMAGE_REF: harbor.m0sh1.cc/apps/harbor-core:${CI_COMMIT_TAG}
-    NOTATION_KEY:
-      from_secret: notation_key
-    NOTATION_CERT:
-      from_secret: notation_cert
-    REGISTRY_USERNAME:
-      from_secret: harbor_username
-    REGISTRY_PASSWORD:
-      from_secret: harbor_password
-  commands:
-  - mkdir -p /tmp/notation $HOME/.config/notation $HOME/.docker
-  - echo "$NOTATION_KEY" > /tmp/notation/harbor.key
-  - echo "$NOTATION_CERT" > /tmp/notation/harbor.crt
-  - |
-    cat > $HOME/.config/notation/signingkeys.json <<EOF
-    {"default":"harbor","keys":[{"name":"harbor","keyPath":"/tmp/notation/harbor.key","certPath":"/tmp/notation/harbor.crt"}]}
-    EOF
-  - printf '{"auths":{"harbor.m0sh1.cc":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
-  - notation sign --force-referrers-tag=false --key harbor $${IMAGE_REF}
-  - rm -rf /tmp/notation $HOME/.docker/config.json
+  # ── Notation sign (all 4 images) ────────────────────────────
+  - name: notation-sign-core
+    image: "dhi.io/notation:1.3.2-debian13-dev@sha256:1837c85a13e06ab2fc739e4c760df9dd630ad8d97b8951e8f08c0abcf682862d"
+    environment:
+      IMAGE_REF: "harbor.m0sh1.cc/apps/harbor-core:${CI_COMMIT_TAG}"
+      NOTATION_KEY:
+        from_secret: notation_key
+      NOTATION_CERT:
+        from_secret: notation_cert
+      REGISTRY_USERNAME:
+        from_secret: harbor_username
+      REGISTRY_PASSWORD:
+        from_secret: harbor_password
+    commands:
+      - mkdir -p /tmp/notation $HOME/.config/notation $HOME/.docker
+      - echo "$NOTATION_KEY" > /tmp/notation/harbor.key
+      - echo "$NOTATION_CERT" > /tmp/notation/harbor.crt
+      - |
+        cat > $HOME/.config/notation/signingkeys.json <<EOF
+        {"default":"harbor","keys":[{"name":"harbor","keyPath":"/tmp/notation/harbor.key","certPath":"/tmp/notation/harbor.crt"}]}
+        EOF
+      - printf '{"auths":{"harbor.m0sh1.cc":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
+      - notation sign --force-referrers-tag=false --key harbor $${IMAGE_REF}
+      - rm -rf /tmp/notation $HOME/.docker/config.json
 
-- name: notation-sign-jobservice
-  image: dhi.io/notation:1.3.2-debian13-dev@sha256:1837c85a13e06ab2fc739e4c760df9dd630ad8d97b8951e8f08c0abcf682862d
-  environment:
-    IMAGE_REF: harbor.m0sh1.cc/apps/harbor-jobservice:${CI_COMMIT_TAG}
-    NOTATION_KEY:
-      from_secret: notation_key
-    NOTATION_CERT:
-      from_secret: notation_cert
-    REGISTRY_USERNAME:
-      from_secret: harbor_username
-    REGISTRY_PASSWORD:
-      from_secret: harbor_password
-  commands:
-  - mkdir -p /tmp/notation $HOME/.config/notation $HOME/.docker
-  - echo "$NOTATION_KEY" > /tmp/notation/harbor.key
-  - echo "$NOTATION_CERT" > /tmp/notation/harbor.crt
-  - |
-    cat > $HOME/.config/notation/signingkeys.json <<EOF
-    {"default":"harbor","keys":[{"name":"harbor","keyPath":"/tmp/notation/harbor.key","certPath":"/tmp/notation/harbor.crt"}]}
-    EOF
-  - printf '{"auths":{"harbor.m0sh1.cc":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
-  - notation sign --force-referrers-tag=false --key harbor $${IMAGE_REF}
-  - rm -rf /tmp/notation $HOME/.docker/config.json
+  - name: notation-sign-jobservice
+    image: "dhi.io/notation:1.3.2-debian13-dev@sha256:1837c85a13e06ab2fc739e4c760df9dd630ad8d97b8951e8f08c0abcf682862d"
+    environment:
+      IMAGE_REF: "harbor.m0sh1.cc/apps/harbor-jobservice:${CI_COMMIT_TAG}"
+      NOTATION_KEY:
+        from_secret: notation_key
+      NOTATION_CERT:
+        from_secret: notation_cert
+      REGISTRY_USERNAME:
+        from_secret: harbor_username
+      REGISTRY_PASSWORD:
+        from_secret: harbor_password
+    commands:
+      - mkdir -p /tmp/notation $HOME/.config/notation $HOME/.docker
+      - echo "$NOTATION_KEY" > /tmp/notation/harbor.key
+      - echo "$NOTATION_CERT" > /tmp/notation/harbor.crt
+      - |
+        cat > $HOME/.config/notation/signingkeys.json <<EOF
+        {"default":"harbor","keys":[{"name":"harbor","keyPath":"/tmp/notation/harbor.key","certPath":"/tmp/notation/harbor.crt"}]}
+        EOF
+      - printf '{"auths":{"harbor.m0sh1.cc":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
+      - notation sign --force-referrers-tag=false --key harbor $${IMAGE_REF}
+      - rm -rf /tmp/notation $HOME/.docker/config.json
 
-- name: notation-sign-registryctl
-  image: dhi.io/notation:1.3.2-debian13-dev@sha256:1837c85a13e06ab2fc739e4c760df9dd630ad8d97b8951e8f08c0abcf682862d
-  environment:
-    IMAGE_REF: harbor.m0sh1.cc/apps/harbor-registryctl:${CI_COMMIT_TAG}
-    NOTATION_KEY:
-      from_secret: notation_key
-    NOTATION_CERT:
-      from_secret: notation_cert
-    REGISTRY_USERNAME:
-      from_secret: harbor_username
-    REGISTRY_PASSWORD:
-      from_secret: harbor_password
-  commands:
-  - mkdir -p /tmp/notation $HOME/.config/notation $HOME/.docker
-  - echo "$NOTATION_KEY" > /tmp/notation/harbor.key
-  - echo "$NOTATION_CERT" > /tmp/notation/harbor.crt
-  - |
-    cat > $HOME/.config/notation/signingkeys.json <<EOF
-    {"default":"harbor","keys":[{"name":"harbor","keyPath":"/tmp/notation/harbor.key","certPath":"/tmp/notation/harbor.crt"}]}
-    EOF
-  - printf '{"auths":{"harbor.m0sh1.cc":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
-  - notation sign --force-referrers-tag=false --key harbor $${IMAGE_REF}
-  - rm -rf /tmp/notation $HOME/.docker/config.json
+  - name: notation-sign-registryctl
+    image: "dhi.io/notation:1.3.2-debian13-dev@sha256:1837c85a13e06ab2fc739e4c760df9dd630ad8d97b8951e8f08c0abcf682862d"
+    environment:
+      IMAGE_REF: "harbor.m0sh1.cc/apps/harbor-registryctl:${CI_COMMIT_TAG}"
+      NOTATION_KEY:
+        from_secret: notation_key
+      NOTATION_CERT:
+        from_secret: notation_cert
+      REGISTRY_USERNAME:
+        from_secret: harbor_username
+      REGISTRY_PASSWORD:
+        from_secret: harbor_password
+    commands:
+      - mkdir -p /tmp/notation $HOME/.config/notation $HOME/.docker
+      - echo "$NOTATION_KEY" > /tmp/notation/harbor.key
+      - echo "$NOTATION_CERT" > /tmp/notation/harbor.crt
+      - |
+        cat > $HOME/.config/notation/signingkeys.json <<EOF
+        {"default":"harbor","keys":[{"name":"harbor","keyPath":"/tmp/notation/harbor.key","certPath":"/tmp/notation/harbor.crt"}]}
+        EOF
+      - printf '{"auths":{"harbor.m0sh1.cc":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
+      - notation sign --force-referrers-tag=false --key harbor $${IMAGE_REF}
+      - rm -rf /tmp/notation $HOME/.docker/config.json
 
-- name: notation-sign-exporter
-  image: dhi.io/notation:1.3.2-debian13-dev@sha256:1837c85a13e06ab2fc739e4c760df9dd630ad8d97b8951e8f08c0abcf682862d
-  environment:
-    IMAGE_REF: harbor.m0sh1.cc/apps/harbor-exporter:${CI_COMMIT_TAG}
-    NOTATION_KEY:
-      from_secret: notation_key
-    NOTATION_CERT:
-      from_secret: notation_cert
-    REGISTRY_USERNAME:
-      from_secret: harbor_username
-    REGISTRY_PASSWORD:
-      from_secret: harbor_password
-  commands:
-  - mkdir -p /tmp/notation $HOME/.config/notation $HOME/.docker
-  - echo "$NOTATION_KEY" > /tmp/notation/harbor.key
-  - echo "$NOTATION_CERT" > /tmp/notation/harbor.crt
-  - |
-    cat > $HOME/.config/notation/signingkeys.json <<EOF
-    {"default":"harbor","keys":[{"name":"harbor","keyPath":"/tmp/notation/harbor.key","certPath":"/tmp/notation/harbor.crt"}]}
-    EOF
-  - printf '{"auths":{"harbor.m0sh1.cc":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
-  - notation sign --force-referrers-tag=false --key harbor $${IMAGE_REF}
-  - rm -rf /tmp/notation $HOME/.docker/config.json
+  - name: notation-sign-exporter
+    image: "dhi.io/notation:1.3.2-debian13-dev@sha256:1837c85a13e06ab2fc739e4c760df9dd630ad8d97b8951e8f08c0abcf682862d"
+    environment:
+      IMAGE_REF: "harbor.m0sh1.cc/apps/harbor-exporter:${CI_COMMIT_TAG}"
+      NOTATION_KEY:
+        from_secret: notation_key
+      NOTATION_CERT:
+        from_secret: notation_cert
+      REGISTRY_USERNAME:
+        from_secret: harbor_username
+      REGISTRY_PASSWORD:
+        from_secret: harbor_password
+    commands:
+      - mkdir -p /tmp/notation $HOME/.config/notation $HOME/.docker
+      - echo "$NOTATION_KEY" > /tmp/notation/harbor.key
+      - echo "$NOTATION_CERT" > /tmp/notation/harbor.crt
+      - |
+        cat > $HOME/.config/notation/signingkeys.json <<EOF
+        {"default":"harbor","keys":[{"name":"harbor","keyPath":"/tmp/notation/harbor.key","certPath":"/tmp/notation/harbor.crt"}]}
+        EOF
+      - printf '{"auths":{"harbor.m0sh1.cc":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
+      - notation sign --force-referrers-tag=false --key harbor $${IMAGE_REF}
+      - rm -rf /tmp/notation $HOME/.docker/config.json
