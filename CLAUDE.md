@@ -66,7 +66,7 @@ git push origin sm-moshi/v2.15 --tags
 cd src && go vet ./...
 cd src && staticcheck $(go list ./... | grep -v '\.pb\.go')
 # Local Docker build test:
-docker build -f .woodpecker/docker/Dockerfile.core -t harbor-core-test .
+docker build -f build/docker/Dockerfile.core -t harbor-core-test .
 ```
 
 ## Cherry-picked PRs (v2.15.0-rc2-sm1)
