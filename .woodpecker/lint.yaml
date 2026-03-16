@@ -30,6 +30,22 @@ steps:
       mount:
         - .go-mod-cache
 
+  - name: generate-swagger
+    image: golang:1.25.7
+    environment:
+      GOMODCACHE: /woodpecker/src/github.com/sm-moshi/harbor/.go-mod-cache
+    commands:
+      - go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1
+      - swagger generate server
+        --template-dir=tools/swagger/templates
+        --exclude-main
+        --additional-initialism=CVE
+        --additional-initialism=GC
+        --additional-initialism=OIDC
+        -f api/v2.0/swagger.yaml
+        -A harbor
+        --target src/server/v2.0
+
   - name: build-check
     image: golang:1.25.7
     environment:
