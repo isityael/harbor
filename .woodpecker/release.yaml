@@ -43,10 +43,8 @@ steps:
         - smeya@10.0.10.4
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
-      cache_from:
-        - "type=registry,ref=harbor.m0sh1.cc/cache/harbor-core:buildcache"
-      cache_to:
-        - "type=registry,ref=harbor.m0sh1.cc/cache/harbor-core:buildcache,mode=max,ignore-error=true"
+      cache_from: "harbor.m0sh1.cc/cache/harbor-core:buildcache"
+      cache_to: "type=registry,ref=harbor.m0sh1.cc/cache/harbor-core:buildcache,mode=max,ignore-error=true"
 
   - name: build-jobservice
     image: woodpeckerci/plugin-docker-buildx
@@ -74,10 +72,8 @@ steps:
         - smeya@10.0.10.4
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
-      cache_from:
-        - "type=registry,ref=harbor.m0sh1.cc/cache/harbor-jobservice:buildcache"
-      cache_to:
-        - "type=registry,ref=harbor.m0sh1.cc/cache/harbor-jobservice:buildcache,mode=max,ignore-error=true"
+      cache_from: "harbor.m0sh1.cc/cache/harbor-jobservice:buildcache"
+      cache_to: "type=registry,ref=harbor.m0sh1.cc/cache/harbor-jobservice:buildcache,mode=max,ignore-error=true"
 
   - name: build-registryctl
     image: woodpeckerci/plugin-docker-buildx
@@ -105,10 +101,8 @@ steps:
         - smeya@10.0.10.4
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
-      cache_from:
-        - "type=registry,ref=harbor.m0sh1.cc/cache/harbor-registryctl:buildcache"
-      cache_to:
-        - "type=registry,ref=harbor.m0sh1.cc/cache/harbor-registryctl:buildcache,mode=max,ignore-error=true"
+      cache_from: "harbor.m0sh1.cc/cache/harbor-registryctl:buildcache"
+      cache_to: "type=registry,ref=harbor.m0sh1.cc/cache/harbor-registryctl:buildcache,mode=max,ignore-error=true"
 
   - name: build-exporter
     image: woodpeckerci/plugin-docker-buildx
@@ -136,10 +130,8 @@ steps:
         - smeya@10.0.10.4
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
-      cache_from:
-        - "type=registry,ref=harbor.m0sh1.cc/cache/harbor-exporter:buildcache"
-      cache_to:
-        - "type=registry,ref=harbor.m0sh1.cc/cache/harbor-exporter:buildcache,mode=max,ignore-error=true"
+      cache_from: "harbor.m0sh1.cc/cache/harbor-exporter:buildcache"
+      cache_to: "type=registry,ref=harbor.m0sh1.cc/cache/harbor-exporter:buildcache,mode=max,ignore-error=true"
 
   # ── Wait for Garage replication ──────────────────────────────
   - name: wait-for-replication
