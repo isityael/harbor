@@ -1,0 +1,51 @@
+# Multi-stage Dockerfile for harbor-core
+# Built from sm-moshi/harbor fork with cherry-picked fixes
+#
+# Cross-compilation: builder runs on BUILDPLATFORM (native speed),
+# Go cross-compiles to TARGETARCH. Only the runtime stage uses QEMU.
+ARG GO_VERSION=1.25.7
+
+FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS builder
+ARG GITCOMMIT=unknown
+ARG RELEASE_VERSION=dev
+ARG TARGETOS=linux
+ARG TARGETARCH=amd64
+
+WORKDIR /harbor
+COPY src/ ./src/
+
+RUN cd src && CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    go build -o /out/harbor_core \
+    -ldflags "-w -s \
+    -X github.com/goharbor/harbor/src/pkg/version.GitCommit=${GITCOMMIT} \
+    -X github.com/goharbor/harbor/src/pkg/version.ReleaseVersion=${RELEASE_VERSION}" \
+    ./core
+
+FROM photon:5.0
+
+RUN tdnf install -y tzdata shadow curl >> /dev/null \
+    && tdnf clean all \
+    && groupadd -r -g 10000 harbor \
+    && useradd --no-log-init -r -m -g 10000 -u 10000 harbor \
+    && mkdir -p /harbor/
+
+COPY --from=builder /out/harbor_core /harbor/
+COPY make/photon/core/entrypoint.sh /harbor/
+COPY make/photon/common/install_cert.sh /harbor/
+COPY src/core/views /harbor/views
+COPY make/migrations /harbor/migrations
+COPY icons /harbor/icons
+
+RUN chown -R harbor:harbor /etc/pki/tls/certs \
+    && chown -R harbor:harbor /harbor/ \
+    && chmod u+x /harbor/entrypoint.sh \
+    && chmod u+x /harbor/install_cert.sh \
+    && chmod u+x /harbor/harbor_core
+
+HEALTHCHECK --interval=30s --timeout=10s \
+    CMD curl --fail -s http://localhost:8080/api/v2.0/ping || \
+        curl -k --fail -s https://localhost:8443/api/v2.0/ping || exit 1
+
+WORKDIR /harbor/
+USER harbor
+ENTRYPOINT ["/harbor/entrypoint.sh"]
