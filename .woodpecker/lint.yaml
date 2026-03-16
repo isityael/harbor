@@ -1,8 +1,9 @@
 # Harbor Go source — lint pipeline
 # Runs on push/PR to sm-moshi/v2.15 branch
 #
-# NOTE: server/v2.0/{models,restapi} are swagger-generated and not checked in.
-# Exclude ./server/... from linting to avoid missing module errors.
+# Only lint the 4 Go components we build. The full repo has swagger-generated
+# code (server/v2.0/{models,restapi}) that isn't checked in, which breaks
+# go vet on any package that transitively imports it.
 when:
   - event: [push, pull_request]
     branch: sm-moshi/v2.15
@@ -11,10 +12,10 @@ steps:
   - name: go-vet
     image: golang:1.25.7
     commands:
-      - cd src && go vet $(go list ./... | grep -v '/server/')
+      - cd src && go vet ./core/... ./jobservice/... ./registryctl/... ./cmd/exporter/...
 
   - name: staticcheck
     image: golang:1.25.7
     commands:
       - go install honnef.co/go/tools/cmd/staticcheck@latest
-      - cd src && staticcheck $(go list ./... | grep -v -e '\.pb\.go' -e '/server/')
+      - cd src && staticcheck ./core/... ./jobservice/... ./registryctl/... ./cmd/exporter/...
