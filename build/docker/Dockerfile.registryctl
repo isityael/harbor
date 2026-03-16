@@ -2,17 +2,21 @@
 # Built from sm-moshi/harbor fork with cherry-picked fixes
 #
 # NOTE: registryctl ships the goharbor/distribution binary for GC operations.
-# We build it from source alongside registryctl.
+# The distribution binary is copied from the upstream registry image because
+# goharbor/distribution v2.8.x is a GOPATH-era project (no go.mod) and
+# cannot be built with Go 1.25+ which requires modules.
 #
 # Cross-compilation: builder runs on BUILDPLATFORM (native speed),
 # Go cross-compiles to TARGETARCH. Only the runtime stage uses QEMU.
 ARG GO_VERSION=1.25.7
-ARG DISTRIBUTION_VERSION=v2.8.3-harbor.1-rc.1
+ARG HARBOR_VERSION=v2.15.0-rc2
+
+# Copy pre-built registry binary from upstream image
+FROM goharbor/registry-photon:${HARBOR_VERSION} AS registry-upstream
 
 FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS builder
 ARG GITCOMMIT=unknown
 ARG RELEASE_VERSION=dev
-ARG DISTRIBUTION_VERSION
 ARG TARGETOS=linux
 ARG TARGETARCH=amd64
 
@@ -41,13 +45,6 @@ RUN cd src && CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     -X github.com/goharbor/harbor/src/pkg/version.ReleaseVersion=${RELEASE_VERSION}" \
     ./registryctl
 
-# Build distribution registry binary (used for GC operations)
-RUN git clone --depth 1 --branch ${DISTRIBUTION_VERSION} \
-    https://github.com/goharbor/distribution.git /distribution \
-    && cd /distribution \
-    && CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
-    go build -o /out/registry ./cmd/registry
-
 FROM photon:5.0
 
 RUN tdnf install -y tzdata shadow curl >> /dev/null \
@@ -57,7 +54,7 @@ RUN tdnf install -y tzdata shadow curl >> /dev/null \
     && mkdir -p /etc/registry /home/harbor
 
 COPY --from=builder /out/harbor_registryctl /home/harbor/
-COPY --from=builder /out/registry /usr/bin/registry_DO_NOT_USE_GC
+COPY --from=registry-upstream /usr/bin/registry_DO_NOT_USE_GC /usr/bin/registry_DO_NOT_USE_GC
 COPY make/photon/registryctl/start.sh /home/harbor/
 COPY make/photon/common/install_cert.sh /home/harbor/
 
