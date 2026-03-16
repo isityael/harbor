@@ -45,6 +45,7 @@ steps:
         -f api/v2.0/swagger.yaml
         -A harbor
         --target src/server/v2.0
+      - cd src && go mod tidy
 
   - name: build-check
     image: golang:1.25.7
