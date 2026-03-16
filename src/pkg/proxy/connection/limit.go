@@ -57,7 +57,7 @@ func (c *ConnLimiter) Acquire(ctx context.Context, rdb *redis.Client, key string
 		return false, err
 	}
 	log.Debugf("Acquire script result is %d", result)
-	return result == 1
+	return result == 1, nil
 }
 
 var decreaseText = `
