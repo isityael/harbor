@@ -3,23 +3,23 @@ module github.com/goharbor/harbor/src
 go 1.25.7
 
 require (
-	github.com/FZambia/sentinel v1.1.0
+	github.com/FZambia/sentinel v1.1.1
 	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/aliyun/alibaba-cloud-sdk-go v1.63.107
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2
 	github.com/aws/aws-sdk-go v1.55.8
-	github.com/beego/beego/v2 v2.3.8
+	github.com/beego/beego/v2 v2.3.9
 	github.com/beego/i18n e9308947f407
 	github.com/bmatcuk/doublestar v1.3.4
 	github.com/casbin/casbin v1.9.1
 	github.com/cenkalti/backoff/v4 v4.3.0
-	github.com/cloudevents/sdk-go/v2 v2.16.1
-	github.com/coreos/go-oidc/v3 v3.15.0
+	github.com/cloudevents/sdk-go/v2 v2.16.2
+	github.com/coreos/go-oidc/v3 v3.17.0
 	github.com/dghubble/sling v1.4.2
 	github.com/docker/distribution v2.8.3+incompatible
 	github.com/docker/libtrust v0.0.0-20160708172513-aabc10ec26b7
 	github.com/go-asn1-ber/asn1-ber v1.5.8-0.20250403174932-29230038a667
-	github.com/go-ldap/ldap/v3 v3.4.11
+	github.com/go-ldap/ldap/v3 v3.4.13
 	github.com/go-openapi/errors v0.22.7
 	github.com/go-openapi/loads v0.23.2 // indirect
 	github.com/go-openapi/runtime v0.29.3
@@ -29,12 +29,12 @@ require (
 	github.com/go-openapi/validate v0.25.1 // indirect
 	github.com/gocarina/gocsv 78e41c74b4b1
 	github.com/gocraft/work v0.5.1
-	github.com/golang-jwt/jwt/v5 v5.2.2
-	github.com/golang-migrate/migrate/v4 v4.19.0
+	github.com/golang-jwt/jwt/v5 v5.3.1
+	github.com/golang-migrate/migrate/v4 v4.19.1
 	github.com/gomodule/redigo v2.0.0+incompatible
-	github.com/google/go-containerregistry v0.20.2
+	github.com/google/go-containerregistry v0.21.3
 	github.com/google/uuid v1.6.0
-	github.com/gorilla/csrf v1.7.2
+	github.com/gorilla/csrf v1.7.3
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
 	github.com/graph-gophers/dataloader v5.0.0+incompatible
@@ -48,15 +48,15 @@ require (
 	github.com/opencontainers/go-digest v1.0.0
 	github.com/opencontainers/image-spec v1.1.1
 	github.com/pkg/errors v0.9.1
-	github.com/prometheus/client_golang v1.22.0
+	github.com/prometheus/client_golang v1.23.2
 	github.com/prometheus/client_model v0.6.2
-	github.com/redis/go-redis/v9 v9.17.2
+	github.com/redis/go-redis/v9 v9.18.0
 	github.com/robfig/cron/v3 v3.0.1
-	github.com/spf13/viper v1.19.0
+	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
 	github.com/tencentcloud/tencentcloud-sdk-go v3.0.233+incompatible
 	github.com/vmihailenco/msgpack/v5 v5.4.1
-	github.com/volcengine/volcengine-go-sdk v1.1.44
+	github.com/volcengine/volcengine-go-sdk v1.2.22
 	go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux v0.67.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.67.0
 	go.opentelemetry.io/otel v1.42.0
@@ -64,7 +64,7 @@ require (
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.42.0
 	go.opentelemetry.io/otel/sdk v1.42.0
 	go.opentelemetry.io/otel/trace v1.42.0
-	go.pinniped.dev v0.37.0
+	go.pinniped.dev v0.45.0
 	go.uber.org/ratelimit v0.3.1
 	golang.org/x/crypto v0.49.0
 	golang.org/x/net v0.52.0
@@ -74,7 +74,7 @@ require (
 	golang.org/x/time v0.15.0
 	gopkg.in/h2non/gock.v1 v1.1.2
 	gopkg.in/yaml.v2 v2.4.0
-	helm.sh/helm/v3 v3.18.5
+	helm.sh/helm/v3 v3.20.1
 	k8s.io/api v0.35.3
 	k8s.io/apimachinery v0.35.3
 	k8s.io/client-go v0.35.3
@@ -208,11 +208,11 @@ require (
 
 replace (
 	github.com/Azure/go-autorest => github.com/Azure/go-autorest v14.2.0+incompatible
-	github.com/docker/distribution => github.com/distribution/distribution v2.8.2+incompatible
-	github.com/gocraft/work => github.com/goharbor/work v0.5.1-patch
+	github.com/docker/distribution => github.com/distribution/distribution v2.8.3+incompatible
+	github.com/gocraft/work => github.com/goharbor/work v0.5.1
 	github.com/goharbor/harbor => ../
-	github.com/gomodule/redigo => github.com/gomodule/redigo v1.9.2
-	google.golang.org/api => google.golang.org/api v0.0.0-20160322025152-9bf6e6e569ff
+	github.com/gomodule/redigo => github.com/gomodule/redigo v1.9.3
+	google.golang.org/api => google.golang.org/api v0.273.0
 )
 
 ignore portal
