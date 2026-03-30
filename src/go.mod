@@ -20,12 +20,12 @@ require (
 	github.com/docker/libtrust v0.0.0-20160708172513-aabc10ec26b7
 	github.com/go-asn1-ber/asn1-ber v1.5.8-0.20250403174932-29230038a667
 	github.com/go-ldap/ldap/v3 v3.4.11
-	github.com/go-openapi/errors v0.22.4
+	github.com/go-openapi/errors v0.22.7
 	github.com/go-openapi/loads v0.23.2 // indirect
-	github.com/go-openapi/runtime v0.29.2
+	github.com/go-openapi/runtime v0.29.3
 	github.com/go-openapi/spec v0.22.1 // indirect
-	github.com/go-openapi/strfmt v0.25.0
-	github.com/go-openapi/swag v0.23.1
+	github.com/go-openapi/strfmt v0.26.1
+	github.com/go-openapi/swag v0.25.5
 	github.com/go-openapi/validate v0.25.1 // indirect
 	github.com/gocarina/gocsv 78e41c74b4b1
 	github.com/gocraft/work v0.5.1
