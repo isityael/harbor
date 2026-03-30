@@ -14,11 +14,11 @@
   ],
   "packageRules": [
     {
-      "description": "Disable dhi.io images \u2014 private registry, Renovate cannot resolve digests",
-      "matchPackagePatterns": [
-        "^dhi\\.io/"
-      ],
-      "enabled": false
+      "description": "Disable dhi.io images — private registry, Renovate cannot resolve digests",
+      "enabled": false,
+      "matchPackageNames": [
+        "/^dhi\.io//"
+      ]
     },
     {
       "description": "Disable digest pinning and updates for all Docker images",
@@ -37,13 +37,13 @@
     {
       "description": "Group all goharbor Docker images (test fixtures + docker-compose)",
       "groupName": "goharbor docker images",
-      "matchPackagePatterns": [
-        "^goharbor/"
-      ],
       "matchManagers": [
         "docker-compose",
         "dockerfile",
         "helm-values"
+      ],
+      "matchPackageNames": [
+        "/^goharbor//"
       ]
     },
     {
@@ -81,90 +81,90 @@
     {
       "description": "Group go-openapi modules",
       "groupName": "go-openapi modules",
-      "matchPackagePatterns": [
-        "^github\\.com/go-openapi/"
+      "matchPackageNames": [
+        "/^github\.com/go-openapi//"
       ]
     },
     {
       "description": "Group OpenTelemetry Go modules",
       "groupName": "opentelemetry go modules",
-      "matchPackagePatterns": [
-        "^go\\.opentelemetry\\.io/"
+      "matchPackageNames": [
+        "/^go\.opentelemetry\.io//"
       ]
     },
     {
       "description": "Group Kubernetes Go modules (k8s.io/*)",
       "groupName": "kubernetes go modules",
-      "matchPackagePatterns": [
-        "^k8s\\.io/"
+      "matchPackageNames": [
+        "/^k8s\.io//"
       ]
     },
     {
       "description": "Group golang.org/x/* standard library extensions",
       "groupName": "golang.org/x modules",
-      "matchPackagePatterns": [
-        "^golang\\.org/x/"
+      "matchPackageNames": [
+        "/^golang\.org/x//"
       ]
     },
     {
       "description": "Group Angular framework + devkit packages",
       "groupName": "angular framework",
-      "matchPackagePatterns": [
-        "^@angular/",
-        "^@angular-devkit/"
+      "matchPackageNames": [
+        "/^@angular//",
+        "/^@angular-devkit//"
       ]
     },
     {
       "description": "Group Angular ESLint packages",
       "groupName": "angular eslint",
-      "matchPackagePatterns": [
-        "^@angular-eslint/"
+      "matchPackageNames": [
+        "/^@angular-eslint//"
       ]
     },
     {
       "description": "Group Clarity Design System (@cds/core, @clr/*)",
       "groupName": "clarity design system",
-      "matchPackagePatterns": [
-        "^@cds/",
-        "^@clr/"
+      "matchPackageNames": [
+        "/^@cds//",
+        "/^@clr//"
       ]
     },
     {
       "description": "Group ESLint + Prettier + Stylelint linting toolchain",
       "groupName": "linting toolchain",
-      "matchPackagePatterns": [
-        "^eslint",
-        "^prettier",
-        "^stylelint",
-        "^@typescript-eslint/"
+      "matchPackageNames": [
+        "/^eslint/",
+        "/^prettier/",
+        "/^stylelint/",
+        "/^@typescript-eslint//"
       ]
     },
     {
       "description": "Group Karma + Jasmine + Cypress test toolchain",
       "groupName": "test toolchain",
-      "matchPackagePatterns": [
-        "^karma",
-        "^jasmine",
-        "^cypress"
+      "matchPackageNames": [
+        "/^karma/",
+        "/^jasmine/",
+        "/^cypress/"
       ]
     },
     {
       "description": "Group Webpack build toolchain",
       "groupName": "webpack build toolchain",
-      "matchPackagePatterns": [
-        "^webpack",
-        "^css-loader",
-        "^style-loader",
-        "^copy-webpack-plugin",
-        "^html-webpack-plugin"
+      "matchPackageNames": [
+        "/^webpack/",
+        "/^css-loader/",
+        "/^style-loader/",
+        "/^copy-webpack-plugin/",
+        "/^html-webpack-plugin/"
       ]
     },
     {
       "description": "Group ngx-* and @ngx-translate Angular libraries",
       "groupName": "ngx angular libraries",
-      "matchPackagePatterns": [
-        "^ngx-",
-        "^@ngx-translate/"
+      "matchPackageNames": [
+        "/^ngx-/",
+        "/^@ngx-translate//"
       ]
     },
     {
@@ -177,11 +177,11 @@
         "minor",
         "patch"
       ],
-      "excludePackagePatterns": [
-        "^github\\.com/go-openapi/",
-        "^go\\.opentelemetry\\.io/",
-        "^k8s\\.io/",
-        "^golang\\.org/x/"
+      "matchPackageNames": [
+        "!/^github\.com/go-openapi//",
+        "!/^go\.opentelemetry\.io//",
+        "!/^k8s\.io//",
+        "!/^golang\.org/x//"
       ]
     },
     {
@@ -194,22 +194,22 @@
         "minor",
         "patch"
       ],
-      "excludePackagePatterns": [
-        "^@angular",
-        "^@cds/",
-        "^@clr/",
-        "^eslint",
-        "^prettier",
-        "^stylelint",
-        "^@typescript-eslint/",
-        "^karma",
-        "^jasmine",
-        "^cypress",
-        "^webpack",
-        "^css-loader",
-        "^style-loader",
-        "^ngx-",
-        "^@ngx-translate/"
+      "matchPackageNames": [
+        "!/^@angular/",
+        "!/^@cds//",
+        "!/^@clr//",
+        "!/^eslint/",
+        "!/^prettier/",
+        "!/^stylelint/",
+        "!/^@typescript-eslint//",
+        "!/^karma/",
+        "!/^jasmine/",
+        "!/^cypress/",
+        "!/^webpack/",
+        "!/^css-loader/",
+        "!/^style-loader/",
+        "!/^ngx-/",
+        "!/^@ngx-translate//"
       ]
     },
     {
@@ -224,7 +224,7 @@
       "automerge": true
     },
     {
-      "description": "Major Go module updates \u2014 separate PRs, require dashboard approval",
+      "description": "Major Go module updates — separate PRs, require dashboard approval",
       "matchManagers": [
         "gomod"
       ],
@@ -234,7 +234,7 @@
       "dependencyDashboardApproval": true
     },
     {
-      "description": "Major npm updates \u2014 separate PRs, require dashboard approval",
+      "description": "Major npm updates — separate PRs, require dashboard approval",
       "matchManagers": [
         "npm"
       ],
