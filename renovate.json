@@ -14,6 +14,12 @@
       "enabled": false
     },
     {
+      "description": "Disable digest pinning and updates for all Docker images",
+      "matchManagers": ["dockerfile", "docker-compose", "woodpecker"],
+      "matchUpdateTypes": ["pin", "pinDigest", "digest"],
+      "enabled": false
+    },
+    {
       "description": "Group all goharbor Docker images (test fixtures + docker-compose)",
       "groupName": "goharbor docker images",
       "matchPackagePatterns": ["^goharbor/"],
