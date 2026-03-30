@@ -22,6 +22,7 @@ import (
 	"net/http"
 
 	commonhttp "github.com/goharbor/harbor/src/common/http"
+	commonutils "github.com/goharbor/harbor/src/common/utils"
 	"github.com/goharbor/harbor/src/lib/log"
 	"github.com/goharbor/harbor/src/pkg/reg/model"
 )
@@ -77,6 +78,7 @@ func (c *Client) refreshToken() error {
 		return err
 	}
 	request.Header.Set("Content-Type", "application/json")
+	commonutils.SetUserAgentHeader(request)
 
 	resp, err := c.client.Do(request)
 	if err != nil {
@@ -115,6 +117,7 @@ func (c *Client) Do(method, path string, body io.Reader) (*http.Response, error)
 		req.Header.Set("Content-Type", "application/json")
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("JWT %s", c.token))
+	commonutils.SetUserAgentHeader(req)
 
 	return c.client.Do(req)
 }
