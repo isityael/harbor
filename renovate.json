@@ -137,7 +137,7 @@
       "groupName": "go module digest updates",
       "matchManagers": [ "gomod" ],
       "matchUpdateTypes": [ "digest" ],
-      "autoMerge": true
+      "automerge": true
     },
     {
       "description": "Major Go module updates — separate PRs, require dashboard approval",
