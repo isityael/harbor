@@ -4,10 +4,13 @@
 # Builds 4 Go component images via SSH remote builder on Mac for
 # native-speed Go cross-compilation, then scans and signs each image.
 #
-# Images pushed to: harbor.m0sh1.cc/apps/harbor-{core,jobservice,registryctl,exporter}
+# Images pushed to:
+#   harbor.m0sh1.cc/apps/harbor-{core,jobservice,registryctl,exporter}
+#   ghcr.io/sm-moshi/harbor-{core,jobservice,registryctl,exporter}
 #
 # Required secrets:
 #   harbor_username, harbor_password — registry auth
+#   ghcr_username, ghcr_token       — GHCR auth (GitHub PAT with packages:write)
 #   mac_builder_ssh_key             — SSH private key for remote builder
 #   cosign_key, cosign_password     — cosign signing
 #   notation_key, notation_cert     — notation signing
@@ -139,6 +142,28 @@ steps:
     commands:
       - echo "Waiting 10s for Garage replication..."
       - sleep 10
+
+  # ── Mirror to GHCR (bootstrap-safe location) ────────────────
+  - name: mirror-to-ghcr
+    image: "dhi.io/crane:0.20.4-debian13-dev@sha256:d53f41e08cc74db8f75f3abe3bbc2e47f5e7c75ae02339c22d5cbf67b96b26a4"
+    environment:
+      HARBOR_USERNAME:
+        from_secret: harbor_username
+      HARBOR_PASSWORD:
+        from_secret: harbor_password
+      GHCR_USERNAME:
+        from_secret: ghcr_username
+      GHCR_TOKEN:
+        from_secret: ghcr_token
+    commands:
+      - crane auth login harbor.m0sh1.cc -u "$HARBOR_USERNAME" -p "$HARBOR_PASSWORD"
+      - crane auth login ghcr.io -u "$GHCR_USERNAME" -p "$GHCR_TOKEN"
+      - |
+        for component in core jobservice registryctl exporter; do
+          echo "Mirroring harbor-$${component}:${CI_COMMIT_TAG} → ghcr.io/sm-moshi/harbor-$${component}:${CI_COMMIT_TAG}"
+          crane copy "harbor.m0sh1.cc/apps/harbor-$${component}:${CI_COMMIT_TAG}" "ghcr.io/sm-moshi/harbor-$${component}:${CI_COMMIT_TAG}"
+          crane copy "harbor.m0sh1.cc/apps/harbor-$${component}:latest" "ghcr.io/sm-moshi/harbor-$${component}:latest"
+        done
 
   # ── Trivy scan (all 4 images) ───────────────────────────────
   - name: trivy-scan-core
