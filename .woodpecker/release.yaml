@@ -18,6 +18,13 @@ when:
   - event: tag
     ref: "refs/tags/v*-sm*"
 
+clone:
+  git:
+    image: woodpeckerci/plugin-git
+    settings:
+      lfs: false
+      tags: false
+
 steps:
   # ── Build & push ─────────────────────────────────────────────
   - name: build-core
