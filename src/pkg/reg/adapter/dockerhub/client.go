@@ -57,15 +57,12 @@ func NewClient(registry *model.Registry) (*Client, error) {
 		return client, nil
 	}
 
-	// Login to DockerHub to get access token. Tokens expire after 10 minutes;
-	// subsequent calls via Do() will refresh the token automatically.
+	// Store credentials for lazy token refresh on first API call.
+	// We no longer call hub.docker.com/v2/users/login/ eagerly because
+	// Cloudflare blocks Go's TLS fingerprint on that endpoint.
 	client.credential = LoginCredential{
 		Identifier: registry.Credential.AccessKey,
 		Secret:     registry.Credential.AccessSecret,
-	}
-	err := client.refreshToken()
-	if err != nil {
-		return nil, fmt.Errorf("login to dockerhub error: %v", err)
 	}
 
 	return client, nil
@@ -143,7 +140,9 @@ func (c *Client) Do(method, path string, body io.Reader) (*http.Response, error)
 	if body != nil || method == http.MethodPost || method == http.MethodPut {
 		req.Header.Set("Content-Type", "application/json")
 	}
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
+	if c.token != "" {
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
+	}
 	commonutils.SetUserAgentHeader(req)
 
 	return c.client.Do(req)
