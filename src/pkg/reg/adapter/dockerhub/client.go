@@ -33,6 +33,7 @@ type Client struct {
 	token      string
 	host       string
 	credential LoginCredential
+	hasCredential bool
 }
 
 // NewClient creates a new DockerHub client.
@@ -53,15 +54,14 @@ func NewClient(registry *model.Registry) (*Client, error) {
 		return client, nil
 	}
 
-	// Login to DockerHub to get access token, default expire date is 30d.
+	// Store credentials for lazy token refresh on first API call.
+	// We no longer call hub.docker.com/v2/users/login/ eagerly because
+	// Cloudflare blocks Go's TLS fingerprint on that endpoint.
 	client.credential = LoginCredential{
 		User:     registry.Credential.AccessKey,
 		Password: registry.Credential.AccessSecret,
 	}
-	err := client.refreshToken()
-	if err != nil {
-		return nil, fmt.Errorf("login to dockerhub error: %v", err)
-	}
+	client.hasCredential = true
 
 	return client, nil
 }
@@ -107,6 +107,13 @@ func (c *Client) refreshToken() error {
 
 // Do performs http request to DockerHub, it will set token automatically.
 func (c *Client) Do(method, path string, body io.Reader) (*http.Response, error) {
+	// Lazy token refresh: defer hub.docker.com login until actually needed.
+	if c.hasCredential && c.token == "" {
+		if err := c.refreshToken(); err != nil {
+			return nil, fmt.Errorf("login to dockerhub error: %v", err)
+		}
+	}
+
 	url := baseURL + path
 	log.Infof("%s %s", method, url)
 	req, err := http.NewRequest(method, url, body)
