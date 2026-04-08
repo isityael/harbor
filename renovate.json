@@ -17,7 +17,7 @@
       "description": "Disable dhi.io images — private registry, Renovate cannot resolve digests",
       "enabled": false,
       "matchPackageNames": [
-        "/^dhi\.io//"
+        "/^dhi\\.io//"
       ]
     },
     {
@@ -82,28 +82,28 @@
       "description": "Group go-openapi modules",
       "groupName": "go-openapi modules",
       "matchPackageNames": [
-        "/^github\.com/go-openapi//"
+        "/^github\\.com/go-openapi//"
       ]
     },
     {
       "description": "Group OpenTelemetry Go modules",
       "groupName": "opentelemetry go modules",
       "matchPackageNames": [
-        "/^go\.opentelemetry\.io//"
+        "/^go\\.opentelemetry\\.io//"
       ]
     },
     {
       "description": "Group Kubernetes Go modules (k8s.io/*)",
       "groupName": "kubernetes go modules",
       "matchPackageNames": [
-        "/^k8s\.io//"
+        "/^k8s\\.io//"
       ]
     },
     {
       "description": "Group golang.org/x/* standard library extensions",
       "groupName": "golang.org/x modules",
       "matchPackageNames": [
-        "/^golang\.org/x//"
+        "/^golang\\.org/x//"
       ]
     },
     {
@@ -178,10 +178,10 @@
         "patch"
       ],
       "matchPackageNames": [
-        "!/^github\.com/go-openapi//",
-        "!/^go\.opentelemetry\.io//",
-        "!/^k8s\.io//",
-        "!/^golang\.org/x//"
+        "!/^github\\.com/go-openapi//",
+        "!/^go\\.opentelemetry\\.io//",
+        "!/^k8s\\.io//",
+        "!/^golang\\.org/x//"
       ]
     },
     {
