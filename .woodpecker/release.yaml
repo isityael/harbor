@@ -29,6 +29,9 @@ steps:
   # ── Build & push ─────────────────────────────────────────────
   - name: build-core
     image: woodpeckerci/plugin-docker-buildx
+    environment:
+      SSH_KNOWN_HOSTS:
+        from_secret: mac_builder_ssh_known_hosts
     settings:
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/harbor-core
@@ -58,6 +61,9 @@ steps:
 
   - name: build-jobservice
     image: woodpeckerci/plugin-docker-buildx
+    environment:
+      SSH_KNOWN_HOSTS:
+        from_secret: mac_builder_ssh_known_hosts
     settings:
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/harbor-jobservice
@@ -87,6 +93,9 @@ steps:
 
   - name: build-registryctl
     image: woodpeckerci/plugin-docker-buildx
+    environment:
+      SSH_KNOWN_HOSTS:
+        from_secret: mac_builder_ssh_known_hosts
     settings:
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/harbor-registryctl
@@ -116,6 +125,9 @@ steps:
 
   - name: build-exporter
     image: woodpeckerci/plugin-docker-buildx
+    environment:
+      SSH_KNOWN_HOSTS:
+        from_secret: mac_builder_ssh_known_hosts
     settings:
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/harbor-exporter
