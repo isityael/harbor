@@ -26,13 +26,20 @@ clone:
       tags: false
 
 steps:
+  - name: prepare-remote-builder-ssh
+    image: "dhi.io/golang:1.26.1-debian13-dev"
+    commands:
+      - apt-get update
+      - apt-get install -y --no-install-recommends openssh-client ca-certificates
+      - ssh-keyscan 10.0.10.4 > .woodpecker_known_hosts
+      - chmod 600 .woodpecker_known_hosts
+      - printf "SSH_KNOWN_HOSTS=.woodpecker_known_hosts\n" > .woodpecker-remote-builder.env
+
   # ── Build & push ─────────────────────────────────────────────
   - name: build-core
     image: woodpeckerci/plugin-docker-buildx
-    environment:
-      SSH_KNOWN_HOSTS:
-        from_secret: mac_builder_ssh_known_hosts
     settings:
+      env_file: .woodpecker-remote-builder.env
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/harbor-core
       dockerfile: build/docker/Dockerfile.core
@@ -61,10 +68,8 @@ steps:
 
   - name: build-jobservice
     image: woodpeckerci/plugin-docker-buildx
-    environment:
-      SSH_KNOWN_HOSTS:
-        from_secret: mac_builder_ssh_known_hosts
     settings:
+      env_file: .woodpecker-remote-builder.env
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/harbor-jobservice
       dockerfile: build/docker/Dockerfile.jobservice
@@ -93,10 +98,8 @@ steps:
 
   - name: build-registryctl
     image: woodpeckerci/plugin-docker-buildx
-    environment:
-      SSH_KNOWN_HOSTS:
-        from_secret: mac_builder_ssh_known_hosts
     settings:
+      env_file: .woodpecker-remote-builder.env
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/harbor-registryctl
       dockerfile: build/docker/Dockerfile.registryctl
@@ -125,10 +128,8 @@ steps:
 
   - name: build-exporter
     image: woodpeckerci/plugin-docker-buildx
-    environment:
-      SSH_KNOWN_HOSTS:
-        from_secret: mac_builder_ssh_known_hosts
     settings:
+      env_file: .woodpecker-remote-builder.env
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/harbor-exporter
       dockerfile: build/docker/Dockerfile.exporter
