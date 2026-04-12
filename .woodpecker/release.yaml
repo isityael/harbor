@@ -47,10 +47,6 @@ steps:
       build_args:
         - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
         - "RELEASE_VERSION=${CI_COMMIT_TAG}"
-      ssh_key:
-        from_secret: mac_builder_ssh_key
-      remote_builders:
-        - smeya@10.0.10.4
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
       cache_from: "harbor.m0sh1.cc/cache/harbor-core:buildcache"
@@ -76,10 +72,6 @@ steps:
       build_args:
         - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
         - "RELEASE_VERSION=${CI_COMMIT_TAG}"
-      ssh_key:
-        from_secret: mac_builder_ssh_key
-      remote_builders:
-        - smeya@10.0.10.4
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
       cache_from: "harbor.m0sh1.cc/cache/harbor-jobservice:buildcache"
@@ -105,10 +97,6 @@ steps:
       build_args:
         - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
         - "RELEASE_VERSION=${CI_COMMIT_TAG}"
-      ssh_key:
-        from_secret: mac_builder_ssh_key
-      remote_builders:
-        - smeya@10.0.10.4
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
       cache_from: "harbor.m0sh1.cc/cache/harbor-registryctl:buildcache"
@@ -134,10 +122,6 @@ steps:
       build_args:
         - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
         - "RELEASE_VERSION=${CI_COMMIT_TAG}"
-      ssh_key:
-        from_secret: mac_builder_ssh_key
-      remote_builders:
-        - smeya@10.0.10.4
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
       cache_from: "harbor.m0sh1.cc/cache/harbor-exporter:buildcache"
