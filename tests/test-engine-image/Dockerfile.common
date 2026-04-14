@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 as tool_builder
+FROM ubuntu:24.04 as tool_builder
 ENV TZ=Asia/Shanghai \
     DEBIAN_FRONTEND=noninteractive
 ENV LANG C.UTF-8
