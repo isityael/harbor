@@ -37,7 +37,8 @@ RUN cd src && CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
 
 FROM photon:5.0
 
-RUN tdnf install -y tzdata shadow curl >> /dev/null \
+RUN tdnf update -y >> /dev/null \
+    && tdnf install -y tzdata shadow curl >> /dev/null \
     && tdnf clean all \
     && groupadd -r -g 10000 harbor \
     && useradd --no-log-init -r -m -g 10000 -u 10000 harbor \
