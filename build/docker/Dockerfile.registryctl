@@ -9,7 +9,7 @@
 # Cross-compilation: builder runs on BUILDPLATFORM (native speed),
 # Go cross-compiles to TARGETARCH. Only the runtime stage uses QEMU.
 ARG GO_VERSION=1.26.2
-ARG HARBOR_VERSION=v2.15.0-rc2
+ARG HARBOR_VERSION=v2.15.1-rc1
 
 # Copy pre-built registry binary from upstream image
 FROM goharbor/registry-photon:${HARBOR_VERSION} AS registry-upstream
