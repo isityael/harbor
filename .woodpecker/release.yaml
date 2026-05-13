@@ -1,5 +1,5 @@
 # Harbor Go components — build, push, scan & sign pipeline
-# Triggered by sm-moshi version tags (v*-sm*)
+# Triggered by sm-moshi v2.16.0 version tags (v2.16.0-sm*)
 #
 # Builds 4 Go component images via SSH remote builder on Mac for
 # native-speed Go cross-compilation, then scans and signs each image.
@@ -16,7 +16,7 @@
 #   notation_key, notation_cert     — notation signing
 when:
   - event: tag
-    ref: "refs/tags/v*-sm*"
+    ref: "refs/tags/v2.16.0-sm*"
 
 clone:
   git:
@@ -26,6 +26,17 @@ clone:
       tags: false
 
 steps:
+  - name: validate-version
+    image: "dhi.io/busybox:1.37.0-debian13"
+    commands:
+      - test -n "$CI_COMMIT_TAG"
+      - test "$(cat VERSION)" = "$CI_COMMIT_TAG"
+      - |
+        case "$CI_COMMIT_TAG" in
+          v2.16.0-sm*) ;;
+          *) echo "Refusing to release non-v2.16.0-sm tag: $CI_COMMIT_TAG"; exit 1 ;;
+        esac
+
   # ── Build & push ─────────────────────────────────────────────
   - name: build-core
     image: woodpeckerci/plugin-docker-buildx

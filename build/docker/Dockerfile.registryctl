@@ -9,9 +9,10 @@
 # Cross-compilation: builder runs on BUILDPLATFORM (native speed),
 # Go cross-compiles to TARGETARCH. Only the runtime stage uses QEMU.
 ARG GO_VERSION=1.26.1
-ARG HARBOR_VERSION=v2.15.0-rc2
+ARG HARBOR_VERSION=dev
 
-# Copy pre-built registry binary from upstream image
+# Copy pre-built registry binary from upstream's development image. Upstream has
+# not published goharbor/registry-photon:v2.16.0 yet.
 FROM goharbor/registry-photon:${HARBOR_VERSION} AS registry-upstream
 
 FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS builder
@@ -35,7 +36,7 @@ RUN go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1 \
     --additional-initialism=OIDC \
     -f api/v2.0/swagger.yaml \
     -A harbor \
-    --target src/server/v2.0 && cd src && go mod tidy
+    --target src/server/v2.0
 
 # Build registryctl
 RUN cd src && CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \

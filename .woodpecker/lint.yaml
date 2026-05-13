@@ -1,5 +1,5 @@
 # Harbor Go components — build verification pipeline
-# Runs on push/PR to sm-moshi/v2.15 branch
+# Runs on push/PR to sm-moshi/v2.16-security branch
 #
 # Verifies the 4 Go components compile successfully. Full go vet is not
 # possible without swagger-generated code (server/v2.0/{models,restapi})
@@ -8,7 +8,7 @@
 # Go module cache persisted via NFS (woodpecker-pipeline-cache) between runs.
 when:
   - event: [push, pull_request]
-    branch: sm-moshi/v2.15
+    branch: sm-moshi/v2.16-security
 
 steps:
   - name: generate-swagger
@@ -21,7 +21,7 @@ steps:
     commands:
       - mkdir -p "$GOMODCACHE" "$GOCACHE"
       - go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1
-      - swagger generate server
+      - timeout 10m swagger generate server
         --template-dir=tools/swagger/templates
         --exclude-main
         --additional-initialism=CVE
@@ -30,7 +30,6 @@ steps:
         -f api/v2.0/swagger.yaml
         -A harbor
         --target src/server/v2.0
-      - cd src && go mod tidy
 
   - name: build-check
     image: dhi.io/golang:1.26.1-debian13-dev
