@@ -1,0 +1,53 @@
+# Multi-stage Dockerfile for registry-photon
+# Built from goharbor/distribution pinned to Harbor's v2.16 release line.
+#
+# goharbor/distribution is still GOPATH-era code, so keep it under the
+# github.com/docker/distribution import path while building.
+ARG GO_VERSION=1.26.1
+ARG DISTRIBUTION_VERSION=v2.8.3-harbor.1-rc.1
+ARG DISTRIBUTION_SRC=https://github.com/goharbor/distribution.git
+
+FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS builder
+ARG DISTRIBUTION_VERSION
+ARG DISTRIBUTION_SRC
+ARG TARGETOS=linux
+ARG TARGETARCH=amd64
+
+ENV PATH=/usr/local/go/bin:$PATH \
+    GO111MODULE=auto \
+    BUILDTAGS="include_oss include_gcs"
+
+WORKDIR /go/src/github.com/docker
+RUN git clone --depth 1 --branch "${DISTRIBUTION_VERSION}" "${DISTRIBUTION_SRC}" distribution
+
+WORKDIR /go/src/github.com/docker/distribution
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    make PREFIX=/go clean bin/registry
+
+FROM photon:5.0
+
+RUN tdnf update -y >> /dev/null \
+    && tdnf install -y tzdata shadow curl >> /dev/null \
+    && tdnf clean all \
+    && groupadd -r -g 10000 harbor \
+    && useradd --no-log-init -m -g 10000 -u 10000 harbor \
+    && mkdir -p /home/harbor /storage
+
+COPY --from=builder /go/src/github.com/docker/distribution/bin/registry /usr/bin/registry_DO_NOT_USE_GC
+COPY make/photon/registry/entrypoint.sh /home/harbor/
+COPY make/photon/common/install_cert.sh /home/harbor/
+
+RUN chown -R harbor:harbor /etc/pki/tls/certs \
+    && chown -R harbor:harbor /home/harbor /storage \
+    && chown harbor:harbor /usr/bin/registry_DO_NOT_USE_GC \
+    && chmod u+x /usr/bin/registry_DO_NOT_USE_GC \
+    && chmod u+x /home/harbor/entrypoint.sh \
+    && chmod u+x /home/harbor/install_cert.sh
+
+HEALTHCHECK --interval=30s --timeout=10s \
+    CMD curl --fail -s http://localhost:5000 || \
+        curl -k --fail -s https://localhost:5443 || exit 1
+
+VOLUME ["/storage"]
+ENTRYPOINT ["/home/harbor/entrypoint.sh"]
+USER harbor

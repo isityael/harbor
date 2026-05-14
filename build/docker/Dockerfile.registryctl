@@ -2,18 +2,31 @@
 # Built from sm-moshi/harbor fork with cherry-picked fixes
 #
 # NOTE: registryctl ships the goharbor/distribution binary for GC operations.
-# The distribution binary is copied from the upstream registry image because
-# goharbor/distribution v2.8.x is a GOPATH-era project (no go.mod) and
-# cannot be built with Go 1.25+ which requires modules.
+# goharbor/distribution is still GOPATH-era code, so keep it under the
+# github.com/docker/distribution import path while building.
 #
 # Cross-compilation: builder runs on BUILDPLATFORM (native speed),
 # Go cross-compiles to TARGETARCH. Only the runtime stage uses QEMU.
 ARG GO_VERSION=1.26.1
-ARG HARBOR_VERSION=dev
+ARG DISTRIBUTION_VERSION=v2.8.3-harbor.1-rc.1
+ARG DISTRIBUTION_SRC=https://github.com/goharbor/distribution.git
 
-# Copy pre-built registry binary from upstream's development image. Upstream has
-# not published goharbor/registry-photon:v2.16.0 yet.
-FROM goharbor/registry-photon:${HARBOR_VERSION} AS registry-upstream
+FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS distribution-builder
+ARG DISTRIBUTION_VERSION
+ARG DISTRIBUTION_SRC
+ARG TARGETOS=linux
+ARG TARGETARCH=amd64
+
+ENV PATH=/usr/local/go/bin:$PATH \
+    GO111MODULE=auto \
+    BUILDTAGS="include_oss include_gcs"
+
+WORKDIR /go/src/github.com/docker
+RUN git clone --depth 1 --branch "${DISTRIBUTION_VERSION}" "${DISTRIBUTION_SRC}" distribution
+
+WORKDIR /go/src/github.com/docker/distribution
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    make PREFIX=/go clean bin/registry
 
 FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS builder
 ARG GITCOMMIT=unknown
@@ -56,7 +69,7 @@ RUN tdnf update -y >> /dev/null \
     && mkdir -p /etc/registry /home/harbor
 
 COPY --from=builder /out/harbor_registryctl /home/harbor/
-COPY --from=registry-upstream /usr/bin/registry_DO_NOT_USE_GC /usr/bin/registry_DO_NOT_USE_GC
+COPY --from=distribution-builder /go/src/github.com/docker/distribution/bin/registry /usr/bin/registry_DO_NOT_USE_GC
 COPY make/photon/registryctl/start.sh /home/harbor/
 COPY make/photon/common/install_cert.sh /home/harbor/
 
