@@ -3,7 +3,7 @@
 #
 # Cross-compilation: builder runs on BUILDPLATFORM (native speed),
 # Go cross-compiles to TARGETARCH. Only the runtime stage uses QEMU.
-ARG GO_VERSION=1.26.1
+ARG GO_VERSION=1.26.3
 
 FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS builder
 ARG GITCOMMIT=unknown
@@ -35,7 +35,7 @@ RUN cd src && CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     -X github.com/goharbor/harbor/src/pkg/version.ReleaseVersion=${RELEASE_VERSION}" \
     ./core
 
-FROM photon:5.0
+FROM goharbor/photon:5.0
 
 RUN tdnf update -y >> /dev/null \
     && tdnf install -y tzdata shadow curl >> /dev/null \
