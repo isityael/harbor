@@ -18,7 +18,7 @@ require (
 	github.com/dghubble/sling v1.4.2
 	github.com/docker/distribution v2.8.3+incompatible
 	github.com/docker/libtrust v0.0.0-20160708172513-aabc10ec26b7
-	github.com/go-asn1-ber/asn1-ber v1.5.8-0.20250403174932-29230038a667
+	github.com/go-asn1-ber/asn1-ber v1.5.8-0.20260416181348-e7dc79048676
 	github.com/go-ldap/ldap/v3 v3.4.13
 	github.com/go-openapi/errors v0.22.7
 	github.com/go-openapi/loads v0.23.3
@@ -27,7 +27,7 @@ require (
 	github.com/go-openapi/strfmt v0.26.1
 	github.com/go-openapi/swag v0.25.5
 	github.com/go-openapi/validate v0.25.2
-	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
+	github.com/gocarina/gocsv v0.0.0-20260523204920-c264028e67ea
 	github.com/gocraft/work v0.5.1
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/golang-migrate/migrate/v4 v4.19.1
