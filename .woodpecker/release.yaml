@@ -11,7 +11,7 @@
 #
 # Required secrets:
 #   harbor_username, harbor_password — registry auth
-#   ghcr_username, ghcr_token       — GHCR auth (GitHub PAT with packages:write)
+#   github_username, github_token   — GHCR auth (GitHub PAT with packages:write)
 #   mac_builder_ssh_key             — SSH private key for remote builder
 #   cosign_key, cosign_password     — cosign signing
 #   notation_key, notation_cert     — notation signing
@@ -182,9 +182,9 @@ steps:
       HARBOR_PASSWORD:
         from_secret: harbor_password
       GHCR_USERNAME:
-        from_secret: ghcr_username
+        from_secret: github_username
       GHCR_TOKEN:
-        from_secret: ghcr_token
+        from_secret: github_token
     commands:
       - crane auth login harbor.m0sh1.cc -u "$HARBOR_USERNAME" -p "$HARBOR_PASSWORD"
       - crane auth login ghcr.io -u "$GHCR_USERNAME" -p "$GHCR_TOKEN"
