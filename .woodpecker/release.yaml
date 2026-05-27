@@ -41,6 +41,7 @@ steps:
   # ── Build & push ─────────────────────────────────────────────
   - name: build-core
     image: woodpeckerci/plugin-docker-buildx
+    privileged: true
     settings:
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/harbor-core
@@ -66,6 +67,7 @@ steps:
 
   - name: build-jobservice
     image: woodpeckerci/plugin-docker-buildx
+    privileged: true
     settings:
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/harbor-jobservice
@@ -91,6 +93,7 @@ steps:
 
   - name: build-registryctl
     image: woodpeckerci/plugin-docker-buildx
+    privileged: true
     settings:
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/harbor-registryctl
@@ -116,6 +119,7 @@ steps:
 
   - name: build-registry
     image: woodpeckerci/plugin-docker-buildx
+    privileged: true
     settings:
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/registry-photon
@@ -138,6 +142,7 @@ steps:
 
   - name: build-exporter
     image: woodpeckerci/plugin-docker-buildx
+    privileged: true
     settings:
       registry: harbor.m0sh1.cc
       repo: harbor.m0sh1.cc/apps/harbor-exporter
