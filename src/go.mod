@@ -210,7 +210,7 @@ replace (
 	github.com/gocraft/work => github.com/goharbor/work v0.5.1
 	github.com/goharbor/harbor => ../
 	github.com/gomodule/redigo => github.com/gomodule/redigo v1.9.3
-	google.golang.org/api => google.golang.org/api v0.281.0
+	google.golang.org/api => google.golang.org/api v0.282.0
 )
 
 ignore portal
