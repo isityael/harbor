@@ -1,9 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "github>sm-moshi/infra//.github/renovate/base.json",
+    "local>m0sh1/infra//.github/renovate/base.json",
     "config:recommended",
     ":semanticCommits"
+  ],
+  "baseBranches": [
+    "progressed"
   ],
   "labels": [
     "release-note/bump-version"
