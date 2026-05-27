@@ -1,5 +1,5 @@
 # Harbor Go components — build verification pipeline
-# Runs on push/PR to sm-moshi/v2.16-security branch
+# Runs on push/PR to the progressed branch
 #
 # Verifies the 4 Go components compile successfully. Full go vet is not
 # possible without swagger-generated code (server/v2.0/{models,restapi})
@@ -8,7 +8,7 @@
 # Go module cache persisted via NFS (woodpecker-pipeline-cache) between runs.
 when:
   - event: [push, pull_request]
-    branch: sm-moshi/v2.16-security
+    branch: progressed
 
 steps:
   - name: generate-swagger
