@@ -26,7 +26,7 @@ import (
 	migrate "github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/pgx" // import pgx driver for migrator
 	_ "github.com/golang-migrate/migrate/v4/source/file"  // import local file driver for migrator
-	_ "github.com/jackc/pgx/v4/stdlib"                    // registry pgx driver
+	_ "github.com/jackc/pgx/v5/stdlib"                    // registry pgx driver
 
 	"github.com/goharbor/harbor/src/common/models"
 	"github.com/goharbor/harbor/src/common/utils"

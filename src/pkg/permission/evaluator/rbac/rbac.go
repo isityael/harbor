@@ -18,8 +18,9 @@ import (
 	"context"
 	"sync"
 
-	"github.com/casbin/casbin"
+	"github.com/casbin/casbin/v3"
 
+	"github.com/goharbor/harbor/src/lib/log"
 	"github.com/goharbor/harbor/src/pkg/permission/evaluator"
 	"github.com/goharbor/harbor/src/pkg/permission/types"
 )
@@ -30,16 +31,26 @@ var _ evaluator.Evaluator = &Evaluator{}
 type Evaluator struct {
 	rbacUser types.RBACUser
 	enforcer *casbin.Enforcer
+	err      error
 	once     sync.Once
 }
 
 // HasPermission returns true when the rbac user has action permission for the resource
 func (e *Evaluator) HasPermission(_ context.Context, resource types.Resource, action types.Action) bool {
 	e.once.Do(func() {
-		e.enforcer = makeEnforcer(e.rbacUser)
+		e.enforcer, e.err = makeEnforcer(e.rbacUser)
 	})
+	if e.err != nil {
+		log.Errorf("failed to initialise RBAC enforcer: %v", e.err)
+		return false
+	}
 
-	return e.enforcer.Enforce(e.rbacUser.GetUserName(), resource.String(), action.String())
+	allowed, err := e.enforcer.Enforce(e.rbacUser.GetUserName(), resource.String(), action.String())
+	if err != nil {
+		log.Errorf("failed to evaluate RBAC permission: %v", err)
+		return false
+	}
+	return allowed
 }
 
 // New returns evaluator.Evaluator for the RBACUser

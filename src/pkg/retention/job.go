@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/tw"
 
 	"github.com/goharbor/harbor/src/controller/quota"
 	"github.com/goharbor/harbor/src/jobservice/job"
@@ -201,15 +202,15 @@ func logResults(logger logger.Interface, all []*selector.Candidate, results []*s
 		data = append(data, row)
 	}
 
-	table := tablewriter.NewWriter(&buf)
-	table.SetAutoFormatHeaders(false)
-	table.SetHeader([]string{"Digest", "Tag", "Kind", "Labels", "PushedTime", "PulledTime", "CreatedTime", "Retention"})
-	table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
-	table.SetCenterSeparator("|")
-	table.AppendBulk(data)
-	table.Render()
-
-	logger.Infof("\n%s", buf.String())
+	table := tablewriter.NewTable(&buf, tablewriter.WithHeaderAutoFormat(tw.Off))
+	table.Header([]string{"Digest", "Tag", "Kind", "Labels", "PushedTime", "PulledTime", "CreatedTime", "Retention"})
+	if err := table.Bulk(data); err != nil {
+		logger.Error(errors.Wrap(err, "render retention table"))
+	} else if err := table.Render(); err != nil {
+		logger.Error(errors.Wrap(err, "render retention table"))
+	} else {
+		logger.Infof("\n%s", buf.String())
+	}
 
 	// log all the concrete errors if have
 	for _, r := range results {
