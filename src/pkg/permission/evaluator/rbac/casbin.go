@@ -15,8 +15,8 @@
 package rbac
 
 import (
-	"github.com/casbin/casbin"
-	"github.com/casbin/casbin/model"
+	"github.com/casbin/casbin/v3"
+	"github.com/casbin/casbin/v3/model"
 
 	"github.com/goharbor/harbor/src/lib/log"
 	"github.com/goharbor/harbor/src/pkg/permission/types"
@@ -45,11 +45,16 @@ e = some(where (p.eft == allow)) && !some(where (p.eft == deny))
 m = g(r.sub, p.sub) && keyMatch2(r.obj, p.obj) && (r.act == p.act || p.act == '*')
 `
 
-func makeEnforcer(rbacUser types.RBACUser) *casbin.Enforcer {
+func makeEnforcer(rbacUser types.RBACUser) (*casbin.Enforcer, error) {
 	m := model.Model{}
-	m.LoadModelFromText(modelText)
+	if err := m.LoadModelFromText(modelText); err != nil {
+		return nil, err
+	}
 
-	e := casbin.NewEnforcer(m, &adapter{rbacUser: rbacUser}, log.GetLevel() <= log.DebugLevel)
+	e, err := casbin.NewEnforcer(m, &adapter{rbacUser: rbacUser}, log.GetLevel() <= log.DebugLevel)
+	if err != nil {
+		return nil, err
+	}
 	e.AddFunction("keyMatch2", keyMatch2Func)
-	return e
+	return e, nil
 }
