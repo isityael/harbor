@@ -7,7 +7,7 @@
 #
 # Images pushed to:
 #   harbor.m0sh1.cc/apps/{harbor-core,harbor-jobservice,registry-photon,harbor-registryctl,harbor-exporter}
-#   ghcr.io/sm-moshi/{harbor-core,harbor-jobservice,registry-photon,harbor-registryctl,harbor-exporter}
+#   ghcr.io/yaelmoshi/{harbor-core,harbor-jobservice,registry-photon,harbor-registryctl,harbor-exporter}
 #
 # Required secrets:
 #   harbor_username, harbor_password — registry auth
@@ -190,9 +190,9 @@ steps:
       - crane auth login ghcr.io -u "$GHCR_USERNAME" -p "$GHCR_TOKEN"
       - |
         for image in harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-exporter; do
-          echo "Mirroring $${image}:${CI_COMMIT_TAG} → ghcr.io/sm-moshi/$${image}:${CI_COMMIT_TAG}"
-          crane copy "harbor.m0sh1.cc/apps/$${image}:${CI_COMMIT_TAG}" "ghcr.io/sm-moshi/$${image}:${CI_COMMIT_TAG}"
-          crane copy "harbor.m0sh1.cc/apps/$${image}:latest" "ghcr.io/sm-moshi/$${image}:latest"
+          echo "Mirroring $${image}:${CI_COMMIT_TAG} → ghcr.io/yaelmoshi/$${image}:${CI_COMMIT_TAG}"
+          crane copy "harbor.m0sh1.cc/apps/$${image}:${CI_COMMIT_TAG}" "ghcr.io/yaelmoshi/$${image}:${CI_COMMIT_TAG}"
+          crane copy "harbor.m0sh1.cc/apps/$${image}:latest" "ghcr.io/yaelmoshi/$${image}:latest"
         done
 
   # ── Trivy scan (all 5 images) ───────────────────────────────
