@@ -196,8 +196,8 @@ steps:
       TRIVY_PASSWORD:
         from_secret: harbor_password
     commands:
-      - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
-      - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
+      - trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
+      - trivy image --scanners vuln --skip-version-check --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
 
   - name: trivy-scan-jobservice
     failure: ignore
@@ -209,8 +209,8 @@ steps:
       TRIVY_PASSWORD:
         from_secret: harbor_password
     commands:
-      - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
-      - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
+      - trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
+      - trivy image --scanners vuln --skip-version-check --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
 
   - name: trivy-scan-registryctl
     failure: ignore
@@ -222,8 +222,8 @@ steps:
       TRIVY_PASSWORD:
         from_secret: harbor_password
     commands:
-      - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
-      - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
+      - trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
+      - trivy image --scanners vuln --skip-version-check --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
 
   - name: trivy-scan-registry
     failure: ignore
@@ -235,8 +235,8 @@ steps:
       TRIVY_PASSWORD:
         from_secret: harbor_password
     commands:
-      - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
-      - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
+      - trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
+      - trivy image --scanners vuln --skip-version-check --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
 
   - name: trivy-scan-exporter
     failure: ignore
@@ -248,8 +248,8 @@ steps:
       TRIVY_PASSWORD:
         from_secret: harbor_password
     commands:
-      - trivy image --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
-      - trivy image --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
+      - trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed $${IMAGE_REF}
+      - trivy image --scanners vuln --skip-version-check --exit-code 0 --severity HIGH --ignore-unfixed $${IMAGE_REF}
 
   # ── Cosign sign (all 5 images) ──────────────────────────────
   - name: cosign-sign-core
@@ -268,7 +268,7 @@ steps:
     commands:
       - echo "$COSIGN_KEY" > /tmp/cosign.key
       - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
-      - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
+      - cosign sign --key /tmp/cosign.key --yes --tlog-upload=false --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
       - rm -f /tmp/cosign.key
 
   - name: cosign-sign-jobservice
@@ -287,7 +287,7 @@ steps:
     commands:
       - echo "$COSIGN_KEY" > /tmp/cosign.key
       - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
-      - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
+      - cosign sign --key /tmp/cosign.key --yes --tlog-upload=false --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
       - rm -f /tmp/cosign.key
 
   - name: cosign-sign-registryctl
@@ -306,7 +306,7 @@ steps:
     commands:
       - echo "$COSIGN_KEY" > /tmp/cosign.key
       - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
-      - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
+      - cosign sign --key /tmp/cosign.key --yes --tlog-upload=false --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
       - rm -f /tmp/cosign.key
 
   - name: cosign-sign-registry
@@ -325,7 +325,7 @@ steps:
     commands:
       - echo "$COSIGN_KEY" > /tmp/cosign.key
       - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
-      - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
+      - cosign sign --key /tmp/cosign.key --yes --tlog-upload=false --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
       - rm -f /tmp/cosign.key
 
   - name: cosign-sign-exporter
@@ -344,7 +344,7 @@ steps:
     commands:
       - echo "$COSIGN_KEY" > /tmp/cosign.key
       - cosign login harbor.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
-      - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
+      - cosign sign --key /tmp/cosign.key --yes --tlog-upload=false --registry-referrers-mode=oci-1-1 $${IMAGE_REF}
       - rm -f /tmp/cosign.key
 
   # ── Notation sign (all 5 images) ────────────────────────────

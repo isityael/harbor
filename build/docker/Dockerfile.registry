@@ -4,7 +4,7 @@
 # goharbor/distribution is still GOPATH-era code, so keep it under the
 # github.com/docker/distribution import path while building.
 ARG GO_VERSION=1.26.3
-ARG DISTRIBUTION_VERSION=v2.8.3-harbor.1-rc.2
+ARG DISTRIBUTION_VERSION=v2.8.3-harbor.1-rc.3
 ARG DISTRIBUTION_SRC=https://github.com/goharbor/distribution.git
 
 FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS builder
@@ -21,6 +21,12 @@ WORKDIR /go/src/github.com/docker
 RUN git clone --depth 1 --branch "${DISTRIBUTION_VERSION}" "${DISTRIBUTION_SRC}" distribution
 
 WORKDIR /go/src/github.com/docker/distribution
+RUN go get \
+    github.com/gorilla/handlers@v1.5.2 \
+    golang.org/x/oauth2/google@v0.36.0 \
+    google.golang.org/grpc@v1.81.1 \
+    gopkg.in/square/go-jose.v1@v1.0.4 \
+    && go mod vendor
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     make PREFIX=/go clean bin/registry
 
