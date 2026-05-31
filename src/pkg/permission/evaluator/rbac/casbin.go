@@ -18,7 +18,6 @@ import (
 	"github.com/casbin/casbin/v3"
 	"github.com/casbin/casbin/v3/model"
 
-	"github.com/goharbor/harbor/src/lib/log"
 	"github.com/goharbor/harbor/src/pkg/permission/types"
 )
 
@@ -51,7 +50,7 @@ func makeEnforcer(rbacUser types.RBACUser) (*casbin.Enforcer, error) {
 		return nil, err
 	}
 
-	e, err := casbin.NewEnforcer(m, &adapter{rbacUser: rbacUser}, log.GetLevel() <= log.DebugLevel)
+	e, err := casbin.NewEnforcer(m, &adapter{rbacUser: rbacUser})
 	if err != nil {
 		return nil, err
 	}
