@@ -81,7 +81,7 @@ require (
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/casbin/casbin/v3 v3.10.0
 	github.com/cenkalti/backoff/v5 v5.0.3
-	github.com/jackc/pgx/v5 v5.9.2
+	github.com/jackc/pgx/v5 v5.10.0
 	gopkg.in/yaml.v3 v3.0.1
 	helm.sh/helm/v4 v4.2.0
 )
