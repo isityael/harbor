@@ -3,7 +3,7 @@
 #
 # goharbor/distribution is still GOPATH-era code, so keep it under the
 # github.com/docker/distribution import path while building.
-ARG GO_VERSION=1.26.3
+ARG GO_VERSION=1.26.4
 ARG DISTRIBUTION_VERSION=v2.8.3-harbor.1-rc.3
 ARG DISTRIBUTION_SRC=https://github.com/goharbor/distribution.git
 
