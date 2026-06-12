@@ -83,7 +83,7 @@ require (
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/jackc/pgx/v5 v5.10.0
 	gopkg.in/yaml.v3 v3.0.1
-	helm.sh/helm/v4 v4.2.0
+	helm.sh/helm/v4 v4.2.1
 )
 
 require (
