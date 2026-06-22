@@ -596,6 +596,7 @@ func (c *controllerTestSuite) TestDeleteDeeply() {
 }
 
 func (c *controllerTestSuite) TestCopy() {
+	c.T().Setenv("UTTEST", "true")
 	c.artMgr.On("Get", mock.Anything, mock.Anything).Return(&artifact.Artifact{
 		ID:     1,
 		Digest: "sha256:418fb88ec412e340cdbef913b8ca1bbe8f9e8dc705f9617414c1f2c8db980180",
