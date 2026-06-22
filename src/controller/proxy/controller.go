@@ -48,6 +48,8 @@ const (
 )
 
 var (
+	manifestCacheSleepInterval = sleepIntervalSec * time.Second
+
 	// Ctl is a global proxy controller instance
 	ctl  Controller
 	once sync.Once

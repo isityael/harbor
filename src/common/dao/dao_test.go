@@ -17,10 +17,11 @@ package dao
 import (
 	"context"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/beego/beego/v2/client/orm"
-	
+
 	"github.com/goharbor/harbor/src/common/models"
 	"github.com/goharbor/harbor/src/lib/log"
 	libOrm "github.com/goharbor/harbor/src/lib/orm"
@@ -105,6 +106,10 @@ func TestMain(m *testing.M) {
 		result := 1
 		switch database {
 		case "postgresql":
+			if ok, missing := PostgresTestConfigured(); !ok {
+				log.Warningf("skip PostgreSQL DAO integration tests; missing environment variable(s): %s", strings.Join(missing, ", "))
+				os.Exit(0)
+			}
 			PrepareTestForPostgresSQL()
 		default:
 			log.Fatalf("invalid database: %s", database)
