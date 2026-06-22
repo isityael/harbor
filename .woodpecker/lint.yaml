@@ -20,7 +20,7 @@ clone:
 
 steps:
   - name: generate-swagger
-    image: dhi.io/golang:1.26.3-debian13-dev
+    image: dhi.io/golang:1.26.4-debian13-dev
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
@@ -46,7 +46,7 @@ steps:
         --target src/server/v2.0
 
   - name: build-check
-    image: dhi.io/golang:1.26.3-debian13-dev
+    image: dhi.io/golang:1.26.4-debian13-dev
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
