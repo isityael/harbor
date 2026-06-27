@@ -20,7 +20,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cenkalti/backoff/v5"
+	"github.com/cenkalti/backoff/v6"
 	"github.com/gomodule/redigo/redis"
 
 	"github.com/goharbor/harbor/src/jobservice/common/rds"

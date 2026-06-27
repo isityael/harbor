@@ -15,7 +15,11 @@
     "postgresql",
     "redis",
     "github.com/distribution/distribution",
-    "github.com/docker/distribution"
+    "github.com/docker/distribution",
+    "github.com/go-asn1-ber/asn1-ber",
+    "github.com/google/uuid",
+    "github.com/opencontainers/go-digest",
+    "github.com/robfig/cron/v3"
   ],
   "packageRules": [
     {
