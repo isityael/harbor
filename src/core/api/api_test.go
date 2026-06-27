@@ -20,12 +20,13 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
 	"testing"
 
-	"github.com/dghubble/sling"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -84,12 +85,131 @@ type codeCheckingCase struct {
 	postFunc func(*httptest.ResponseRecorder) error
 }
 
+type testRequestBuilder struct {
+	method string
+	rawURL string
+	header http.Header
+	body   io.Reader
+}
+
+func newTestRequestBuilder() *testRequestBuilder {
+	return &testRequestBuilder{header: http.Header{}}
+}
+
+func (b *testRequestBuilder) Get(rawURL string) *testRequestBuilder {
+	return b.withMethod(http.MethodGet, rawURL)
+}
+
+func (b *testRequestBuilder) Post(rawURL string) *testRequestBuilder {
+	return b.withMethod(http.MethodPost, rawURL)
+}
+
+func (b *testRequestBuilder) Put(rawURL string) *testRequestBuilder {
+	return b.withMethod(http.MethodPut, rawURL)
+}
+
+func (b *testRequestBuilder) Delete(rawURL string) *testRequestBuilder {
+	return b.withMethod(http.MethodDelete, rawURL)
+}
+
+func (b *testRequestBuilder) Head(rawURL string) *testRequestBuilder {
+	return b.withMethod(http.MethodHead, rawURL)
+}
+
+func (b *testRequestBuilder) Patch(rawURL string) *testRequestBuilder {
+	return b.withMethod(http.MethodPatch, rawURL)
+}
+
+func (b *testRequestBuilder) withMethod(method, rawURL string) *testRequestBuilder {
+	b.method = method
+	b.rawURL = rawURL
+	return b
+}
+
+func (b *testRequestBuilder) Add(key, value string) *testRequestBuilder {
+	b.header.Add(key, value)
+	return b
+}
+
+func (b *testRequestBuilder) Set(key, value string) *testRequestBuilder {
+	b.header.Set(key, value)
+	return b
+}
+
+func (b *testRequestBuilder) SetBasicAuth(username, password string) *testRequestBuilder {
+	authReq, _ := http.NewRequest(http.MethodGet, "/", nil)
+	authReq.SetBasicAuth(username, password)
+	b.header.Set("Authorization", authReq.Header.Get("Authorization"))
+	return b
+}
+
+func (b *testRequestBuilder) QueryStruct(queryStruct any) (*testRequestBuilder, error) {
+	values, err := queryValues(queryStruct)
+	if err != nil {
+		return nil, err
+	}
+	if len(values) == 0 {
+		return b, nil
+	}
+	sep := "?"
+	if strings.Contains(b.rawURL, "?") {
+		sep = "&"
+	}
+	b.rawURL += sep + values.Encode()
+	return b, nil
+}
+
+func (b *testRequestBuilder) BodyJSON(body any) (*testRequestBuilder, error) {
+	payload, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	b.body = strings.NewReader(string(payload))
+	b.header.Set("Content-Type", "application/json")
+	return b, nil
+}
+
+func (b *testRequestBuilder) Request() (*http.Request, error) {
+	req, err := http.NewRequest(b.method, b.rawURL, b.body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = b.header.Clone()
+	return req, nil
+}
+
+func queryValues(queryStruct any) (url.Values, error) {
+	values := url.Values{}
+	rv := reflect.Indirect(reflect.ValueOf(queryStruct))
+	if !rv.IsValid() {
+		return values, nil
+	}
+	if rv.Kind() != reflect.Struct {
+		return nil, fmt.Errorf("queryStruct must be a struct")
+	}
+
+	rt := rv.Type()
+	for i := range rv.NumField() {
+		field := rt.Field(i)
+		name := strings.Split(field.Tag.Get("url"), ",")[0]
+		if name == "" || name == "-" {
+			name = field.Name
+		}
+		value := rv.Field(i)
+		if value.IsZero() {
+			continue
+		}
+		values.Set(name, fmt.Sprint(value.Interface()))
+	}
+	return values, nil
+}
+
 func newRequest(r *testingRequest) (*http.Request, error) {
 	if r == nil {
 		return nil, nil
 	}
 
-	reqBuilder := sling.New()
+	reqBuilder := newTestRequestBuilder()
 	switch strings.ToUpper(r.method) {
 	case "", http.MethodGet:
 		reqBuilder = reqBuilder.Get(r.url)
@@ -114,11 +234,19 @@ func newRequest(r *testingRequest) (*http.Request, error) {
 	}
 
 	if r.queryStruct != nil {
-		reqBuilder = reqBuilder.QueryStruct(r.queryStruct)
+		var err error
+		reqBuilder, err = reqBuilder.QueryStruct(r.queryStruct)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if r.bodyJSON != nil {
-		reqBuilder = reqBuilder.BodyJSON(r.bodyJSON)
+		var err error
+		reqBuilder, err = reqBuilder.BodyJSON(r.bodyJSON)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if r.credential != nil {

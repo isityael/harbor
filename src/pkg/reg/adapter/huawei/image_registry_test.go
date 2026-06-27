@@ -16,17 +16,21 @@ package huawei
 
 import (
 	"fmt"
+	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/docker/distribution"
+	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
-	gock "gopkg.in/h2non/gock.v1"
 
 	"github.com/goharbor/harbor/src/pkg/reg/model"
 )
 
-func mockRequest() *gock.Request {
-	return gock.New("https://swr.cn-north-1.myhuaweicloud.com")
+const mockHuaweiURL = "https://swr.cn-north-1.myhuaweicloud.com"
+
+func registerHuaweiResponder(method, path string, status int, body string) {
+	httpmock.RegisterResponder(method, mockHuaweiURL+path, httpmock.NewStringResponder(status, body))
 }
 
 func getHwMockAdapter(t *testing.T) *adapter {
@@ -46,31 +50,31 @@ func getHwMockAdapter(t *testing.T) *adapter {
 	}
 	a := adp.(*adapter)
 
-	gock.InterceptClient(a.client.GetClient())
-	gock.InterceptClient(a.oriClient)
+	httpmock.ActivateNonDefault(a.client.GetClient())
+	httpmock.ActivateNonDefault(a.oriClient)
+	t.Cleanup(httpmock.DeactivateAndReset)
 
 	return a
 }
 
 func mockGetJwtToken(repository string) {
-	mockRequest().Get("/swr/auth/v2/registry/auth").
-		MatchParam("scope", fmt.Sprintf("repository:%s:push,pull", repository)).
-		Reply(200).
-		JSON(jwtToken{
-			Token: "token",
-		})
+	httpmock.RegisterResponderWithQuery(http.MethodGet, mockHuaweiURL+"/swr/auth/v2/registry/auth",
+		url.Values{"scope": []string{fmt.Sprintf("repository:%s:push,pull", repository)}},
+		httpmock.NewJsonResponderOrPanic(http.StatusOK, jwtToken{Token: "token"}))
 }
 
 func TestAdapter_FetchArtifacts(t *testing.T) {
-	defer gock.Off()
-	gock.Observe(gock.DumpRequest)
-
-	mockRequest().Get("/dockyard/v2/repositories").MatchParam("filter", "center::self").
-		BasicAuth("cn-north-1@IJYZLFBKBFN8LOUITAH", "f31e8e2b948265afdae32e83722a7705fd43e154585ff69e64108247750e5d").
-		Reply(200).
-		JSON([]hwRepoQueryResult{
-			{Name: "name1"},
-			{Name: "name2"},
+	httpmock.RegisterResponderWithQuery(http.MethodGet, mockHuaweiURL+"/dockyard/v2/repositories",
+		url.Values{"filter": []string{"center::self"}},
+		func(req *http.Request) (*http.Response, error) {
+			username, password, ok := req.BasicAuth()
+			assert.True(t, ok)
+			assert.Equal(t, "cn-north-1@IJYZLFBKBFN8LOUITAH", username)
+			assert.Equal(t, "f31e8e2b948265afdae32e83722a7705fd43e154585ff69e64108247750e5d", password)
+			return httpmock.NewJsonResponse(http.StatusOK, []hwRepoQueryResult{
+				{Name: "name1"},
+				{Name: "name2"},
+			})
 		})
 
 	a := getHwMockAdapter(t)
@@ -80,15 +84,11 @@ func TestAdapter_FetchArtifacts(t *testing.T) {
 }
 
 func TestAdapter_ManifestExist(t *testing.T) {
-	defer gock.Off()
-	gock.Observe(gock.DumpRequest)
-
 	mockGetJwtToken("sundaymango_mango/hello-world")
-	mockRequest().Get("/v2/sundaymango_mango/hello-world/manifests/latest").
-		Reply(200).
-		JSON(hwManifest{
+	httpmock.RegisterResponder(http.MethodGet, mockHuaweiURL+"/v2/sundaymango_mango/hello-world/manifests/latest",
+		httpmock.NewJsonResponderOrPanic(http.StatusOK, hwManifest{
 			MediaType: distribution.ManifestMediaTypes()[0],
-		})
+		}))
 
 	a := getHwMockAdapter(t)
 	exist, _, err := a.ManifestExist("sundaymango_mango/hello-world", "latest")
@@ -97,11 +97,8 @@ func TestAdapter_ManifestExist(t *testing.T) {
 }
 
 func TestAdapter_DeleteManifest(t *testing.T) {
-	defer gock.Off()
-	gock.Observe(gock.DumpRequest)
-
 	mockGetJwtToken("sundaymango_mango/hello-world")
-	mockRequest().Delete("/v2/sundaymango_mango/hello-world/manifests/latest").Reply(200)
+	registerHuaweiResponder(http.MethodDelete, "/v2/sundaymango_mango/hello-world/manifests/latest", http.StatusOK, "")
 
 	a := getHwMockAdapter(t)
 	err := a.DeleteManifest("sundaymango_mango/hello-world", "latest")

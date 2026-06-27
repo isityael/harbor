@@ -15,18 +15,14 @@
 package retry
 
 import (
+	"context"
 	"fmt"
-	"math/rand"
 	"time"
 
-	"github.com/jpillora/backoff"
+	"github.com/cenkalti/backoff/v6"
 
 	"github.com/goharbor/harbor/src/lib/errors"
 )
-
-func init() {
-	rand.NewSource(time.Now().UnixNano())
-}
 
 var (
 	// ErrRetryTimeout timeout error for retrying
@@ -122,45 +118,49 @@ func Retry(f func() error, options ...Option) error {
 		opts.Timeout = time.Minute
 	}
 
-	var b *backoff.Backoff
+	var b backoff.BackOff = &backoff.ZeroBackOff{}
 
 	if opts.Backoff {
-		b = &backoff.Backoff{
-			Min:    opts.InitialInterval,
-			Max:    opts.MaxInterval,
-			Factor: 2,
-			Jitter: true,
-		}
+		exp := backoff.NewExponentialBackOff()
+		exp.InitialInterval = opts.InitialInterval
+		exp.MaxInterval = opts.MaxInterval
+		exp.Multiplier = 2
+		exp.RandomizationFactor = 0.5
+		b = exp
 	}
 
-	var err error
+	_, retryErr := backoff.Retry(context.Background(), func() (struct{}, error) {
+		err := f()
+		if err == nil {
+			return struct{}{}, nil
+		}
 
-	timeout := time.After(opts.Timeout)
-	for {
-		select {
-		case <-timeout:
-			return errors.New(ErrRetryTimeout).WithCause(err)
-		default:
-			err = f()
-			if err == nil {
-				return nil
-			}
+		var ab *abort
+		if errors.As(err, &ab) {
+			return struct{}{}, backoff.Permanent(ab.cause)
+		}
 
-			var ab *abort
-			if errors.As(err, &ab) {
-				return ab.cause
-			}
-
-			var sleep time.Duration
-			if opts.Backoff {
-				sleep = b.Duration()
-			}
-
+		return struct{}{}, err
+	},
+		backoff.WithBackOff(b),
+		backoff.WithMaxElapsedTime(opts.Timeout),
+		backoff.WithNotify(func(err error, sleep time.Duration) {
 			if opts.Callback != nil {
 				opts.Callback(err, sleep)
 			}
+		}),
+	)
 
-			time.Sleep(sleep)
-		}
+	if retryErr == nil {
+		return nil
 	}
+
+	if re := backoff.AsRetryError(retryErr); re != nil {
+		if errors.Is(re.Cause, backoff.ErrPermanent) {
+			return re.LastErr
+		}
+		return errors.New(ErrRetryTimeout).WithCause(re.LastErr)
+	}
+
+	return retryErr
 }

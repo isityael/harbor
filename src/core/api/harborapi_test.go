@@ -22,7 +22,6 @@ import (
 	"runtime"
 
 	"github.com/beego/beego/v2/server/web"
-	"github.com/dghubble/sling"
 
 	"github.com/goharbor/harbor/src/common/dao"
 	"github.com/goharbor/harbor/src/common/job/test"
@@ -100,9 +99,9 @@ func init() {
 	handler = chain(web.BeeApp.Handlers)
 }
 
-func request0(_sling *sling.Sling, acceptHeader string, authInfo ...usrInfo) (int, http.Header, []byte, error) {
-	_sling = _sling.Set("Accept", acceptHeader)
-	req, err := _sling.Request()
+func request0(reqBuilder *testRequestBuilder, acceptHeader string, authInfo ...usrInfo) (int, http.Header, []byte, error) {
+	reqBuilder = reqBuilder.Set("Accept", acceptHeader)
+	req, err := reqBuilder.Request()
 	if err != nil {
 		return 400, nil, nil, err
 	}
@@ -116,7 +115,7 @@ func request0(_sling *sling.Sling, acceptHeader string, authInfo ...usrInfo) (in
 	return w.Code, w.Header(), body, err
 }
 
-func request(_sling *sling.Sling, acceptHeader string, authInfo ...usrInfo) (int, []byte, error) {
-	code, _, body, err := request0(_sling, acceptHeader, authInfo...)
+func request(reqBuilder *testRequestBuilder, acceptHeader string, authInfo ...usrInfo) (int, []byte, error) {
+	code, _, body, err := request0(reqBuilder, acceptHeader, authInfo...)
 	return code, body, err
 }

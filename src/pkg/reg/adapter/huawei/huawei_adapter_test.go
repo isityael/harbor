@@ -15,10 +15,11 @@
 package huawei
 
 import (
+	"net/http"
 	"testing"
 
+	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
-	gock "gopkg.in/h2non/gock.v1"
 
 	"github.com/goharbor/harbor/src/pkg/reg/model"
 )
@@ -41,8 +42,9 @@ func getMockAdapter(t *testing.T) *adapter {
 	}
 
 	a := hwAdapter.(*adapter)
-	gock.InterceptClient(a.client.GetClient())
-	gock.InterceptClient(a.oriClient)
+	httpmock.ActivateNonDefault(a.client.GetClient())
+	httpmock.ActivateNonDefault(a.oriClient)
+	t.Cleanup(httpmock.DeactivateAndReset)
 
 	return a
 }
@@ -58,14 +60,9 @@ func TestAdapter_Info(t *testing.T) {
 }
 
 func TestAdapter_PrepareForPush(t *testing.T) {
-	defer gock.Off()
-	gock.Observe(gock.DumpRequest)
+	registerHuaweiResponder(http.MethodGet, "/dockyard/v2/namespaces/domain_repo_new", http.StatusOK, "{}")
 
-	mockRequest().Get("/dockyard/v2/namespaces/domain_repo_new").
-		Reply(200).BodyString("{}")
-
-	mockRequest().Post("/dockyard/v2/namespaces").BodyString(`{"namespace":"domain_repo_new"}`).
-		Reply(200)
+	registerHuaweiResponder(http.MethodPost, "/dockyard/v2/namespaces", http.StatusOK, "")
 
 	a := getMockAdapter(t)
 
@@ -83,9 +80,6 @@ func TestAdapter_PrepareForPush(t *testing.T) {
 }
 
 func TestAdapter_HealthCheck(t *testing.T) {
-	defer gock.Off()
-	gock.Observe(gock.DumpRequest)
-
 	a := getMockAdapter(t)
 
 	health, err := a.HealthCheck()

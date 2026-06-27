@@ -21,10 +21,10 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"net/url"
 	"os"
 	"strings"
 
-	"github.com/asaskevich/govalidator"
 	"github.com/gocraft/work"
 
 	"github.com/goharbor/harbor/src/lib/errors"
@@ -100,7 +100,22 @@ func IsValidURL(address string) bool {
 		return false
 	}
 
-	return govalidator.IsURL(address)
+	rawURL := strings.TrimSpace(address)
+	if !strings.Contains(rawURL, "://") {
+		rawURL = "http://" + rawURL
+	}
+
+	u, err := url.ParseRequestURI(rawURL)
+	if err != nil {
+		return false
+	}
+
+	host := u.Hostname()
+	if host == "" || strings.Contains(host, "_") {
+		return false
+	}
+
+	return net.ParseIP(host) != nil || strings.Contains(host, ".")
 }
 
 // SerializeJob encodes work.Job to json data.
