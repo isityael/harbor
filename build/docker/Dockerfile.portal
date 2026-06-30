@@ -1,0 +1,38 @@
+# Multi-stage Dockerfile for harbor-portal built on DHI bases.
+ARG NODE_IMAGE=dhi.io/node:26.4.0-alpine3.24-dev
+ARG RUNTIME_IMAGE=dhi.io/nginx:1.31.2-alpine3.24
+
+FROM --platform=$BUILDPLATFORM ${NODE_IMAGE} AS nodeportal
+WORKDIR /build_dir
+
+ARG npm_registry=https://registry.npmjs.org
+
+COPY api/v2.0/swagger.yaml /build_dir/swagger.yaml
+COPY src/portal /build_dir
+
+ENV NPM_CONFIG_REGISTRY=${npm_registry}
+RUN npm install --unsafe-perm
+RUN npm run generate-build-timestamp
+RUN node --max_old_space_size=2048 'node_modules/@angular/cli/bin/ng' build --configuration production
+RUN npm install js-yaml@4.1.0 \
+    && node -e "const yaml = require('js-yaml'); const fs = require('fs'); const swagger = yaml.load(fs.readFileSync('swagger.yaml', 'utf8')); fs.writeFileSync('swagger.json', JSON.stringify(swagger));"
+
+COPY LICENSE /build_dir/dist
+
+RUN cd app-swagger-ui && npm install --unsafe-perm
+RUN cd app-swagger-ui && npm run build
+
+FROM ${RUNTIME_IMAGE}
+
+COPY --from=nodeportal --chown=nginx:nginx /build_dir/dist /usr/share/nginx/html
+COPY --from=nodeportal --chown=nginx:nginx /build_dir/swagger.json /usr/share/nginx/html
+COPY --from=nodeportal --chown=nginx:nginx /build_dir/app-swagger-ui/dist /usr/share/nginx/html
+
+VOLUME ["/var/cache/nginx", "/var/log/nginx", "/run"]
+STOPSIGNAL SIGQUIT
+
+HEALTHCHECK CMD wget -q -O /dev/null http://localhost:8080 || \
+    wget --no-check-certificate -q -O /dev/null https://localhost:8443 || exit 1
+
+USER nginx
+CMD ["nginx", "-g", "daemon off;"]

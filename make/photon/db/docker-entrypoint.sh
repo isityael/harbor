@@ -7,7 +7,16 @@ CUR=$PWD
 PG_VERSION_OLD=$1
 PG_VERSION_NEW=$2
 
-PGBINOLD="/usr/pgsql/${PG_VERSION_OLD}/bin"
+PGBINOLD=""
+for candidate in \
+        "/usr/pgsql/${PG_VERSION_OLD}/bin" \
+        "/usr/lib/postgresql/${PG_VERSION_OLD}/bin" \
+        "/usr/local/pgsql-${PG_VERSION_OLD}/bin"; do
+        if [ -x "$candidate/pg_ctl" ] && [ -x "$candidate/pg_controldata" ]; then
+                PGBINOLD="$candidate"
+                break
+        fi
+done
 
 PGDATAOLD=${PGDATA}/pg${PG_VERSION_OLD}
 PGDATANEW=${PGDATA}/pg${PG_VERSION_NEW}
@@ -35,6 +44,10 @@ fi
 if [ ! -s $PGDATANEW/PG_VERSION ]; then
         if [ ! -z $PG_VERSION_OLD ] && [ -s $PGDATAOLD/PG_VERSION ]; then
                 echo "upgrade DB from $PG_VERSION_OLD to $PG_VERSION_NEW"
+                if [ -z "$PGBINOLD" ]; then
+                        echo "old PostgreSQL $PG_VERSION_OLD binaries are required for pg_upgrade but were not found"
+                        exit 1
+                fi
                 # Match the data checksum setting of the old cluster, otherwise pg_upgrade
                 # will fail with "old cluster does not use data checksums but the new one does".
                 # Starting from PostgreSQL 18, initdb enables data checksums by default while

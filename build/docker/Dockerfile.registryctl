@@ -1,17 +1,10 @@
-# Multi-stage Dockerfile for harbor-registryctl
-# Built from sm-moshi/harbor fork with cherry-picked fixes
-#
-# NOTE: registryctl ships the goharbor/distribution binary for GC operations.
-# goharbor/distribution is still GOPATH-era code, so keep it under the
-# github.com/docker/distribution import path while building.
-#
-# Cross-compilation: builder runs on BUILDPLATFORM (native speed),
-# Go cross-compiles to TARGETARCH. Only the runtime stage uses QEMU.
-ARG GO_VERSION=1.26.4
+# Multi-stage Dockerfile for harbor-registryctl built on DHI bases.
+ARG GO_IMAGE=dhi.io/golang:1.26.4-alpine3.24-dev
+ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24
 ARG DISTRIBUTION_VERSION=v2.8.3-harbor.1-rc.3
 ARG DISTRIBUTION_SRC=https://github.com/goharbor/distribution.git
 
-FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS distribution-builder
+FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS distribution-builder
 ARG DISTRIBUTION_VERSION
 ARG DISTRIBUTION_SRC
 ARG TARGETOS=linux
@@ -34,7 +27,7 @@ RUN go get \
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     make PREFIX=/go clean bin/registry
 
-FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS builder
+FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS builder
 ARG GITCOMMIT=unknown
 ARG RELEASE_VERSION=dev
 ARG TARGETOS=linux
@@ -45,7 +38,6 @@ COPY src/ ./src/
 COPY api/ ./api/
 COPY tools/swagger/templates/ ./tools/swagger/templates/
 
-# Generate swagger server code — Go module loader requires it even for non-server builds
 RUN go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1 \
     && swagger generate server \
     --template-dir=tools/swagger/templates \
@@ -57,40 +49,30 @@ RUN go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1 \
     -A harbor \
     --target src/server/v2.0
 
-# Build registryctl
 RUN cd src && CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
-    go build -o /out/harbor_registryctl \
+    go build -mod=mod -o /out/harbor_registryctl \
     -ldflags "-w -s \
     -X github.com/goharbor/harbor/src/pkg/version.GitCommit=${GITCOMMIT} \
     -X github.com/goharbor/harbor/src/pkg/version.ReleaseVersion=${RELEASE_VERSION}" \
     ./registryctl
 
-FROM goharbor/photon:5.0
+FROM ${RUNTIME_IMAGE}
 
-RUN tdnf update -y >> /dev/null \
-    && tdnf install -y tzdata shadow curl >> /dev/null \
-    && tdnf clean all \
-    && groupadd -r -g 10000 harbor \
-    && useradd --no-log-init -m -g 10000 -u 10000 harbor \
-    && mkdir -p /etc/registry /home/harbor
+ENV HARBOR_CA_BUNDLE=/home/harbor/ca-bundle.crt \
+    SSL_CERT_FILE=/home/harbor/ca-bundle.crt
 
-COPY --from=builder /out/harbor_registryctl /home/harbor/
-COPY --from=distribution-builder /go/src/github.com/docker/distribution/bin/registry /usr/bin/registry_DO_NOT_USE_GC
-COPY make/photon/registryctl/start.sh /home/harbor/
-COPY make/photon/common/install_cert.sh /home/harbor/
+RUN mkdir -p /home/harbor /etc/registry /etc/registryctl /var/lib/registry /etc/harbor/ssl /harbor_cust_cert \
+    && cp /etc/ssl/certs/ca-certificates.crt /home/harbor/ca-bundle.crt \
+    && chown -R 10000:10000 /home/harbor /etc/registry /etc/registryctl /var/lib/registry /etc/harbor/ssl /harbor_cust_cert
 
-RUN chown -R harbor:harbor /etc/pki/tls/certs \
-    && chown harbor:harbor /home/harbor/harbor_registryctl && chmod u+x /home/harbor/harbor_registryctl \
-    && chown harbor:harbor /usr/bin/registry_DO_NOT_USE_GC && chmod u+x /usr/bin/registry_DO_NOT_USE_GC \
-    && chown harbor:harbor /home/harbor/start.sh && chmod u+x /home/harbor/start.sh \
-    && chown harbor:harbor /home/harbor/install_cert.sh && chmod u+x /home/harbor/install_cert.sh
+COPY --from=builder --chown=10000:10000 --chmod=0755 /out/harbor_registryctl /home/harbor/
+COPY --from=distribution-builder --chown=10000:10000 --chmod=0755 /go/src/github.com/docker/distribution/bin/registry /usr/bin/registry_DO_NOT_USE_GC
+COPY --chown=10000:10000 --chmod=0755 make/photon/registryctl/start.sh /home/harbor/
+COPY --chown=10000:10000 --chmod=0755 make/photon/common/install_cert.sh /home/harbor/
 
 HEALTHCHECK --interval=30s --timeout=10s \
-    CMD curl --fail -s http://localhost:8080/api/health || \
-        curl -sk --fail --key /etc/harbor/ssl/registryctl.key \
-        --cert /etc/harbor/ssl/registryctl.crt \
-        https://localhost:8443/api/health || exit 1
+    CMD wget -q -O /dev/null http://localhost:8080/api/health || exit 1
 
 VOLUME ["/var/lib/registry"]
 ENTRYPOINT ["/home/harbor/start.sh"]
-USER harbor
+USER 10000:10000

@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-set -eo pipefail
+set -e
 
 if ping="$(valkey-cli -h "127.0.0.1" ping)" && [ "$ping" = 'PONG' ]; then
 	exit 0
