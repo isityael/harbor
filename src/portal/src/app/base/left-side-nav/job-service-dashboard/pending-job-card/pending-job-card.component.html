@@ -15,7 +15,6 @@
             </div>
             <div class="clr-col-6 count">{{ jobQueue[0]?.count || 0 }}</div>
         </div>
-        </div>
         <div *ngIf="jobQueue?.length > 1" class="clr-row queue-row">
             <div class="clr-col-6 center">
                 <label class="clr-control-label text-truncate">
@@ -24,7 +23,6 @@
             </div>
             <div class="clr-col-6 count">{{ jobQueue[1]?.count || 0 }}</div>
         </div>
-        </div>
         <div *ngIf="jobQueue?.length > 2" class="clr-row queue-row">
             <div class="clr-col-6 center">
                 <label class="clr-control-label text-truncate">{{
@@ -32,7 +30,6 @@
                 }}</label>
             </div>
             <div class="clr-col-6 count">{{ otherCount() }}</div>
-        </div>
         </div>
         </ng-container>
         <div *ngIf="loading" class="loading">
