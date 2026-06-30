@@ -1,7 +1,7 @@
 # Harbor components — build, push, scan, and sign GHCR images.
-# Triggered by sm-moshi v2.16.0 version tags (v2.16.0-sm*).
+# Triggered by isityael v2.16.0 yael tag (v2.16.0-yael).
 #
-# Images pushed to ghcr.io/yaelmoshi only:
+# Images pushed to ghcr.io/isityael only:
 #   nginx-photon, harbor-portal, harbor-core, harbor-jobservice,
 #   registry-photon, harbor-registryctl, harbor-db,
 #   harbor-trivy-adapter, harbor-exporter, valkey-photon
@@ -12,7 +12,7 @@
 #   notation_key, notation_cert     — notation signing
 when:
   - event: tag
-    ref: "refs/tags/v2.16.0-sm*"
+    ref: "refs/tags/v2.16.0-yael"
 
 clone:
   git:
@@ -29,8 +29,8 @@ steps:
       - test "$(cat VERSION)" = "$CI_COMMIT_TAG"
       - |
         case "$CI_COMMIT_TAG" in
-          v2.16.0-sm*) ;;
-          *) echo "Refusing to release non-v2.16.0-sm tag: $CI_COMMIT_TAG"; exit 1 ;;
+          v2.16.0-yael) ;;
+          *) echo "Refusing to release non-v2.16.0-yael tag: $CI_COMMIT_TAG"; exit 1 ;;
         esac
 
   - name: build-nginx
@@ -38,7 +38,7 @@ steps:
     privileged: true
     settings:
       registry: ghcr.io
-      repo: ghcr.io/yaelmoshi/nginx-photon
+      repo: ghcr.io/isityael/nginx-photon
       dockerfile: build/docker/Dockerfile.nginx
       context: .
       tags: ["${CI_COMMIT_TAG}", latest]
@@ -57,7 +57,7 @@ steps:
     privileged: true
     settings:
       registry: ghcr.io
-      repo: ghcr.io/yaelmoshi/harbor-portal
+      repo: ghcr.io/isityael/harbor-portal
       dockerfile: build/docker/Dockerfile.portal
       context: .
       tags: ["${CI_COMMIT_TAG}", latest]
@@ -76,7 +76,7 @@ steps:
     privileged: true
     settings:
       registry: ghcr.io
-      repo: ghcr.io/yaelmoshi/harbor-core
+      repo: ghcr.io/isityael/harbor-core
       dockerfile: build/docker/Dockerfile.core
       context: .
       tags: ["${CI_COMMIT_TAG}", latest]
@@ -98,7 +98,7 @@ steps:
     privileged: true
     settings:
       registry: ghcr.io
-      repo: ghcr.io/yaelmoshi/harbor-jobservice
+      repo: ghcr.io/isityael/harbor-jobservice
       dockerfile: build/docker/Dockerfile.jobservice
       context: .
       tags: ["${CI_COMMIT_TAG}", latest]
@@ -120,7 +120,7 @@ steps:
     privileged: true
     settings:
       registry: ghcr.io
-      repo: ghcr.io/yaelmoshi/registry-photon
+      repo: ghcr.io/isityael/registry-photon
       dockerfile: build/docker/Dockerfile.registry
       context: .
       tags: ["${CI_COMMIT_TAG}", latest]
@@ -139,7 +139,7 @@ steps:
     privileged: true
     settings:
       registry: ghcr.io
-      repo: ghcr.io/yaelmoshi/harbor-registryctl
+      repo: ghcr.io/isityael/harbor-registryctl
       dockerfile: build/docker/Dockerfile.registryctl
       context: .
       tags: ["${CI_COMMIT_TAG}", latest]
@@ -161,7 +161,7 @@ steps:
     privileged: true
     settings:
       registry: ghcr.io
-      repo: ghcr.io/yaelmoshi/harbor-db
+      repo: ghcr.io/isityael/harbor-db
       dockerfile: build/docker/Dockerfile.db
       context: .
       tags: ["${CI_COMMIT_TAG}", latest]
@@ -180,7 +180,7 @@ steps:
     privileged: true
     settings:
       registry: ghcr.io
-      repo: ghcr.io/yaelmoshi/harbor-trivy-adapter
+      repo: ghcr.io/isityael/harbor-trivy-adapter
       dockerfile: build/docker/Dockerfile.trivy-adapter
       context: .
       tags: ["${CI_COMMIT_TAG}", latest]
@@ -199,7 +199,7 @@ steps:
     privileged: true
     settings:
       registry: ghcr.io
-      repo: ghcr.io/yaelmoshi/harbor-exporter
+      repo: ghcr.io/isityael/harbor-exporter
       dockerfile: build/docker/Dockerfile.exporter
       context: .
       tags: ["${CI_COMMIT_TAG}", latest]
@@ -221,7 +221,7 @@ steps:
     privileged: true
     settings:
       registry: ghcr.io
-      repo: ghcr.io/yaelmoshi/valkey-photon
+      repo: ghcr.io/isityael/valkey-photon
       dockerfile: build/docker/Dockerfile.valkey
       context: .
       tags: ["${CI_COMMIT_TAG}", latest]
@@ -246,7 +246,7 @@ steps:
     commands:
       - |
         for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
-          ref="ghcr.io/yaelmoshi/$${image}:${CI_COMMIT_TAG}"
+          ref="ghcr.io/isityael/$${image}:${CI_COMMIT_TAG}"
           trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed "$${ref}"
           trivy image --scanners vuln --skip-version-check --exit-code 0 --severity HIGH --ignore-unfixed "$${ref}"
         done
@@ -268,7 +268,7 @@ steps:
       - cosign login ghcr.io -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
       - |
         for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
-          cosign sign --key /tmp/cosign.key --yes --tlog-upload=false --registry-referrers-mode=oci-1-1 "ghcr.io/yaelmoshi/$${image}:${CI_COMMIT_TAG}"
+          cosign sign --key /tmp/cosign.key --yes --tlog-upload=false --registry-referrers-mode=oci-1-1 "ghcr.io/isityael/$${image}:${CI_COMMIT_TAG}"
         done
       - rm -f /tmp/cosign.key
 
@@ -294,6 +294,6 @@ steps:
       - printf '{"auths":{"ghcr.io":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
       - |
         for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
-          notation sign --force-referrers-tag=false --key harbor "ghcr.io/yaelmoshi/$${image}:${CI_COMMIT_TAG}"
+          notation sign --force-referrers-tag=false --key harbor "ghcr.io/isityael/$${image}:${CI_COMMIT_TAG}"
         done
       - rm -rf /tmp/notation $HOME/.docker/config.json
