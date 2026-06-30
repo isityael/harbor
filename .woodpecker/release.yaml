@@ -49,6 +49,11 @@ steps:
             from_secret: github_username
           password:
             from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
 
@@ -68,6 +73,11 @@ steps:
             from_secret: github_username
           password:
             from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
 
@@ -87,6 +97,11 @@ steps:
             from_secret: github_username
           password:
             from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
       build_args:
         - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
         - "RELEASE_VERSION=${CI_COMMIT_TAG}"
@@ -109,6 +124,11 @@ steps:
             from_secret: github_username
           password:
             from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
       build_args:
         - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
         - "RELEASE_VERSION=${CI_COMMIT_TAG}"
@@ -131,6 +151,11 @@ steps:
             from_secret: github_username
           password:
             from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
 
@@ -150,6 +175,11 @@ steps:
             from_secret: github_username
           password:
             from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
       build_args:
         - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
         - "RELEASE_VERSION=${CI_COMMIT_TAG}"
@@ -172,6 +202,11 @@ steps:
             from_secret: github_username
           password:
             from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
 
@@ -191,6 +226,11 @@ steps:
             from_secret: github_username
           password:
             from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
 
@@ -210,6 +250,11 @@ steps:
             from_secret: github_username
           password:
             from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
       build_args:
         - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
         - "RELEASE_VERSION=${CI_COMMIT_TAG}"
@@ -232,6 +277,11 @@ steps:
             from_secret: github_username
           password:
             from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
       provenance: "mode=max"
       buildkit_driveropt: "network=host"
 
