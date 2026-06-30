@@ -13,11 +13,10 @@
                 }}</label>
             </div>
             <div class="clr-col-7">
-                @if (!loadingStatus) {
-                <span class="status">{{ statusStr() | translate }}</span>
-                } @if (loadingStatus) {
-                <span class="spinner spinner-inline"></span>
-                }
+                <span *ngIf="!loadingStatus" class="status">{{
+                    statusStr() | translate
+                }}</span>
+                <span *ngIf="loadingStatus" class="spinner spinner-inline"></span>
             </div>
         </div>
     </div>
