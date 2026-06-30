@@ -46,18 +46,16 @@
             <clr-dg-page-size [clrPageSizeOptions]="clrPageSizeOptions">{{
                 'PAGINATION.PAGE_SIZE' | translate
             }}</clr-dg-page-size>
-            @if (pools?.length) {
-            <span>
+            <span *ngIf="pools?.length">
                 {{ pagination.firstItem + 1 }} -
                 {{ pagination.lastItem + 1 }}
                 {{ 'GROUP.OF' | translate }}
             </span>
-            }
             {{ pools?.length }} {{ 'GROUP.ITEMS' | translate }}
         </clr-dg-pagination>
     </clr-dg-footer>
 </clr-datagrid>
-@if (selectedPool) {
+<ng-container *ngIf="selectedPool">
 <h2>{{ 'JOB_SERVICE_DASHBOARD.WORKERS' | translate }}</h2>
 <clr-datagrid
     clrDgSelectionType="multi"
@@ -122,14 +120,13 @@
         <clr-dg-cell>{{ w.start_at | harborDatetime }}</clr-dg-cell>
         <clr-dg-cell>{{ w.checkin_at | harborDatetime }}</clr-dg-cell>
         <clr-dg-cell>
-            @if (w.job_id) {
             <a
+                *ngIf="w.job_id"
                 rel="noopener noreferrer"
                 target="_blank"
                 [href]="viewLog(w.job_id)">
                 <clr-icon shape="list"></clr-icon>
             </a>
-            }
         </clr-dg-cell>
     </clr-dg-row>
     <clr-dg-footer>
@@ -140,15 +137,13 @@
             <clr-dg-page-size [clrPageSizeOptions]="clrPageSizeOptions">{{
                 'PAGINATION.PAGE_SIZE' | translate
             }}</clr-dg-page-size>
-            @if (workers?.length) {
-            <span>
+            <span *ngIf="workers?.length">
                 {{ pagination.firstItem + 1 }} -
                 {{ pagination.lastItem + 1 }}
                 {{ 'GROUP.OF' | translate }}
             </span>
-            }
             {{ workers?.length }} {{ 'GROUP.ITEMS' | translate }}
         </clr-dg-pagination>
     </clr-dg-footer>
 </clr-datagrid>
-}
+</ng-container>
