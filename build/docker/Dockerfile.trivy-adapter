@@ -23,7 +23,7 @@ ENV HARBOR_CA_BUNDLE=/home/scanner/ca-bundle.crt \
     SSL_CERT_FILE=/home/scanner/ca-bundle.crt \
     TRIVY_VERSION=${TRIVY_VERSION}
 
-USER root
+USER 0
 RUN mkdir -p /home/scanner/bin /home/scanner/.cache/trivy /home/scanner/.cache/reports /etc/harbor/ssl /harbor_cust_cert \
     && cp /etc/ssl/certs/ca-certificates.crt /home/scanner/ca-bundle.crt \
     && chown -R 10000:10000 /home/scanner /etc/harbor/ssl /harbor_cust_cert
