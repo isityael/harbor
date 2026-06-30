@@ -1,13 +1,10 @@
-# Multi-stage Dockerfile for registry-photon
-# Built from goharbor/distribution pinned to Harbor's v2.16 release line.
-#
-# goharbor/distribution is still GOPATH-era code, so keep it under the
-# github.com/docker/distribution import path while building.
-ARG GO_VERSION=1.26.4
+# Multi-stage Dockerfile for registry-photon built on DHI bases.
+ARG GO_IMAGE=dhi.io/golang:1.26.4-alpine3.24-dev
+ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24
 ARG DISTRIBUTION_VERSION=v2.8.3-harbor.1-rc.3
 ARG DISTRIBUTION_SRC=https://github.com/goharbor/distribution.git
 
-FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS builder
+FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS builder
 ARG DISTRIBUTION_VERSION
 ARG DISTRIBUTION_SRC
 ARG TARGETOS=linux
@@ -30,30 +27,23 @@ RUN go get \
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     make PREFIX=/go clean bin/registry
 
-FROM goharbor/photon:5.0
+FROM ${RUNTIME_IMAGE}
 
-RUN tdnf update -y >> /dev/null \
-    && tdnf install -y tzdata shadow curl >> /dev/null \
-    && tdnf clean all \
-    && groupadd -r -g 10000 harbor \
-    && useradd --no-log-init -m -g 10000 -u 10000 harbor \
-    && mkdir -p /home/harbor /storage
+ENV HARBOR_CA_BUNDLE=/home/harbor/ca-bundle.crt \
+    SSL_CERT_FILE=/home/harbor/ca-bundle.crt
 
-COPY --from=builder /go/src/github.com/docker/distribution/bin/registry /usr/bin/registry_DO_NOT_USE_GC
-COPY make/photon/registry/entrypoint.sh /home/harbor/
-COPY make/photon/common/install_cert.sh /home/harbor/
+RUN mkdir -p /home/harbor /storage /etc/registry /etc/harbor/ssl /harbor_cust_cert \
+    && cp /etc/ssl/certs/ca-certificates.crt /home/harbor/ca-bundle.crt \
+    && chown -R 10000:10000 /home/harbor /storage /etc/registry /etc/harbor/ssl /harbor_cust_cert
 
-RUN chown -R harbor:harbor /etc/pki/tls/certs \
-    && chown -R harbor:harbor /home/harbor /storage \
-    && chown harbor:harbor /usr/bin/registry_DO_NOT_USE_GC \
-    && chmod u+x /usr/bin/registry_DO_NOT_USE_GC \
-    && chmod u+x /home/harbor/entrypoint.sh \
-    && chmod u+x /home/harbor/install_cert.sh
+COPY --from=builder --chown=10000:10000 --chmod=0755 /go/src/github.com/docker/distribution/bin/registry /usr/bin/registry_DO_NOT_USE_GC
+COPY --chown=10000:10000 --chmod=0755 make/photon/registry/entrypoint.sh /home/harbor/
+COPY --chown=10000:10000 --chmod=0755 make/photon/common/install_cert.sh /home/harbor/
 
 HEALTHCHECK --interval=30s --timeout=10s \
-    CMD curl --fail -s http://localhost:5000 || \
-        curl -k --fail -s https://localhost:5443 || exit 1
+    CMD wget -q -O /dev/null http://localhost:5000 || \
+        wget --no-check-certificate -q -O /dev/null https://localhost:5443 || exit 1
 
 VOLUME ["/storage"]
 ENTRYPOINT ["/home/harbor/entrypoint.sh"]
-USER harbor
+USER 10000:10000

@@ -1,0 +1,12 @@
+# Dockerfile for Harbor's nginx gateway built on a DHI nginx base.
+ARG RUNTIME_IMAGE=dhi.io/nginx:1.31.2-alpine3.24
+
+FROM ${RUNTIME_IMAGE}
+
+VOLUME ["/var/cache/nginx", "/var/log/nginx", "/run"]
+STOPSIGNAL SIGQUIT
+
+HEALTHCHECK CMD wget -q -O /dev/null http://localhost:8080 || exit 1
+
+USER nginx
+CMD ["nginx", "-g", "daemon off;"]
