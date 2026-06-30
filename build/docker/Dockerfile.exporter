@@ -36,7 +36,7 @@ FROM ${RUNTIME_IMAGE}
 ENV HARBOR_CA_BUNDLE=/harbor/ca-bundle.crt \
     SSL_CERT_FILE=/harbor/ca-bundle.crt
 
-USER root
+USER 0
 RUN mkdir -p /harbor /etc/harbor/ssl /harbor_cust_cert \
     && cp /etc/ssl/certs/ca-certificates.crt /harbor/ca-bundle.crt \
     && chown -R 10000:10000 /harbor /etc/harbor/ssl /harbor_cust_cert
