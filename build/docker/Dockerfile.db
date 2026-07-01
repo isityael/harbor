@@ -5,7 +5,7 @@ FROM ${RUNTIME_IMAGE}
 
 ENV PGDATA=/var/lib/postgresql/data
 
-USER root
+USER 0
 RUN mkdir -p /var/lib/postgresql/data /docker-entrypoint-initdb.d \
     && chown -R postgres:postgres /var/lib/postgresql /docker-entrypoint-initdb.d
 
