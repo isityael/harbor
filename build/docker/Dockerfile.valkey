@@ -3,16 +3,16 @@ ARG RUNTIME_IMAGE=dhi.io/valkey:9.1.0-debian13
 
 FROM ${RUNTIME_IMAGE}
 
-USER root
+USER 0
 RUN mkdir -p /var/lib/redis \
-    && chown -R valkey:valkey /var/lib/redis
+    && chown -R 65532:65532 /var/lib/redis
 
 VOLUME ["/var/lib/redis"]
 WORKDIR /var/lib/redis
 
-COPY --chown=valkey:valkey --chmod=0755 make/photon/valkey/docker-healthcheck /usr/bin/docker-healthcheck
-COPY --chown=valkey:valkey make/photon/valkey/redis.conf /etc/redis.conf
+COPY --chown=65532:65532 --chmod=0755 make/photon/valkey/docker-healthcheck /usr/bin/docker-healthcheck
+COPY --chown=65532:65532 make/photon/valkey/redis.conf /etc/redis.conf
 
 HEALTHCHECK CMD ["docker-healthcheck"]
-USER valkey
+USER 65532:65532
 CMD ["valkey-server", "/etc/redis.conf"]
