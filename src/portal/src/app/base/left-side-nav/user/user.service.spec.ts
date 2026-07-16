@@ -17,6 +17,7 @@ import { UserService } from './user.service';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('UserService', () => {
@@ -25,7 +26,7 @@ describe('UserService', () => {
             imports: [],
             providers: [
                 UserService,
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

@@ -109,14 +109,14 @@
                     'USER.COLUMN_REG_NAME' | translate
                 }}</clr-dg-column>
                 @for (user of users; track user) {
-                <clr-dg-row [clrDgItem]="user">
-                    <clr-dg-cell>{{ user.username }}</clr-dg-cell>
-                    <clr-dg-cell>{{ isSystemAdmin(user) }}</clr-dg-cell>
-                    <clr-dg-cell>{{ user.email }}</clr-dg-cell>
-                    <clr-dg-cell>{{
-                        user.creation_time | harborDatetime : 'short'
-                    }}</clr-dg-cell>
-                </clr-dg-row>
+                    <clr-dg-row [clrDgItem]="user">
+                        <clr-dg-cell>{{ user.username }}</clr-dg-cell>
+                        <clr-dg-cell>{{ isSystemAdmin(user) }}</clr-dg-cell>
+                        <clr-dg-cell>{{ user.email }}</clr-dg-cell>
+                        <clr-dg-cell>{{
+                            user.creation_time | harborDatetime: 'short'
+                        }}</clr-dg-cell>
+                    </clr-dg-row>
                 }
                 <clr-dg-footer>
                     <clr-dg-pagination
@@ -131,11 +131,11 @@
                             }}</clr-dg-page-size
                         >
                         @if (totalCount > 0) {
-                        <span
-                            >{{ pagination.firstItem + 1 }} -
-                            {{ pagination.lastItem + 1 }}
-                            {{ 'USER.OF' | translate }}</span
-                        >
+                            <span
+                                >{{ pagination.firstItem + 1 }} -
+                                {{ pagination.lastItem + 1 }}
+                                {{ 'USER.OF' | translate }}</span
+                            >
                         }
                         {{ totalCount }} {{ 'USER.ITEMS' | translate }}
                     </clr-dg-pagination>

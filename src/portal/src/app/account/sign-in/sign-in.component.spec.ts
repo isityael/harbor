@@ -25,7 +25,8 @@ import { UserPermissionService } from '../../shared/services';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 
 describe('SignInComponent', () => {
     let component: SignInComponent;

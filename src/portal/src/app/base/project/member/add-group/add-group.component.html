@@ -43,18 +43,21 @@
                             ">
                             <ul>
                                 @for (group of searchedGroups; track group) {
-                                <li (click)="selectGroup(group.group_name)">
-                                    {{ group.group_name }}
-                                </li>
+                                    <li (click)="selectGroup(group.group_name)">
+                                        {{ group.group_name }}
+                                    </li>
                                 }
                             </ul>
                         </div>
                     </div>
-                    @if ( (groupName.invalid && (groupName.touched ||
-                    groupName.dirty)) || !isGroupNameValid ) {
-                    <clr-control-error class="tooltip-content">
-                        {{ groupTooltip | translate }}
-                    </clr-control-error>
+                    @if (
+                        (groupName.invalid &&
+                            (groupName.touched || groupName.dirty)) ||
+                        !isGroupNameValid
+                    ) {
+                        <clr-control-error class="tooltip-content">
+                            {{ groupTooltip | translate }}
+                        </clr-control-error>
                     }
                 </div>
             </div>
@@ -64,19 +67,23 @@
                 }}</label>
                 <div class="clr-control-container">
                     @for (projectRoot of projectRoots; track projectRoot) {
-                    <clr-radio-wrapper>
-                        <input
-                            clrRadio
-                            type="radio"
-                            name="member_role"
-                            id="{{ 'check_root_project_' + projectRoot.NAME }}"
-                            [value]="projectRoot.VALUE"
-                            [(ngModel)]="roleId" />
-                        <label
-                            for="{{ 'check_root_project_' + projectRoot.NAME }}"
-                            >{{ projectRoot.LABEL | translate }}</label
-                        >
-                    </clr-radio-wrapper>
+                        <clr-radio-wrapper>
+                            <input
+                                clrRadio
+                                type="radio"
+                                name="member_role"
+                                id="{{
+                                    'check_root_project_' + projectRoot.NAME
+                                }}"
+                                [value]="projectRoot.VALUE"
+                                [(ngModel)]="roleId" />
+                            <label
+                                for="{{
+                                    'check_root_project_' + projectRoot.NAME
+                                }}"
+                                >{{ projectRoot.LABEL | translate }}</label
+                            >
+                        </clr-radio-wrapper>
                     }
                 </div>
             </div>

@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import {
     durationStr,
@@ -47,6 +52,7 @@ import { HEALTHY_TIME } from '../job-service-dashboard-health-check.service';
     selector: 'app-pending-job-list',
     templateUrl: './pending-job-list.component.html',
     styleUrls: ['./pending-job-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class PendingListComponent implements OnInit, OnDestroy {

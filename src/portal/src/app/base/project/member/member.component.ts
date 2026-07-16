@@ -12,7 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { catchError, finalize, map } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
     forkJoin,
@@ -60,6 +66,7 @@ import { AddGroupComponent } from './add-group/add-group.component';
 @Component({
     templateUrl: 'member.component.html',
     styleUrls: ['./member.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class MemberComponent implements OnInit, OnDestroy {

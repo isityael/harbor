@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import { finalize, forkJoin, Subscription, timer } from 'rxjs';
 import {
@@ -46,6 +51,7 @@ import {
     selector: 'app-purge-history',
     templateUrl: './purge-history.component.html',
     styleUrls: ['./purge-history.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class PurgeHistoryComponent implements OnInit, OnDestroy {

@@ -134,11 +134,7 @@ REGISTRYVERSION=v2.8.3-patch-redis
 TRIVYVERSION=v0.72.0
 TRIVYADAPTERVERSION=v0.38.0-rc1
 
-# VALKEYVERSION and VALKEYSHA256 are only used for the arm64 source build.
-# On amd64 the Photon tdnf package version is used directly.
-VALKEYVERSION=9.0.3
-VALKEYSHA256=e220f4b0143292ee6ea6d705aa40d45a0c8a77759b3e94c201cb5c25dbdca42f
-NODEBUILDIMAGE=node:22.22.3
+NODEBUILDIMAGE=dhi.io/node:26.5.0-debian13-dev@sha256:728bf5fbed66fdcbe3474b5fb343a1480ee093dfd4da6dd5afaf5337ac66150c
 
 # version of registry for pulling the source code
 REGISTRY_SRC_TAG=v2.8.3-harbor.1
@@ -180,7 +176,7 @@ GOINSTALL=$(GOCMD) install
 GOTEST=$(GOCMD) test
 GODEP=$(GOTEST) -i
 GOFMT=gofmt -w
-GOBUILDIMAGE=golang:1.26.4
+GOBUILDIMAGE=dhi.io/golang:1.26.5-alpine3.24-dev@sha256:711ea0b8f09f549c50f2f550dc26859d3e6441ca11d5640caecf69c29a862f0c
 GOBUILDPATHINCONTAINER=/harbor
 
 # go build

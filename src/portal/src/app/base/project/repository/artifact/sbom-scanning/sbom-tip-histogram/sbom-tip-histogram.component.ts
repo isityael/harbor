@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SbomSummary } from '../../../../../../shared/services';
@@ -35,6 +35,7 @@ const SUCCESS_PCT: number = 100;
     selector: 'hbr-sbom-tip-histogram',
     templateUrl: './sbom-tip-histogram.component.html',
     styleUrls: ['./sbom-tip-histogram.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class SbomTipHistogramComponent {

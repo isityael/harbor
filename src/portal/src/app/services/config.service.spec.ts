@@ -17,6 +17,7 @@ import { ConfigurationService } from './config.service';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('ConfigService', () => {
@@ -25,7 +26,7 @@ describe('ConfigService', () => {
             imports: [],
             providers: [
                 ConfigurationService,
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

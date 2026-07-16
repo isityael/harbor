@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { SharedTestingModule } from '../../shared.module';
 import {
     PermissionSelectPanelModes,
@@ -62,17 +62,20 @@ describe('RobotPermissionsPanelComponent', () => {
 @Component({
     template: `
         @if (mode === PermissionSelectPanelModes.MODAL) {
-        <robot-permissions-panel [mode]="mode">
-            <div>modal</div>
-        </robot-permissions-panel>
-        } @if (mode === PermissionSelectPanelModes.DROPDOWN) {
-        <robot-permissions-panel [mode]="mode">
-            <div>dropDown</div>
-        </robot-permissions-panel>
-        } @if (mode === PermissionSelectPanelModes.NORMAL) {
-        <robot-permissions-panel [mode]="mode"> </robot-permissions-panel>
+            <robot-permissions-panel [mode]="mode">
+                <div>modal</div>
+            </robot-permissions-panel>
+        }
+        @if (mode === PermissionSelectPanelModes.DROPDOWN) {
+            <robot-permissions-panel [mode]="mode">
+                <div>dropDown</div>
+            </robot-permissions-panel>
+        }
+        @if (mode === PermissionSelectPanelModes.NORMAL) {
+            <robot-permissions-panel [mode]="mode"> </robot-permissions-panel>
         }
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 class TestHostComponent {

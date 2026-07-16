@@ -20,11 +20,11 @@
                         <span>{{ 'CVE_ALLOWLIST.ADD_SYS' | translate }}</span>
                     </div>
                     @if (hasExpired) {
-                    <div class="mt-05">
-                        <span class="label label-warning">{{
-                            'CVE_ALLOWLIST.WARNING_SYS' | translate
-                        }}</span>
-                    </div>
+                        <div class="mt-05">
+                            <span class="label label-warning">{{
+                                'CVE_ALLOWLIST.WARNING_SYS' | translate
+                            }}</span>
+                        </div>
                     }
                 </div>
                 <div class="clr-row width-90per">
@@ -38,59 +38,64 @@
                             </button>
                         </div>
                         @if (showAddModal) {
-                        <div class="add-modal add-modal-dark">
-                            <clr-icon
-                                (click)="showAddModal = false"
-                                class="float-lg-right margin-top-4"
-                                shape="window-close"></clr-icon>
-                            <div>
-                                <clr-textarea-container
-                                    class="flex-direction-column">
-                                    <label>{{
-                                        'CVE_ALLOWLIST.ENTER' | translate
-                                    }}</label>
-                                    <textarea
-                                        id="allowlist-textarea"
-                                        class="w-100 font-italic"
-                                        clrTextarea
-                                        [(ngModel)]="cveIds"
-                                        name="cveIds"></textarea>
-                                    <clr-control-helper>{{
-                                        'CVE_ALLOWLIST.HELP' | translate
-                                    }}</clr-control-helper>
-                                </clr-textarea-container>
+                            <div class="add-modal add-modal-dark">
+                                <clr-icon
+                                    (click)="showAddModal = false"
+                                    class="float-lg-right margin-top-4"
+                                    shape="window-close"></clr-icon>
+                                <div>
+                                    <clr-textarea-container
+                                        class="flex-direction-column">
+                                        <label>{{
+                                            'CVE_ALLOWLIST.ENTER' | translate
+                                        }}</label>
+                                        <textarea
+                                            id="allowlist-textarea"
+                                            class="w-100 font-italic"
+                                            clrTextarea
+                                            [(ngModel)]="cveIds"
+                                            name="cveIds"></textarea>
+                                        <clr-control-helper>{{
+                                            'CVE_ALLOWLIST.HELP' | translate
+                                        }}</clr-control-helper>
+                                    </clr-textarea-container>
+                                </div>
+                                <div>
+                                    <button
+                                        id="add-to-system"
+                                        [disabled]="isDisabled()"
+                                        (click)="addToSystemAllowlist()"
+                                        class="btn btn-link">
+                                        {{ 'CVE_ALLOWLIST.ADD' | translate }}
+                                    </button>
+                                </div>
                             </div>
-                            <div>
-                                <button
-                                    id="add-to-system"
-                                    [disabled]="isDisabled()"
-                                    (click)="addToSystemAllowlist()"
-                                    class="btn btn-link">
-                                    {{ 'CVE_ALLOWLIST.ADD' | translate }}
-                                </button>
-                            </div>
-                        </div>
                         }
                         <ul class="allowlist-window">
                             @if (systemAllowlist?.items?.length < 1) {
-                            <li class="none">
-                                {{ 'CVE_ALLOWLIST.NONE' | translate }}
-                            </li>
-                            } @for ( item of systemAllowlist?.items; track item;
-                            let i = $index) {
-                            <li>
-                                <a
-                                    href="javascript:void(0)"
-                                    (click)="goToDetail(item.cve_id)"
-                                    >{{ item.cve_id }}</a
-                                >
-                                <a
-                                    class="float-lg-right"
-                                    href="javascript:void(0)"
-                                    (click)="deleteItem(i)">
-                                    <clr-icon shape="times-circle"></clr-icon>
-                                </a>
-                            </li>
+                                <li class="none">
+                                    {{ 'CVE_ALLOWLIST.NONE' | translate }}
+                                </li>
+                            }
+                            @for (
+                                item of systemAllowlist?.items;
+                                track item;
+                                let i = $index
+                            ) {
+                                <li>
+                                    <a
+                                        href="javascript:void(0)"
+                                        (click)="goToDetail(item.cve_id)"
+                                        >{{ item.cve_id }}</a
+                                    >
+                                    <a
+                                        class="float-lg-right"
+                                        href="javascript:void(0)"
+                                        (click)="deleteItem(i)">
+                                        <clr-icon
+                                            shape="times-circle"></clr-icon>
+                                    </a>
+                                </li>
                             }
                         </ul>
                     </div>

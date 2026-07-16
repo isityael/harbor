@@ -1,6 +1,8 @@
-FROM goharbor/photon:5.0
+FROM dhi.io/debian-base:trixie-debian13-dev@sha256:5c45913e72c90581fc4cca57c3a7cd7dcac2d9fa44fce24fe4cfa342e5ccb7a6
 
-RUN tdnf install -y rpm shadow >> /dev/null \
-    && tdnf clean all \
-    && groupadd -r -g 10000 scanner \
-    && useradd --no-log-init -m -r -g 10000 -u 10000 scanner
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl passwd \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd --system --gid 10000 scanner \
+    && useradd --no-log-init --create-home --system --gid 10000 --uid 10000 scanner \
+    && mkdir -p /etc/pki/tls/certs /home/scanner/bin \
+    && ln -sf /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt

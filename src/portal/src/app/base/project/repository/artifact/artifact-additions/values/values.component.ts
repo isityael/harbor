@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, OnInit } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { AdditionsService } from '../additions.service';
 import { AdditionLink } from '../../../../../../../../ng-swagger-gen/models/addition-link';
 import { ErrorHandler } from '../../../../../../shared/units/error-handler';
@@ -23,6 +28,7 @@ import { isObject } from '../../../../../../shared/units/utils';
     selector: 'hbr-artifact-values',
     templateUrl: './values.component.html',
     styleUrls: ['./values.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ValuesComponent implements OnInit {
@@ -55,7 +61,7 @@ export class ValuesComponent implements OnInit {
                 .subscribe(
                     res => {
                         try {
-                            this.format(yaml.load(res));
+                            this.format(yaml.load(res) as object);
                             this.values = res;
                         } catch (e) {
                             this.errorHandler.error(e);

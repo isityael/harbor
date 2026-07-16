@@ -19,6 +19,7 @@ import {
     Output,
     EventEmitter,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import {
     debounceTime,
@@ -58,6 +59,7 @@ const MINI_SECONDS_ONE_DAY: number = 60 * 24 * 60 * 1000;
     selector: 'add-robot',
     templateUrl: './add-robot.component.html',
     styleUrls: ['./add-robot.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class AddRobotComponent implements OnInit, OnDestroy {
@@ -208,11 +210,11 @@ export class AddRobotComponent implements OnInit, OnDestroy {
         if (!this.canAdd()) {
             return false;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (this.robot.duration != this.originalRobotForEdit.duration) {
             return true;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (this.robot.description != this.originalRobotForEdit.description) {
             return true;
         }

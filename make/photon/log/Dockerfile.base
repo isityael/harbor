@@ -1,7 +1,9 @@
-FROM goharbor/photon:5.0
+FROM dhi.io/debian-base:trixie-debian13-dev@sha256:5c45913e72c90581fc4cca57c3a7cd7dcac2d9fa44fce24fe4cfa342e5ccb7a6
 
-RUN tdnf install -y cronie rsyslog logrotate shadow tar gzip sudo >> /dev/null\
-    && mkdir /var/spool/rsyslog \
-    && groupadd -r -g 10000 syslog && useradd --no-log-init -r -g 10000 -u 10000 syslog \
-    && tdnf clean all \
+RUN apt-get update && apt-get install -y --no-install-recommends cron rsyslog logrotate passwd tar gzip sudo net-tools \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /var/spool/rsyslog \
+    && groupadd --system --gid 10000 syslog \
+    && useradd --no-log-init --system --gid 10000 --uid 10000 \
+        --no-create-home --home-dir /nonexistent --shell /usr/sbin/nologin syslog \
     && chage -M 99999 root

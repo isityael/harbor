@@ -18,16 +18,16 @@
                         #name="ngModel"
                         (keyup)="existValid(labelModel.name)" />
                     @if (isLabelNameExist) {
-                    <clr-icon
-                        class="clr-validate-icon"
-                        shape="exclamation-circle"></clr-icon>
+                        <clr-icon
+                            class="clr-validate-icon"
+                            shape="exclamation-circle"></clr-icon>
                     }
                 </div>
 
                 @if (isLabelNameExist) {
-                <span class="clr-subtext" [class.error]="isLabelNameExist">
-                    {{ 'LABEL.NAME_ALREADY_EXISTS' | translate }}
-                </span>
+                    <span class="clr-subtext" [class.error]="isLabelNameExist">
+                        {{ 'LABEL.NAME_ALREADY_EXISTS' | translate }}
+                    </span>
                 }
             </div>
         </div>
@@ -48,18 +48,18 @@
                     </button>
                     <clr-dropdown-menu class="color-dropdown-menu" *clrIfOpen>
                         @for (i of labelColor; track i) {
-                        <button
-                            clrDropdownItem
-                            type="button"
-                            class="dropdown-item"
-                            (click)="labelModel.color = i.color"
-                            [class.borderSty]="i.color === '#FFFFFF'"
-                            [ngStyle]="{
-                                'background-color': i.color,
-                                color: i.textColor
-                            }">
-                            Aa
-                        </button>
+                            <button
+                                clrDropdownItem
+                                type="button"
+                                class="dropdown-item"
+                                (click)="labelModel.color = i.color"
+                                [class.borderSty]="i.color === '#FFFFFF'"
+                                [ngStyle]="{
+                                    'background-color': i.color,
+                                    color: i.textColor,
+                                }">
+                                Aa
+                            </button>
                         }
                     </clr-dropdown-menu>
                 </clr-dropdown>

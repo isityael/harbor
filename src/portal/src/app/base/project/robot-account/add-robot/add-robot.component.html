@@ -3,25 +3,28 @@
     [(clrWizardOpen)]="addRobotOpened"
     [clrWizardSize]="'lg'"
     (clrWizardOnCancel)="cancel()">
-    <clr-wizard-title
-        >@if (!isEditMode) {
-        <h3 class="modal-title">
-            {{ 'SYSTEM_ROBOT.CREATE_PROJECT_ROBOT' | translate }}
-        </h3>
-        } @if (isEditMode) {
-        <h3 class="modal-title">
-            {{ 'SYSTEM_ROBOT.EDIT_PROJECT_ROBOT' | translate }}
-        </h3>
-        } @if (!isEditMode) {
-        <p class="mt-0">
-            {{ 'SYSTEM_ROBOT.CREATE_PROJECT_ROBOT_SUMMARY' | translate }}
-        </p>
-        } @if (isEditMode) {
-        <p class="mt-0">
-            {{ 'SYSTEM_ROBOT.EDIT_PROJECT_ROBOT_SUMMARY' | translate }}
-        </p>
-        }</clr-wizard-title
-    >
+    <clr-wizard-title>
+        @if (!isEditMode) {
+            <h3 class="modal-title">
+                {{ 'SYSTEM_ROBOT.CREATE_PROJECT_ROBOT' | translate }}
+            </h3>
+        }
+        @if (isEditMode) {
+            <h3 class="modal-title">
+                {{ 'SYSTEM_ROBOT.EDIT_PROJECT_ROBOT' | translate }}
+            </h3>
+        }
+        @if (!isEditMode) {
+            <p class="mt-0">
+                {{ 'SYSTEM_ROBOT.CREATE_PROJECT_ROBOT_SUMMARY' | translate }}
+            </p>
+        }
+        @if (isEditMode) {
+            <p class="mt-0">
+                {{ 'SYSTEM_ROBOT.EDIT_PROJECT_ROBOT_SUMMARY' | translate }}
+            </p>
+        }
+    </clr-wizard-title>
     <clr-wizard-button [type]="'cancel'">{{
         'BUTTON.CANCEL' | translate
     }}</clr-wizard-button>
@@ -49,21 +52,21 @@
                     <label for="name" class="clr-control-label required"
                         >{{ 'P2P_PROVIDER.NAME' | translate }}
                         @if (!isEditMode) {
-                        <clr-tooltip>
-                            <clr-icon
-                                clrTooltipTrigger
-                                shape="info-circle"
-                                size="24"></clr-icon>
-                            <clr-tooltip-content
-                                clrPosition="top-right"
-                                clrSize="lg"
-                                *clrIfOpen>
-                                <span>{{
-                                    'SYSTEM_ROBOT.FINAL_PROJECT_NAME_TIP'
-                                        | translate
-                                }}</span>
-                            </clr-tooltip-content>
-                        </clr-tooltip>
+                            <clr-tooltip>
+                                <clr-icon
+                                    clrTooltipTrigger
+                                    shape="info-circle"
+                                    size="24"></clr-icon>
+                                <clr-tooltip-content
+                                    clrPosition="top-right"
+                                    clrSize="lg"
+                                    *clrIfOpen>
+                                    <span>{{
+                                        'SYSTEM_ROBOT.FINAL_PROJECT_NAME_TIP'
+                                            | translate
+                                    }}</span>
+                                </clr-tooltip-content>
+                            </clr-tooltip>
                         }
                     </label>
                     <div
@@ -94,21 +97,30 @@
                                 class="spinner spinner-inline"
                                 [hidden]="!checkNameOnGoing"></span>
                         </div>
-                        @if ( ((name.dirty || name.touched) && name.invalid) ||
-                        isNameExisting ) {
-                        <clr-control-error>
-                            @if ( !( (name.dirty || name.touched) &&
-                            name.invalid ) && isNameExisting ) {
-                            <span>{{
-                                'ROBOT_ACCOUNT.ACCOUNT_EXISTING' | translate
-                            }}</span>
-                            } @if ( (name.dirty || name.touched) && name.invalid
-                            ) {
-                            <span>{{
-                                'SYSTEM_ROBOT.NAME_TOOLTIP' | translate
-                            }}</span>
-                            }
-                        </clr-control-error>
+                        @if (
+                            ((name.dirty || name.touched) && name.invalid) ||
+                            isNameExisting
+                        ) {
+                            <clr-control-error>
+                                @if (
+                                    !(
+                                        (name.dirty || name.touched) &&
+                                        name.invalid
+                                    ) && isNameExisting
+                                ) {
+                                    <span>{{
+                                        'ROBOT_ACCOUNT.ACCOUNT_EXISTING'
+                                            | translate
+                                    }}</span>
+                                }
+                                @if (
+                                    (name.dirty || name.touched) && name.invalid
+                                ) {
+                                    <span>{{
+                                        'SYSTEM_ROBOT.NAME_TOOLTIP' | translate
+                                    }}</span>
+                                }
+                            </clr-control-error>
                         }
                     </div>
                 </div>
@@ -188,33 +200,47 @@
                                     shape="exclamation-circle"></clr-icon>
                             </div>
                         </div>
-                        @if ( (isEditMode && robot?.duration > 0 && !(
-                        (expiration.dirty || expiration.touched) &&
-                        expiration.invalid )) || isExpirationInvalid() ) {
-                        <clr-control-helper>
-                            <span
-                                [ngClass]="{
-                                    showWarning: shouldShowWarning()
-                                }">
-                                @if (shouldShowWarning()) {
-                                <clr-icon
-                                    class="alert-icon"
-                                    shape="exclamation-triangle"></clr-icon>
-                                }<span>{{
-                                    'SYSTEM_ROBOT.EXPIRES_AT' | translate
-                                }}</span
-                                >:
-                                <span>{{
-                                    calculateExpiresAt()
-                                        | harborDatetime : 'short'
-                                }}</span>
-                            </span>
-                        </clr-control-helper>
-                        } @if ( ((expiration.dirty || expiration.touched) &&
-                        expiration.invalid) || isExpirationInvalid() ) {
-                        <clr-control-error>
-                            {{ 'SYSTEM_ROBOT.EXPIRATION_REQUIRED' | translate }}
-                        </clr-control-error>
+                        @if (
+                            (isEditMode &&
+                                robot?.duration > 0 &&
+                                !(
+                                    (expiration.dirty || expiration.touched) &&
+                                    expiration.invalid
+                                )) ||
+                            isExpirationInvalid()
+                        ) {
+                            <clr-control-helper>
+                                <span
+                                    [ngClass]="{
+                                        showWarning: shouldShowWarning(),
+                                    }">
+                                    @if (shouldShowWarning()) {
+                                        <clr-icon
+                                            class="alert-icon"
+                                            shape="exclamation-triangle"></clr-icon>
+                                    }
+                                    <span>{{
+                                        'SYSTEM_ROBOT.EXPIRES_AT' | translate
+                                    }}</span
+                                    >:
+                                    <span>{{
+                                        calculateExpiresAt()
+                                            | harborDatetime: 'short'
+                                    }}</span>
+                                </span>
+                            </clr-control-helper>
+                        }
+                        @if (
+                            ((expiration.dirty || expiration.touched) &&
+                                expiration.invalid) ||
+                            isExpirationInvalid()
+                        ) {
+                            <clr-control-error>
+                                {{
+                                    'SYSTEM_ROBOT.EXPIRATION_REQUIRED'
+                                        | translate
+                                }}
+                            </clr-control-error>
                         }
                     </div>
                 </div>
@@ -236,7 +262,9 @@
                 <robot-permissions-panel
                     [mode]="PermissionSelectPanelModes.NORMAL"
                     [(permissionsModel)]="robot.permissions[0].access"
-                    [candidatePermissions]="robotMetadata?.project">
+                    [candidatePermissions]="
+                        $safeNavigationMigration(robotMetadata?.project)
+                    ">
                 </robot-permissions-panel>
             </section>
         </form>

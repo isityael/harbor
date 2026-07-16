@@ -44,9 +44,9 @@
             }}</clr-dg-column>
             <clr-dg-placeholder>
                 @if (hasGeneratedSbom()) {
-                <span>{{ 'SBOM.STATE.OTHER_STATUS' | translate }}</span>
+                    <span>{{ 'SBOM.STATE.OTHER_STATUS' | translate }}</span>
                 } @else {
-                {{ 'SBOM.CHART.TOOLTIPS_TITLE_ZERO' | translate }}
+                    {{ 'SBOM.CHART.TOOLTIPS_TITLE_ZERO' | translate }}
                 }
             </clr-dg-placeholder>
             <clr-dg-row *clrDgItems="let res of artifactSbomPackages()">
@@ -62,15 +62,18 @@
             <clr-dg-footer>
                 <div class="report">
                     @if (artifact?.sbom_overview) {
-                    <i>{{
-                        'SBOM.REPORTED_BY'
-                            | translate
-                                : {
-                                      scanner: getScannerInfo(
-                                          artifact?.sbom_overview?.scanner
-                                      )
-                                  }
-                    }}</i>
+                        <i>{{
+                            'SBOM.REPORTED_BY'
+                                | translate
+                                    : {
+                                          scanner: getScannerInfo(
+                                              $safeNavigationMigration(
+                                                  artifact?.sbom_overview
+                                                      ?.scanner
+                                              )
+                                          ),
+                                      }
+                        }}</i>
                     }
                 </div>
                 <clr-dg-pagination
@@ -84,11 +87,11 @@
                         }}</clr-dg-page-size
                     >
                     @if (artifactSbomPackages().length) {
-                    <span
-                        >{{ pagination.firstItem + 1 }} -
-                        {{ pagination.lastItem + 1 }}
-                        {{ 'SBOM.GRID.FOOT_OF' | translate }}</span
-                    >
+                        <span
+                            >{{ pagination.firstItem + 1 }} -
+                            {{ pagination.lastItem + 1 }}
+                            {{ 'SBOM.GRID.FOOT_OF' | translate }}</span
+                        >
                     }
                     {{ artifactSbomPackages().length }}
                     {{ 'SBOM.GRID.FOOT_ITEMS' | translate }}

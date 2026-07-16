@@ -129,19 +129,20 @@
             }}</clr-dg-column>
             <clr-dg-column>{{ 'MEMBER.ROLE' | translate }}</clr-dg-column>
             @for (m of members; track m) {
-            <clr-dg-row [clrDgItem]="m">
-                <clr-dg-cell>{{ m.entity_name }}</clr-dg-cell>
-                <clr-dg-cell>{{
-                    member_type_toString(m.entity_type) | translate
-                }}</clr-dg-cell>
-                <clr-dg-cell>
-                    @if (ChangeRoleOngoing(m.id)) {
-                    <span class="spinner spinner-inline"></span>
-                    } @if (!ChangeRoleOngoing(m.id)) {
-                    <span>{{ roleInfo[m.role_id] | translate }}</span>
-                    }
-                </clr-dg-cell>
-            </clr-dg-row>
+                <clr-dg-row [clrDgItem]="m">
+                    <clr-dg-cell>{{ m.entity_name }}</clr-dg-cell>
+                    <clr-dg-cell>{{
+                        member_type_toString(m.entity_type) | translate
+                    }}</clr-dg-cell>
+                    <clr-dg-cell>
+                        @if (ChangeRoleOngoing(m.id)) {
+                            <span class="spinner spinner-inline"></span>
+                        }
+                        @if (!ChangeRoleOngoing(m.id)) {
+                            <span>{{ roleInfo[m.role_id] | translate }}</span>
+                        }
+                    </clr-dg-cell>
+                </clr-dg-row>
             }
             <clr-dg-footer>
                 <clr-dg-pagination
@@ -156,11 +157,11 @@
                         }}</clr-dg-page-size
                     >
                     @if (total) {
-                    <span
-                        >{{ pagination.firstItem + 1 }} -
-                        {{ pagination.lastItem + 1 }}
-                        {{ 'MEMBER.OF' | translate }}
-                    </span>
+                        <span
+                            >{{ pagination.firstItem + 1 }} -
+                            {{ pagination.lastItem + 1 }}
+                            {{ 'MEMBER.OF' | translate }}
+                        </span>
                     }
                     {{ total }} {{ 'MEMBER.ITEMS' | translate }}
                 </clr-dg-pagination>

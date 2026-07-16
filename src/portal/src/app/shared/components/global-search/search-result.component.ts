@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    OnDestroy,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
 import { GlobalSearchService } from './global-search.service';
@@ -27,6 +32,7 @@ import { filter, switchMap } from 'rxjs/operators';
     templateUrl: 'search-result.component.html',
     styleUrls: ['search.component.scss'],
     providers: [GlobalSearchService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class SearchResultComponent implements OnInit, OnDestroy {

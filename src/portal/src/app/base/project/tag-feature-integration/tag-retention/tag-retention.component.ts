@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AddRuleComponent } from './add-rule/add-rule.component';
 import { ClrDatagridStateInterface } from '@clr/angular';
@@ -64,6 +70,7 @@ const DECORATION = {
     selector: 'tag-retention',
     templateUrl: './tag-retention.component.html',
     styleUrls: ['./tag-retention.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class TagRetentionComponent implements OnInit, OnDestroy {

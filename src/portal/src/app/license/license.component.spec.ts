@@ -17,6 +17,7 @@ import { LicenseComponent } from './license.component';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('LicenseComponent', () => {
@@ -28,7 +29,7 @@ describe('LicenseComponent', () => {
             declarations: [LicenseComponent],
             imports: [],
             providers: [
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         }).compileComponents();

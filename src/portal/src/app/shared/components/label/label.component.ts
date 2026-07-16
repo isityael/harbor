@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, ViewChild, Input } from '@angular/core';
+import {
+    Component,
+    ViewChild,
+    Input,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ErrorHandler } from '../../units/error-handler';
 import { CreateEditLabelComponent } from './create-edit-label/create-edit-label.component';
 import {
@@ -47,6 +52,7 @@ import { ClrDatagridStateInterface } from '@clr/angular';
     selector: 'hbr-label',
     templateUrl: './label.component.html',
     styleUrls: ['./label.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class LabelComponent {

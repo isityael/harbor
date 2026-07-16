@@ -202,7 +202,7 @@ _build_registryctl:
 	@echo "Done."
 
 _build_valkey:
-	@$(call _build_base,$(VALKEY),$(DOCKERFILEPATH_VALKEY),--build-arg VALKEY_VERSION=$(VALKEYVERSION) --build-arg VALKEY_SHA256=$(VALKEYSHA256))
+	@$(call _build_base,$(VALKEY),$(DOCKERFILEPATH_VALKEY))
 	@echo "building valkey container for photon..."
 	@$(DOCKERBUILD_WITH_PULL_PARA) --build-arg harbor_base_image_version=$(BASEIMAGETAG) --build-arg harbor_base_namespace=$(BASEIMAGENAMESPACE) -f $(DOCKERFILEPATH_VALKEY)/$(DOCKERFILENAME_VALKEY) -t $(DOCKERIMAGENAME_VALKEY):$(VERSIONTAG) .
 	@echo "Done."

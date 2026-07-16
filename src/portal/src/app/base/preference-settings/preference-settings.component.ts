@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import {
     getContainerRuntime,
@@ -46,6 +51,7 @@ import { InlineAlertComponent } from 'src/app/shared/components/inline-alert/inl
     selector: 'preference-settings',
     templateUrl: 'preference-settings.component.html',
     styleUrls: ['preference-settings.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class PreferenceSettingsComponent implements OnInit {
@@ -72,7 +78,7 @@ export class PreferenceSettingsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.selectedLang = this.translate.currentLang as SupportedLanguage;
+        this.selectedLang = this.translate.currentLang() as SupportedLanguage;
         if (this.selectedLang) {
             registerLocaleData(
                 LANGUAGES[this.selectedLang][1],

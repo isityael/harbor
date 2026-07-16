@@ -1,6 +1,6 @@
 # Multi-stage Dockerfile for harbor-jobservice built from sm-moshi/harbor.
-ARG GO_IMAGE=dhi.io/golang:1.26.4-alpine3.24-dev
-ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24
+ARG GO_IMAGE=dhi.io/golang:1.26.5-alpine3.24-dev@sha256:711ea0b8f09f549c50f2f550dc26859d3e6441ca11d5640caecf69c29a862f0c
+ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24@sha256:037a503be3d6f50f01bde0ef366e9b9c84060a2db5781b076df40cdd706e5119
 
 FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS builder
 ARG GITCOMMIT=unknown

@@ -17,6 +17,7 @@ import {
     AfterViewInit,
     ViewChild,
     ElementRef,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 
 const RESOURCE_COLOR_GREEN_NORMAL: string = '#5DB700';
@@ -31,6 +32,7 @@ const RESOURCE_COLOR_GREY600: string = '#C7D1D6';
     selector: 'esxc-gauge',
     templateUrl: 'gauge.component.html',
     styleUrls: ['gauge.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class GaugeComponent implements AfterViewInit {

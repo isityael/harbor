@@ -17,6 +17,7 @@ import {
     ElementRef,
     OnDestroy,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import {
     UntypedFormBuilder,
@@ -38,6 +39,7 @@ import { ScannerService } from '../../../../../../../ng-swagger-gen/services/sca
     selector: 'new-scanner-form',
     templateUrl: 'new-scanner-form.component.html',
     styleUrls: ['new-scanner-form.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class NewScannerFormComponent implements AfterViewInit, OnDestroy {
@@ -194,12 +196,10 @@ export class NewScannerFormComponent implements AfterViewInit, OnDestroy {
         }
     }
     get isNameValid(): boolean {
-        if (
-            !(
-                this.newScannerForm.get('name').dirty ||
-                this.newScannerForm.get('name').touched
-            )
-        ) {
+        if (!(
+            this.newScannerForm.get('name').dirty ||
+            this.newScannerForm.get('name').touched
+        )) {
             return true;
         }
         if (this.checkOnGoing) {
@@ -226,12 +226,10 @@ export class NewScannerFormComponent implements AfterViewInit, OnDestroy {
         return true;
     }
     get isEndpointValid(): boolean {
-        if (
-            !(
-                this.newScannerForm.get('url').dirty ||
-                this.newScannerForm.get('url').touched
-            )
-        ) {
+        if (!(
+            this.newScannerForm.get('url').dirty ||
+            this.newScannerForm.get('url').touched
+        )) {
             return true;
         }
         if (this.checkEndpointOnGoing) {

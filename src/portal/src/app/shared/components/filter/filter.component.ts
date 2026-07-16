@@ -20,6 +20,7 @@ import {
     ViewChild,
     ElementRef,
     ChangeDetectorRef,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -28,6 +29,7 @@ import { debounceTime } from 'rxjs/operators';
     selector: 'hbr-filter',
     templateUrl: './filter.component.html',
     styleUrls: ['./filter.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class FilterComponent implements OnInit {

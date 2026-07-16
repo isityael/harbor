@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    OnDestroy,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import {
     Subscription,
     Observable,
@@ -55,6 +61,7 @@ import { Registry } from '../../../../../ng-swagger-gen/models/registry';
     selector: 'hbr-endpoint',
     templateUrl: './endpoint.component.html',
     styleUrls: ['./endpoint.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class EndpointComponent implements OnInit, OnDestroy {

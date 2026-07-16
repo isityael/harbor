@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { HAS_STYLE_MODE, StyleMode } from '../../../../../services/theme';
 
 // this donut chart is created based on css border-radius and transform: rotate()
@@ -35,6 +35,7 @@ enum LightColors {
     selector: 'app-donut-chart',
     templateUrl: './donut-chart.component.html',
     styleUrls: ['./donut-chart.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class DonutChartComponent {

@@ -1,5 +1,5 @@
 # Dockerfile for Harbor's internal Valkey image built on a DHI Valkey base.
-ARG RUNTIME_IMAGE=dhi.io/valkey:9.1.0-debian13
+ARG RUNTIME_IMAGE=dhi.io/valkey:9.1.0-debian13-dev@sha256:f199131cf2f022eeba9731572ab0fe1413a10609cb5e24d9ea5c9dec1615deb3
 
 FROM ${RUNTIME_IMAGE}
 

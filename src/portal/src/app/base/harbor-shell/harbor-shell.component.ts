@@ -18,6 +18,7 @@ import {
     OnDestroy,
     OnInit,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -49,6 +50,7 @@ const HAS_STYLE_MODE: string = 'styleModeLocal';
     selector: 'harbor-shell',
     templateUrl: 'harbor-shell.component.html',
     styleUrls: ['harbor-shell.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class HarborShellComponent implements OnInit, OnDestroy {

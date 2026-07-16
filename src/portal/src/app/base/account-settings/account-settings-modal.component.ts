@@ -12,7 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core';
+import {
+    AfterViewChecked,
+    Component,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { SessionUser } from '../../shared/entities/session-user';
@@ -36,6 +42,7 @@ import { AppConfigService } from '../../services/app-config.service';
     selector: 'account-settings-modal',
     templateUrl: 'account-settings-modal.component.html',
     styleUrls: ['./account-settings-modal.component.scss', '../../common.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class AccountSettingsModalComponent implements OnInit, AfterViewChecked {

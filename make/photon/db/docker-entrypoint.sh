@@ -11,12 +11,30 @@ PGBINOLD=""
 for candidate in \
         "/usr/pgsql/${PG_VERSION_OLD}/bin" \
         "/usr/lib/postgresql/${PG_VERSION_OLD}/bin" \
+        "/opt/postgresql/${PG_VERSION_OLD}/bin" \
         "/usr/local/pgsql-${PG_VERSION_OLD}/bin"; do
         if [ -x "$candidate/pg_ctl" ] && [ -x "$candidate/pg_controldata" ]; then
                 PGBINOLD="$candidate"
                 break
         fi
 done
+
+PGBINNEW=""
+for candidate in \
+        "/usr/pgsql/${PG_VERSION_NEW}/bin" \
+        "/usr/lib/postgresql/${PG_VERSION_NEW}/bin" \
+        "/opt/postgresql/${PG_VERSION_NEW}/bin" \
+        "/usr/bin"; do
+        if [ -x "$candidate/postgres" ] && [ -x "$candidate/pg_upgrade" ]; then
+                PGBINNEW="$candidate"
+                break
+        fi
+done
+
+if [ -z "$PGBINNEW" ]; then
+        echo "PostgreSQL $PG_VERSION_NEW binaries were not found"
+        exit 1
+fi
 
 PGDATAOLD=${PGDATA}/pg${PG_VERSION_OLD}
 PGDATANEW=${PGDATA}/pg${PG_VERSION_NEW}
@@ -78,7 +96,7 @@ if [ ! -s $PGDATANEW/PG_VERSION ]; then
                 #   Failure, exiting
                 $PGBINOLD/pg_ctl -D "$PGDATAOLD" -w -o "-p 5433" start
                 $PGBINOLD/pg_ctl -D "$PGDATAOLD" -m fast -w stop
-                ./$CUR/upgrade.sh --old-bindir $PGBINOLD --old-datadir $PGDATAOLD --new-datadir $PGDATANEW
+                ./$CUR/upgrade.sh --old-bindir $PGBINOLD --new-bindir $PGBINNEW --old-datadir $PGDATAOLD --new-datadir $PGDATANEW
                 # it needs to clean the $PGDATANEW on upgrade failure
                 if [ $? -ne 0 ]; then
                         echo "remove the $PGDATANEW after fail to upgrade."
@@ -102,4 +120,4 @@ if [ $POSTGRES_MAX_CONNECTIONS -le 0 ] || [ $POSTGRES_MAX_CONNECTIONS -gt 262143
 fi
 
 POSTGRES_PARAMETER="${POSTGRES_PARAMETER} -c max_connections=${POSTGRES_MAX_CONNECTIONS}"
-exec postgres -D $PGDATANEW $POSTGRES_PARAMETER
+exec "$PGBINNEW/postgres" -D $PGDATANEW $POSTGRES_PARAMETER

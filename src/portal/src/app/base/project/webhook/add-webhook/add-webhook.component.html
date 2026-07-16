@@ -4,13 +4,14 @@
     [clrModalClosable]="closable"
     [clrModalSize]="'lg'">
     @if (isEdit) {
-    <h3 class="modal-title">
-        {{ 'WEBHOOK.EDIT_WEBHOOK' | translate }}
-    </h3>
-    } @if (!isEdit) {
-    <h3 class="modal-title">
-        {{ 'WEBHOOK.ADD_WEBHOOK' | translate }}
-    </h3>
+        <h3 class="modal-title">
+            {{ 'WEBHOOK.EDIT_WEBHOOK' | translate }}
+        </h3>
+    }
+    @if (!isEdit) {
+        <h3 class="modal-title">
+            {{ 'WEBHOOK.ADD_WEBHOOK' | translate }}
+        </h3>
     }
     <div class="modal-body">
         <div>{{ 'WEBHOOK.EDIT_WEBHOOK_DESC' | translate }}</div>

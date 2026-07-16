@@ -39,59 +39,96 @@
         'CLEARANCES.NO_GC_RECORDS' | translate
     }}</clr-dg-placeholder>
     @for (job of jobs; track job) {
-    <clr-dg-row [clrDgItem]="job">
-        <clr-dg-cell>{{ job.id }}</clr-dg-cell>
-        <clr-dg-cell>{{
-            (job.schedule?.type
-                ? 'SCHEDULE.' + job.schedule?.type.toUpperCase()
-                : ''
-            ) | translate
-        }}</clr-dg-cell>
-        <clr-dg-cell>{{
-            isDryRun(job?.job_parameters) | translate
-        }}</clr-dg-cell>
-        <clr-dg-cell>{{
-            job.job_status.toUpperCase() | translate
-        }}</clr-dg-cell>
-        <clr-dg-cell>
-            @if (shouldShowDetails(job?.job_status)) { @if
-            (isDryRun(job?.job_parameters) === NO) {
-            <span>{{
-                'GC.DELETE_DETAIL'
+        <clr-dg-row [clrDgItem]="job">
+            <clr-dg-cell>{{ job.id }}</clr-dg-cell>
+            <clr-dg-cell>{{
+                (job.schedule?.type
+                    ? 'SCHEDULE.' + job.schedule?.type.toUpperCase()
+                    : ''
+                ) | translate
+            }}</clr-dg-cell>
+            <clr-dg-cell>{{
+                isDryRun($safeNavigationMigration(job?.job_parameters))
                     | translate
-                        : {
-                              blob: getBlobs(job?.job_parameters),
-                              manifest: getManifest(job?.job_parameters),
-                              size: getSize(job?.job_parameters)
-                          }
-            }}</span>
-            } @if (isDryRun(job?.job_parameters) === YES) {
-            <span>{{
-                'GC.DELETE_DETAIL_DRY_RUN'
-                    | translate
-                        : {
-                              blob: getBlobs(job?.job_parameters),
-                              manifest: getManifest(job?.job_parameters),
-                              size: getSize(job?.job_parameters)
-                          }
-            }}</span>
-            } }
-        </clr-dg-cell>
-        <clr-dg-cell>{{
-            job.creation_time | harborDatetime : 'medium'
-        }}</clr-dg-cell>
-        <clr-dg-cell>{{
-            job.update_time | harborDatetime : 'medium'
-        }}</clr-dg-cell>
-        <clr-dg-cell>
-            <a
-                rel="noopener noreferrer"
-                target="_blank"
-                [href]="getLogLink(job.id)">
-                <clr-icon shape="list"></clr-icon>
-            </a>
-        </clr-dg-cell>
-    </clr-dg-row>
+            }}</clr-dg-cell>
+            <clr-dg-cell>{{
+                job.job_status.toUpperCase() | translate
+            }}</clr-dg-cell>
+            <clr-dg-cell>
+                @if (
+                    shouldShowDetails($safeNavigationMigration(job?.job_status))
+                ) {
+                    @if (
+                        isDryRun(
+                            $safeNavigationMigration(job?.job_parameters)
+                        ) === NO
+                    ) {
+                        <span>{{
+                            'GC.DELETE_DETAIL'
+                                | translate
+                                    : {
+                                          blob: getBlobs(
+                                              $safeNavigationMigration(
+                                                  job?.job_parameters
+                                              )
+                                          ),
+                                          manifest: getManifest(
+                                              $safeNavigationMigration(
+                                                  job?.job_parameters
+                                              )
+                                          ),
+                                          size: getSize(
+                                              $safeNavigationMigration(
+                                                  job?.job_parameters
+                                              )
+                                          ),
+                                      }
+                        }}</span>
+                    }
+                    @if (
+                        isDryRun(
+                            $safeNavigationMigration(job?.job_parameters)
+                        ) === YES
+                    ) {
+                        <span>{{
+                            'GC.DELETE_DETAIL_DRY_RUN'
+                                | translate
+                                    : {
+                                          blob: getBlobs(
+                                              $safeNavigationMigration(
+                                                  job?.job_parameters
+                                              )
+                                          ),
+                                          manifest: getManifest(
+                                              $safeNavigationMigration(
+                                                  job?.job_parameters
+                                              )
+                                          ),
+                                          size: getSize(
+                                              $safeNavigationMigration(
+                                                  job?.job_parameters
+                                              )
+                                          ),
+                                      }
+                        }}</span>
+                    }
+                }
+            </clr-dg-cell>
+            <clr-dg-cell>{{
+                job.creation_time | harborDatetime: 'medium'
+            }}</clr-dg-cell>
+            <clr-dg-cell>{{
+                job.update_time | harborDatetime: 'medium'
+            }}</clr-dg-cell>
+            <clr-dg-cell>
+                <a
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    [href]="getLogLink(job.id)">
+                    <clr-icon shape="list"></clr-icon>
+                </a>
+            </clr-dg-cell>
+        </clr-dg-row>
     }
     <clr-dg-footer>
         <clr-dg-pagination
@@ -103,10 +140,11 @@
                 'PAGINATION.PAGE_SIZE' | translate
             }}</clr-dg-page-size>
             @if (total) {
-            <span
-                >{{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }}
-                {{ 'DESTINATION.OF' | translate }}</span
-            >
+                <span
+                    >{{ pagination.firstItem + 1 }} -
+                    {{ pagination.lastItem + 1 }}
+                    {{ 'DESTINATION.OF' | translate }}</span
+                >
             }
             {{ total }} {{ 'DESTINATION.ITEMS' | translate }}
         </clr-dg-pagination>

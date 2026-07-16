@@ -169,33 +169,33 @@
             }}</clr-control-error>
         </clr-input-container>
         @if (canDownloadCert) {
-        <div class="clr-form-control">
-            <label class="clr-control-label"
-                >{{ 'CONFIG.ROOT_CERT' | translate }}
-                <clr-tooltip>
-                    <clr-icon
-                        clrTooltipTrigger
-                        shape="info-circle"
-                        size="24"></clr-icon>
-                    <clr-tooltip-content
-                        clrPosition="top-right"
-                        clrSize="lg"
-                        *clrIfOpen>
-                        <span>{{
-                            'CONFIG.TOOLTIP.ROOT_CERT_DOWNLOAD' | translate
-                        }}</span>
-                    </clr-tooltip-content>
-                </clr-tooltip>
-            </label>
-            <div class="clr-control-container cert-down">
-                <a
-                    rel="noopener noreferrer"
-                    [href]="downloadLink"
-                    target="_blank"
-                    >{{ 'CONFIG.ROOT_CERT_LINK' | translate }}</a
-                >
+            <div class="clr-form-control">
+                <label class="clr-control-label"
+                    >{{ 'CONFIG.ROOT_CERT' | translate }}
+                    <clr-tooltip>
+                        <clr-icon
+                            clrTooltipTrigger
+                            shape="info-circle"
+                            size="24"></clr-icon>
+                        <clr-tooltip-content
+                            clrPosition="top-right"
+                            clrSize="lg"
+                            *clrIfOpen>
+                            <span>{{
+                                'CONFIG.TOOLTIP.ROOT_CERT_DOWNLOAD' | translate
+                            }}</span>
+                        </clr-tooltip-content>
+                    </clr-tooltip>
+                </label>
+                <div class="clr-control-container cert-down">
+                    <a
+                        rel="noopener noreferrer"
+                        [href]="downloadLink"
+                        target="_blank"
+                        >{{ 'CONFIG.ROOT_CERT_LINK' | translate }}</a
+                    >
+                </div>
             </div>
-        </div>
         }
         <clr-checkbox-container class="center">
             <label id="repo_read_only_lbl" for="repoReadOnly"
@@ -338,29 +338,29 @@
                 </clr-tooltip>
             </label>
             @if (logEventTypes.length === 0) {
-            <div>
-                {{ 'CLEARANCES.AUDIT_LOG_EVENT_TYPE_EMPTY' | translate }}
-            </div>
+                <div>
+                    {{ 'CLEARANCES.AUDIT_LOG_EVENT_TYPE_EMPTY' | translate }}
+                </div>
             }
             <div class="clr-control-container audit-log-type">
                 @for (item of logEventTypes; track item) {
-                <div class="clr-checkbox-wrapper float-left">
-                    <input
-                        type="checkbox"
-                        id="{{ item.id }}"
-                        name="logEventTypes"
-                        value="{{ item.value }}"
-                        class="clr-checkbox"
-                        [disabled]="
-                            !currentConfig?.disabled_audit_log_event_types
-                                ?.editable
-                        "
-                        (change)="setLogEventType(item.value)"
-                        [checked]="hasLogEventType(item.value)" />
-                    <label for="{{ item.id }}" class="clr-control-label">{{
-                        item.label
-                    }}</label>
-                </div>
+                    <div class="clr-checkbox-wrapper float-left">
+                        <input
+                            type="checkbox"
+                            id="{{ item.id }}"
+                            name="logEventTypes"
+                            value="{{ item.value }}"
+                            class="clr-checkbox"
+                            [disabled]="
+                                !currentConfig?.disabled_audit_log_event_types
+                                    ?.editable
+                            "
+                            (change)="setLogEventType(item.value)"
+                            [checked]="hasLogEventType(item.value)" />
+                        <label for="{{ item.id }}" class="clr-control-label">{{
+                            item.label
+                        }}</label>
+                    </div>
                 }
             </div>
         </div>
@@ -421,7 +421,7 @@
                         [ngClass]="{
                             'clr-form-control-disable':
                                 !currentConfig.banner_message.editable ||
-                                !messageText
+                                !messageText,
                         }">
                         <label class="message-label">{{
                             'BANNER_MESSAGE.MESSAGE_TYPE' | translate
@@ -436,9 +436,9 @@
                                 !messageText
                             ">
                             @for (t of bannerMessageTypes; track t) {
-                            <option value="{{ t }}">
-                                {{ translateMessageType(t) | translate }}
-                            </option>
+                                <option value="{{ t }}">
+                                    {{ translateMessageType(t) | translate }}
+                                </option>
                             }
                         </select>
                     </div>
@@ -448,7 +448,7 @@
                     [ngClass]="{
                         'clr-form-control-disable':
                             !currentConfig.banner_message.editable ||
-                            !messageText
+                            !messageText,
                     }">
                     <input
                         class="clr-checkbox-inline"
@@ -480,7 +480,7 @@
                     [ngClass]="{
                         'clr-form-control-disable':
                             !currentConfig.banner_message.editable ||
-                            !messageText
+                            !messageText,
                     }">
                     <label>{{ 'BANNER_MESSAGE.FROM' | translate }}</label>
                     <clr-date-container>
@@ -489,8 +489,8 @@
                             type="date"
                             id="from"
                             autocomplete="off"
-                            min="{{ currentDate | date : 'yyyy-MM-dd' }}"
-                            max="{{ messageToDate | date : 'yyyy-MM-dd' }}"
+                            min="{{ currentDate | date: 'yyyy-MM-dd' }}"
+                            max="{{ messageToDate | date: 'yyyy-MM-dd' }}"
                             clrDate
                             readonly
                             [(ngModel)]="messageFromDate"
@@ -506,7 +506,7 @@
                     [ngClass]="{
                         'clr-form-control-disable':
                             !currentConfig.banner_message.editable ||
-                            !messageText
+                            !messageText,
                     }">
                     <label>{{ 'BANNER_MESSAGE.TO' | translate }}</label>
                     <clr-date-container>
@@ -516,7 +516,7 @@
                             readonly
                             type="date"
                             id="to"
-                            min="{{ minDateForEndDay() | date : 'yyyy-MM-dd' }}"
+                            min="{{ minDateForEndDay() | date: 'yyyy-MM-dd' }}"
                             autocomplete="off"
                             [(ngModel)]="messageToDate"
                             [disabled]="

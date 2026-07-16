@@ -1,38 +1,42 @@
 # Multi-stage Dockerfile for harbor-portal built on DHI bases.
-ARG NODE_IMAGE=dhi.io/node:26.4.0-alpine3.24-dev
-ARG RUNTIME_IMAGE=dhi.io/nginx:1.31.2-alpine3.24
+ARG NODE_IMAGE=dhi.io/node:26.5.0-debian13-dev@sha256:728bf5fbed66fdcbe3474b5fb343a1480ee093dfd4da6dd5afaf5337ac66150c
+ARG RUNTIME_IMAGE=dhi.io/nginx:1.31.3-debian13-dev@sha256:c0f34463d05737646ba965de939e228e6af7a90b4d84ceba3d5634e70740df45
 
 FROM --platform=$BUILDPLATFORM ${NODE_IMAGE} AS nodeportal
 WORKDIR /build_dir
 
 ARG npm_registry=https://registry.npmjs.org
 
-RUN apk add --no-cache python3 py3-setuptools make g++
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 python3-setuptools make g++ \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install --global --force npm@12.0.1
 
 COPY api/v2.0/swagger.yaml /build_dir/swagger.yaml
 COPY src/portal /build_dir
 
 ENV NPM_CONFIG_REGISTRY=${npm_registry}
-RUN npm install --unsafe-perm
+RUN npm ci
 RUN npm run generate-build-timestamp
 RUN node --max_old_space_size=2048 'node_modules/@angular/cli/bin/ng' build --configuration production
-RUN npm install js-yaml@4.1.0 \
-    && node -e "const yaml = require('js-yaml'); const fs = require('fs'); const swagger = yaml.load(fs.readFileSync('swagger.yaml', 'utf8')); fs.writeFileSync('swagger.json', JSON.stringify(swagger));"
+RUN node -e "const yaml = require('js-yaml'); const fs = require('fs'); const swagger = yaml.load(fs.readFileSync('swagger.yaml', 'utf8')); fs.writeFileSync('swagger.json', JSON.stringify(swagger));"
 
 COPY LICENSE /build_dir/dist
 
-RUN cd app-swagger-ui && npm install --unsafe-perm
+RUN cd app-swagger-ui && npm ci
 RUN cd app-swagger-ui && npm run build
 
 FROM ${RUNTIME_IMAGE}
 
 USER 0
-RUN mkdir -p /var/lib/nginx/logs /var/cache/nginx /var/log/nginx /run \
-    && chown -R 10000:10000 /var/lib/nginx /var/cache/nginx /var/log/nginx /run
+RUN apt-get update && apt-get install -y --no-install-recommends wget \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /var/lib/nginx/logs /var/cache/nginx /var/log/nginx /run \
+    && chown -R nginx:nginx /var/lib/nginx /var/cache/nginx /var/log/nginx /run
 
-COPY --from=nodeportal --chown=10000:10000 /build_dir/dist /usr/share/nginx/html
-COPY --from=nodeportal --chown=10000:10000 /build_dir/swagger.json /usr/share/nginx/html
-COPY --from=nodeportal --chown=10000:10000 /build_dir/app-swagger-ui/dist /usr/share/nginx/html
+COPY --from=nodeportal --chown=nginx:nginx /build_dir/dist /usr/share/nginx/html
+COPY --from=nodeportal --chown=nginx:nginx /build_dir/swagger.json /usr/share/nginx/html
+COPY --from=nodeportal --chown=nginx:nginx /build_dir/app-swagger-ui/dist /usr/share/nginx/html
 
 VOLUME ["/var/cache/nginx", "/var/log/nginx", "/run"]
 STOPSIGNAL SIGQUIT
@@ -41,4 +45,4 @@ HEALTHCHECK CMD wget -q -O /dev/null http://localhost:8080 || \
     wget --no-check-certificate -q -O /dev/null https://localhost:8443 || exit 1
 
 USER nginx
-CMD ["-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]

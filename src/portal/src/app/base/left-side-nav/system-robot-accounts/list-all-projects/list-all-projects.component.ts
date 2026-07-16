@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Component,
+    Input,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Project } from '../../../../../../ng-swagger-gen/models/project';
 import { clone, CustomComparator } from '../../../../shared/units/utils';
 import { ClrDatagridComparatorInterface } from '@clr/angular';
@@ -30,6 +36,7 @@ const FIRST_PROJECTS_PAGE_SIZE: number = 100;
     selector: 'app-list-all-projects',
     templateUrl: './list-all-projects.component.html',
     styleUrls: ['./list-all-projects.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ListAllProjectsComponent implements OnInit {

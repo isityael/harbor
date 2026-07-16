@@ -19,6 +19,7 @@ import {
     OnInit,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription, throwError as observableThrowError } from 'rxjs';
@@ -46,6 +47,7 @@ const FIXED_PATTERN_TYPE: string = 'EndpointPatternTypeFix';
     selector: 'hbr-create-edit-endpoint',
     templateUrl: './create-edit-endpoint.component.html',
     styleUrls: ['./create-edit-endpoint.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class CreateEditEndpointComponent

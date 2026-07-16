@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { SessionService } from '../../../shared/services/session.service';
 import { AppConfigService } from '../../../services/app-config.service';
@@ -26,6 +31,7 @@ const URL_TO_DISPLAY: string = '/harbor/replications';
     selector: 'total-replication',
     templateUrl: 'total-replication-page.component.html',
     styleUrls: ['./total-replication-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class TotalReplicationPageComponent implements OnInit, OnDestroy {

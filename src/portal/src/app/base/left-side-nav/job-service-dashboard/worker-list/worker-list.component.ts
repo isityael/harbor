@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import { Worker } from 'ng-swagger-gen/models';
 import { WorkerPool } from 'ng-swagger-gen/models/worker-pool';
@@ -45,6 +50,7 @@ import { JobServiceDashboardSharedDataService } from '../job-service-dashboard-s
     selector: 'app-worker-list',
     templateUrl: './worker-list.component.html',
     styleUrls: ['./worker-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class WorkerListComponent implements OnInit, OnDestroy {

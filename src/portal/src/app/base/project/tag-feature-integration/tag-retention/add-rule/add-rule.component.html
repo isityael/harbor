@@ -4,13 +4,14 @@
     [clrModalClosable]="true"
     [clrModalSize]="'lg'">
     @if (isAdd) {
-    <h3 class="modal-title">
-        {{ 'TAG_RETENTION.ADD_TITLE' | translate }}
-    </h3>
-    } @if (!isAdd) {
-    <h3 class="modal-title">
-        {{ 'TAG_RETENTION.EDIT_TITLE' | translate }}
-    </h3>
+        <h3 class="modal-title">
+            {{ 'TAG_RETENTION.ADD_TITLE' | translate }}
+        </h3>
+    }
+    @if (!isAdd) {
+        <h3 class="modal-title">
+            {{ 'TAG_RETENTION.EDIT_TITLE' | translate }}
+        </h3>
     }
     <div class="modal-body no-scrolling">
         <inline-alert class="modal-title"></inline-alert>
@@ -27,11 +28,13 @@
                         <select
                             [(ngModel)]="repoSelect"
                             class="clr-select w-100">
-                            @for ( d of metadata?.scope_selectors[0]
-                            ?.decorations ; track d) {
-                            <option value="{{ d }}">
-                                {{ getI18nKey(d) | translate }}
-                            </option>
+                            @for (
+                                d of metadata?.scope_selectors[0]?.decorations;
+                                track d
+                            ) {
+                                <option value="{{ d }}">
+                                    {{ getI18nKey(d) | translate }}
+                                </option>
                             }
                         </select>
                     </div>
@@ -70,10 +73,19 @@
                             class="clr-select w-100">
                             <option class="display-none" value=""></option>
                             @for (t of metadata?.templates; track t) {
-                            <option value="{{ t?.rule_template }}">
-                                {{ getI18nKey(t?.action) | translate
-                                }}{{ getI18nKey(t?.display_text) | translate }}
-                            </option>
+                                <option value="{{ t?.rule_template }}">
+                                    {{
+                                        getI18nKey(
+                                            $safeNavigationMigration(t?.action)
+                                        ) | translate
+                                    }}{{
+                                        getI18nKey(
+                                            $safeNavigationMigration(
+                                                t?.display_text
+                                            )
+                                        ) | translate
+                                    }}
+                                </option>
                             }
                         </select>
                     </div>
@@ -81,15 +93,15 @@
                 <div class="clr-col-3">
                     <div class="over-line">
                         @if (hasParam()) {
-                        <span>{{ getI18nKey(unit) | translate }}</span>
+                            <span>{{ getI18nKey(unit) | translate }}</span>
                         }
                     </div>
                     <div class="w-100 disabled">
                         @if (hasParam()) {
-                        <input
-                            id="param"
-                            [(ngModel)]="num"
-                            class="clr-input w-100" />
+                            <input
+                                id="param"
+                                [(ngModel)]="num"
+                                class="clr-input w-100" />
                         }
                     </div>
                 </div>
@@ -105,11 +117,13 @@
                         <select
                             [(ngModel)]="tagsSelect"
                             class="clr-select w-100">
-                            @for ( d of metadata?.tag_selectors[0] ?.decorations
-                            ; track d) {
-                            <option value="{{ d }}">
-                                {{ getI18nKey(d) | translate }}
-                            </option>
+                            @for (
+                                d of metadata?.tag_selectors[0]?.decorations;
+                                track d
+                            ) {
+                                <option value="{{ d }}">
+                                    {{ getI18nKey(d) | translate }}
+                                </option>
                             }
                         </select>
                     </div>
@@ -159,9 +173,10 @@
             class="btn btn-primary"
             (click)="add()">
             @if (isAdd) {
-            <span>{{ 'BUTTON.ADD' | translate }}</span>
-            } @if (!isAdd) {
-            <span>{{ 'BUTTON.SAVE' | translate }}</span>
+                <span>{{ 'BUTTON.ADD' | translate }}</span>
+            }
+            @if (!isAdd) {
+                <span>{{ 'BUTTON.SAVE' | translate }}</span>
             }
         </button>
     </div>

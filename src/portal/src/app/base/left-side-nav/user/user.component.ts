@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewChild,
+    OnDestroy,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Subscription, Observable, forkJoin, of } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { MessageHandlerService } from '../../../shared/services/message-handler.service';
@@ -60,6 +66,7 @@ import {
     templateUrl: 'user.component.html',
     styleUrls: ['user.component.scss'],
     providers: [UserService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class UserComponent implements OnDestroy {

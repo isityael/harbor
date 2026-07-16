@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Output, EventEmitter } from '@angular/core';
+import {
+    Component,
+    Output,
+    EventEmitter,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { ErrorHandler } from '../../units/error-handler';
@@ -21,6 +26,7 @@ import { errorHandler } from '../../units/shared.utils';
     selector: 'inline-alert',
     templateUrl: './inline-alert.component.html',
     styleUrls: ['./inline-alert.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class InlineAlertComponent {

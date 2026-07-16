@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import {
     AccessoryType,
     ArtifactFront as Artifact,
@@ -29,6 +29,7 @@ import { TranslateService } from '@ngx-translate/core';
     selector: 'app-pull-command',
     templateUrl: './pull-command.component.html',
     styleUrls: ['./pull-command.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class PullCommandComponent {

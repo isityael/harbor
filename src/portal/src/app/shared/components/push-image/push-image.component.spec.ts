@@ -17,7 +17,7 @@ import { CopyInputComponent } from './copy-input.component';
 import { InlineAlertComponent } from '../inline-alert/inline-alert.component';
 import { ErrorHandler } from '../../units/error-handler';
 import { SharedTestingModule } from '../../shared.module';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 describe('PushImageButtonComponent (inline template)', () => {
     let component: TestHostComponent;
@@ -72,6 +72,7 @@ describe('PushImageButtonComponent (inline template)', () => {
         [projectName]="'testing'"
         [registryUrl]="'https://testing.harbor.com'">
     </hbr-push-image-button>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 class TestHostComponent {}

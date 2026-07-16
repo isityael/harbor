@@ -129,9 +129,9 @@ const routes: Routes = [
                     },
                 },
                 loadChildren: () =>
-                    import(
-                        './tag-feature-integration/tag-feature-integration.module'
-                    ).then(m => m.TagFeatureIntegrationModule),
+                    import('./tag-feature-integration/tag-feature-integration.module').then(
+                        m => m.TagFeatureIntegrationModule
+                    ),
             },
             {
                 path: 'webhook',

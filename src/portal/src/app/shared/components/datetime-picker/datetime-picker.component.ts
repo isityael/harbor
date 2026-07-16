@@ -19,6 +19,7 @@ import {
     ViewChild,
     OnChanges,
     LOCALE_ID,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { DEFAULT_LANG_LOCALSTORAGE_KEY } from '../../entities/shared.const';
@@ -33,6 +34,7 @@ import { DEFAULT_LANG_LOCALSTORAGE_KEY } from '../../entities/shared.const';
             useValue: localStorage.getItem(DEFAULT_LANG_LOCALSTORAGE_KEY),
         },
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class DatePickerComponent implements OnChanges {

@@ -1,24 +1,26 @@
 #ubuntm based image
-FROM ubuntu:26.04
+FROM dhi.io/debian-base:trixie-debian13-dev@sha256:5c45913e72c90581fc4cca57c3a7cd7dcac2d9fa44fce24fe4cfa342e5ccb7a6
 ENV TZ=Asia/Shanghai \
     DEBIAN_FRONTEND=noninteractive
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 ENV HELM_EXPERIMENTAL_OCI=1
 ENV COSIGN_PASSWORD=Harbor12345
 ENV COSIGN_EXPERIMENTAL=1
 ENV COSIGN_OCI_EXPERIMENTAL=1
 ENV NOTATION_EXPERIMENTAL=1
 
-RUN apt-get update && apt-get install -y --no-install-recommends wget curl gnupg2
-RUN apt-get install libseccomp2
-RUN wget  --no-check-certificate -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+RUN apt-get update && apt-get install -y --no-install-recommends wget curl gnupg2 ca-certificates libseccomp2 \
+    && curl -fsSL https://dl-ssl.google.com/linux/linux_signing_key.pub \
+        | gpg --dearmor -o /usr/share/keyrings/google-linux.gpg \
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux.gpg] https://dl.google.com/linux/chrome/deb/ stable main" \
+        > /etc/apt/sources.list.d/google.list
 
+RUN mkdir -p /usr/local/bin
 COPY --from=tool_builder /tool/tools.tar.gz /usr/local/bin
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
-    openjdk-8-jdk \
+    default-jdk-headless \
     iproute2 \
     iptables \
     build-essential \
@@ -30,13 +32,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     jq \
     # certutil
     libnss3-tools \
-    google-chrome-stable
+    google-chrome-stable \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update -y; apt-get install -y python3.9 && \
-    rm /usr/bin/python; ln -s /usr/bin/python3.9 /usr/bin/python; apt-get install -y python3-pip && \
-    python -m pip install --upgrade pip
+RUN ln -sf /usr/bin/python3 /usr/local/bin/python
 
-RUN pip3 install --upgrade pip pyasn1 google-apitools==0.5.31 gsutil \
+RUN pip3 install --break-system-packages --upgrade pip pyasn1 google-apitools==0.5.31 gsutil \
     robotframework==6.0.1 robotframework-sshlibrary robotframework-httplibrary \
     requests dbbot robotframework-seleniumlibrary robotframework-pabot \
     robotframework-JSONLibrary hurry.filesize --upgrade && \

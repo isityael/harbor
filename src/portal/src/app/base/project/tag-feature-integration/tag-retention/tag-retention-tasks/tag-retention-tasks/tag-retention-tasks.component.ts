@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, OnDestroy } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnDestroy,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { TagRetentionComponent } from '../../tag-retention.component';
 import { ErrorHandler } from '../../../../../../shared/units/error-handler';
@@ -27,6 +32,7 @@ import {
     selector: 'app-tag-retention-tasks',
     templateUrl: './tag-retention-tasks.component.html',
     styleUrls: ['./tag-retention-tasks.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class TagRetentionTasksComponent implements OnDestroy {

@@ -42,18 +42,21 @@
                             ">
                             <ul>
                                 @for (user of searchedUserLists; track user) {
-                                <li (click)="selectedName(user.username)">
-                                    {{ user.username }}
-                                </li>
+                                    <li (click)="selectedName(user.username)">
+                                        {{ user.username }}
+                                    </li>
                                 }
                             </ul>
                         </div>
                     </div>
-                    @if ( (memberName.invalid && (memberName.touched ||
-                    memberName.dirty)) || !isMemberNameValid ) {
-                    <clr-control-error class="tooltip-content">
-                        {{ memberTooltip | translate }}
-                    </clr-control-error>
+                    @if (
+                        (memberName.invalid &&
+                            (memberName.touched || memberName.dirty)) ||
+                        !isMemberNameValid
+                    ) {
+                        <clr-control-error class="tooltip-content">
+                            {{ memberTooltip | translate }}
+                        </clr-control-error>
                     }
                 </div>
             </div>

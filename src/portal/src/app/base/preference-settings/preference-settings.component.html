@@ -20,13 +20,13 @@
                     </button>
                     <clr-dropdown-menu *clrIfOpen>
                         @for (lang of guiLanguages; track lang) {
-                        <a
-                            href="javascript:void(0)"
-                            clrDropdownItem
-                            (click)="switchLanguage(lang[0])"
-                            [class.lang-selected]="matchLang(lang[0])"
-                            >{{ lang[1][0] }}</a
-                        >
+                            <a
+                                href="javascript:void(0)"
+                                clrDropdownItem
+                                (click)="switchLanguage(lang[0])"
+                                [class.lang-selected]="matchLang(lang[0])"
+                                >{{ lang[1][0] }}</a
+                            >
                         }
                     </clr-dropdown-menu>
                 </clr-dropdown>
@@ -48,17 +48,19 @@
                             direction="down"></clr-icon>
                     </button>
                     <clr-dropdown-menu *clrIfOpen>
-                        @for (rendering of guiDatetimeRenderings; track
-                        rendering) {
-                        <a
-                            href="javascript:void(0)"
-                            clrDropdownItem
-                            (click)="switchDatetimeRendering(rendering[0])"
-                            [class.locale-selected]="
-                                matchDatetimeRendering(rendering[0])
-                            "
-                            >{{ rendering[1] | translate }}</a
-                        >
+                        @for (
+                            rendering of guiDatetimeRenderings;
+                            track rendering
+                        ) {
+                            <a
+                                href="javascript:void(0)"
+                                clrDropdownItem
+                                (click)="switchDatetimeRendering(rendering[0])"
+                                [class.locale-selected]="
+                                    matchDatetimeRendering(rendering[0])
+                                "
+                                >{{ rendering[1] | translate }}</a
+                            >
                         }
                     </clr-dropdown-menu>
                 </clr-dropdown>
@@ -104,7 +106,7 @@
                                                     [ngClass]="{
                                                         'is-invalid':
                                                             customPrefix.invalid &&
-                                                            customPrefix.touched
+                                                            customPrefix.touched,
                                                     }"
                                                     pattern="^[a-z]+$"
                                                     minlength="2"
@@ -113,29 +115,42 @@
                                                     class="clr-validate-icon"
                                                     shape="exclamation-circle"></cds-icon>
                                             </div>
-                                            @if ( customPrefix.invalid &&
-                                            customPrefix.touched ) {
-                                            <div>
-                                                @if
-                                                (customPrefix.errors?.['required'])
-                                                {
-                                                <div>Prefix is required</div>
-                                                } @if
-                                                (customPrefix.errors?.['minlength'])
-                                                {
+                                            @if (
+                                                customPrefix.invalid &&
+                                                customPrefix.touched
+                                            ) {
                                                 <div>
-                                                    Prefix must be at least 2
-                                                    characters
+                                                    @if (
+                                                        customPrefix.errors?.[
+                                                            'required'
+                                                        ]
+                                                    ) {
+                                                        <div>
+                                                            Prefix is required
+                                                        </div>
+                                                    }
+                                                    @if (
+                                                        customPrefix.errors?.[
+                                                            'minlength'
+                                                        ]
+                                                    ) {
+                                                        <div>
+                                                            Prefix must be at
+                                                            least 2 characters
+                                                        </div>
+                                                    }
+                                                    @if (
+                                                        customPrefix.errors?.[
+                                                            'pattern'
+                                                        ]
+                                                    ) {
+                                                        <div>
+                                                            Prefix must only
+                                                            contain lowercase
+                                                            alphabets (a-z)
+                                                        </div>
+                                                    }
                                                 </div>
-                                                } @if
-                                                (customPrefix.errors?.['pattern'])
-                                                {
-                                                <div>
-                                                    Prefix must only contain
-                                                    lowercase alphabets (a-z)
-                                                </div>
-                                                }
-                                            </div>
                                             }
                                         </div>
                                     </div>
@@ -157,13 +172,13 @@
                             </clr-dropdown-menu>
                         </clr-dropdown>
                         @for (runtime of guiRuntimes; track runtime) {
-                        <a
-                            href="javascript:void(0)"
-                            clrDropdownItem
-                            (click)="switchRuntime(runtime[0])"
-                            [class.lang-selected]="matchRuntime(runtime[0])"
-                            >{{ runtime[1] }}</a
-                        >
+                            <a
+                                href="javascript:void(0)"
+                                clrDropdownItem
+                                (click)="switchRuntime(runtime[0])"
+                                [class.lang-selected]="matchRuntime(runtime[0])"
+                                >{{ runtime[1] }}</a
+                            >
                         }
                     </clr-dropdown-menu>
                 </clr-dropdown>
