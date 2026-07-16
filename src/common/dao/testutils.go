@@ -28,8 +28,27 @@ import (
 var defaultRegistered = false
 var o orm.Ormer
 
+var requiredPostgresTestEnv = []string{
+	"POSTGRESQL_HOST",
+	"POSTGRESQL_USR",
+	"POSTGRESQL_PORT",
+	"POSTGRESQL_DATABASE",
+}
+
 // PrepareTestForSQLite is for test only.
 func PrepareTestForSQLite() {
+}
+
+// PostgresTestConfigured reports whether the PostgreSQL integration test
+// environment is complete enough to initialise the test database.
+func PostgresTestConfigured() (bool, []string) {
+	var missing []string
+	for _, key := range requiredPostgresTestEnv {
+		if os.Getenv(key) == "" {
+			missing = append(missing, key)
+		}
+	}
+	return len(missing) == 0, missing
 }
 
 // PrepareTestForPostgresSQL is for test only.

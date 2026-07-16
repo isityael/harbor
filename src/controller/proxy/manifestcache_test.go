@@ -18,6 +18,7 @@ import (
 	"context"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/docker/distribution"
 	"github.com/docker/distribution/manifest"
@@ -55,18 +56,22 @@ const ociManifest = `{
 
 type CacheTestSuite struct {
 	suite.Suite
-	mCache     *ManifestCache
-	mListCache *ManifestListCache
-	local      localInterfaceMock
+	mCache                *ManifestCache
+	mListCache            *ManifestListCache
+	local                 localInterfaceMock
+	manifestCacheInterval time.Duration
 }
 
 func (suite *CacheTestSuite) SetupSuite() {
+	suite.manifestCacheInterval = manifestCacheSleepInterval
+	manifestCacheSleepInterval = time.Nanosecond
 	suite.local = localInterfaceMock{}
 	suite.mListCache = &ManifestListCache{local: &suite.local}
 	suite.mCache = &ManifestCache{local: &suite.local}
 }
 
 func (suite *CacheTestSuite) TearDownSuite() {
+	manifestCacheSleepInterval = suite.manifestCacheInterval
 }
 func (suite *CacheTestSuite) TestUpdateManifestList() {
 	ctx := context.Background()

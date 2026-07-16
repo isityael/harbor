@@ -29,7 +29,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/nfnt/resize"
+	"github.com/disintegration/imaging"
 
 	"github.com/goharbor/harbor/src/lib/errors"
 	"github.com/goharbor/harbor/src/lib/icon"
@@ -164,10 +164,10 @@ func (c *controller) Get(ctx context.Context, digest string) (*Icon, error) {
 	// resize the icon to 50x50
 	if i, exist := builtInIcons[digest]; exist {
 		if i.resize {
-			img = resize.Thumbnail(50, 50, img, resize.NearestNeighbor)
+			img = imaging.Thumbnail(img, 50, 50, imaging.NearestNeighbor)
 		}
 	} else {
-		img = resize.Thumbnail(50, 50, img, resize.NearestNeighbor)
+		img = imaging.Thumbnail(img, 50, 50, imaging.NearestNeighbor)
 	}
 
 	// encode the resized icon to png

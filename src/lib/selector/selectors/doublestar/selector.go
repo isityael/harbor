@@ -16,8 +16,9 @@ package doublestar
 
 import (
 	"encoding/json"
+	"strings"
 
-	"github.com/bmatcuk/doublestar"
+	"github.com/bmatcuk/doublestar/v4"
 
 	iselector "github.com/goharbor/harbor/src/lib/selector"
 )
@@ -164,6 +165,9 @@ func New(decoration string, pattern any, extras string) iselector.Selector {
 func match(pattern, str string) (bool, error) {
 	if len(pattern) == 0 {
 		return true, nil
+	}
+	if strings.HasSuffix(pattern, "/**") && str == strings.TrimSuffix(pattern, "/**") {
+		return false, nil
 	}
 	return doublestar.Match(pattern, str)
 }
