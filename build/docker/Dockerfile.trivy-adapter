@@ -1,0 +1,41 @@
+# Multi-stage Dockerfile for harbor-trivy-adapter built on DHI bases.
+ARG GO_IMAGE=dhi.io/golang:1.26.4-alpine3.24-dev
+ARG TRIVY_IMAGE=dhi.io/trivy:0.69.3-debian13-dev
+ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24
+ARG TRIVY_ADAPTER_VERSION=v0.35.1
+
+FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS scanner-builder
+ARG TRIVY_ADAPTER_VERSION
+ARG TARGETOS=linux
+ARG TARGETARCH=amd64
+
+WORKDIR /src
+RUN git clone --depth 1 --branch "${TRIVY_ADAPTER_VERSION}" https://github.com/goharbor/harbor-scanner-trivy.git .
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    go build -mod=mod -o /out/scanner-trivy cmd/scanner-trivy/main.go
+
+FROM ${TRIVY_IMAGE} AS trivy-source
+
+FROM ${RUNTIME_IMAGE}
+ARG TRIVY_VERSION=v0.69.3
+
+ENV HARBOR_CA_BUNDLE=/home/scanner/ca-bundle.crt \
+    SSL_CERT_FILE=/home/scanner/ca-bundle.crt \
+    TRIVY_VERSION=${TRIVY_VERSION}
+
+USER 0
+RUN mkdir -p /home/scanner/bin /home/scanner/.cache/trivy /home/scanner/.cache/reports /etc/harbor/ssl /harbor_cust_cert \
+    && cp /etc/ssl/certs/ca-certificates.crt /home/scanner/ca-bundle.crt \
+    && chown -R 10000:10000 /home/scanner /etc/harbor/ssl /harbor_cust_cert
+
+COPY --from=trivy-source --chown=10000:10000 --chmod=0755 /usr/local/bin/trivy /usr/local/bin/trivy
+COPY --from=scanner-builder --chown=10000:10000 --chmod=0755 /out/scanner-trivy /home/scanner/bin/scanner-trivy
+COPY --chown=10000:10000 --chmod=0755 make/photon/common/install_cert.sh /home/scanner/
+COPY --chown=10000:10000 --chmod=0755 make/photon/trivy-adapter/entrypoint.sh /home/scanner/
+
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD wget -q -O /dev/null http://localhost:8080/probe/healthy || \
+        wget --no-check-certificate -q -O /dev/null https://localhost:8443/probe/healthy || exit 1
+
+USER 10000:10000
+ENTRYPOINT ["/home/scanner/entrypoint.sh"]

@@ -1,0 +1,77 @@
+# Multi-stage Dockerfile for registry-photon built on DHI bases.
+ARG GO_IMAGE=dhi.io/golang:1.26.4-alpine3.24-dev
+ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24
+ARG DISTRIBUTION_VERSION=v2.8.3-harbor.1-rc.3
+ARG DISTRIBUTION_SRC=https://github.com/goharbor/distribution.git
+
+FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS builder
+ARG DISTRIBUTION_VERSION
+ARG DISTRIBUTION_SRC
+ARG TARGETOS=linux
+ARG TARGETARCH=amd64
+
+ENV PATH=/usr/local/go/bin:$PATH \
+    GO111MODULE=auto \
+    BUILDTAGS="include_oss include_gcs"
+
+WORKDIR /go/src/github.com/docker
+RUN git clone --depth 1 --branch "${DISTRIBUTION_VERSION}" "${DISTRIBUTION_SRC}" distribution
+
+WORKDIR /go/src/github.com/docker/distribution
+RUN apk add --no-cache python3
+RUN go get \
+    github.com/gorilla/handlers@v1.5.2 \
+    golang.org/x/oauth2/google@v0.36.0 \
+    google.golang.org/grpc@v1.81.1 \
+    gopkg.in/square/go-jose.v1@v1.0.4 \
+    && go mod vendor
+RUN python3 - <<'PY'
+from pathlib import Path
+path = Path("registry/handlers/app.go")
+lines = path.read_text().splitlines()
+panic_index = next((i for i, line in enumerate(lines) if "uploadpurging config key must contain additional keys" in line), None)
+if panic_index is None:
+    raise SystemExit("uploadpurging parser block not found")
+start = panic_index - 3
+end = panic_index + 2
+replacement = [
+    '\t\tif v, ok := mc["uploadpurging"]; ok {',
+    '\t\t\tswitch typed := v.(type) {',
+    '\t\t\tcase map[interface{}]interface{}:',
+    '\t\t\t\tpurgeConfig = typed',
+    '\t\t\tcase map[string]interface{}:',
+    '\t\t\t\tpurgeConfig = make(map[interface{}]interface{}, len(typed))',
+    '\t\t\t\tfor key, value := range typed {',
+    '\t\t\t\t\tpurgeConfig[key] = value',
+    '\t\t\t\t}',
+    '\t\t\tdefault:',
+    '\t\t\t\tpanic("uploadpurging config key must contain additional keys")',
+    '\t\t\t}',
+    '\t\t}',
+]
+path.write_text("\n".join(lines[:start] + replacement + lines[end:]) + "\n")
+PY
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    make PREFIX=/go clean bin/registry
+
+FROM ${RUNTIME_IMAGE}
+
+ENV HARBOR_CA_BUNDLE=/home/harbor/ca-bundle.crt \
+    SSL_CERT_FILE=/home/harbor/ca-bundle.crt
+
+USER 0
+RUN mkdir -p /home/harbor /storage /etc/registry /etc/harbor/ssl /harbor_cust_cert \
+    && cp /etc/ssl/certs/ca-certificates.crt /home/harbor/ca-bundle.crt \
+    && chown -R 10000:10000 /home/harbor /storage /etc/registry /etc/harbor/ssl /harbor_cust_cert
+
+COPY --from=builder --chown=10000:10000 --chmod=0755 /go/src/github.com/docker/distribution/bin/registry /usr/bin/registry_DO_NOT_USE_GC
+COPY --chown=10000:10000 --chmod=0755 make/photon/registry/entrypoint.sh /home/harbor/
+COPY --chown=10000:10000 --chmod=0755 make/photon/common/install_cert.sh /home/harbor/
+
+HEALTHCHECK --interval=30s --timeout=10s \
+    CMD wget -q -O /dev/null http://localhost:5000 || \
+        wget --no-check-certificate -q -O /dev/null https://localhost:5443 || exit 1
+
+VOLUME ["/storage"]
+ENTRYPOINT ["/home/harbor/entrypoint.sh"]
+USER 10000:10000

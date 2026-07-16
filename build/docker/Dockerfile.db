@@ -1,0 +1,22 @@
+# Dockerfile for Harbor's internal PostgreSQL image built on a DHI PostgreSQL base.
+ARG RUNTIME_IMAGE=dhi.io/postgres:18.4-alpine3.24
+
+FROM ${RUNTIME_IMAGE}
+
+ENV PGDATA=/var/lib/postgresql/data
+
+USER 0
+RUN mkdir -p /var/lib/postgresql/data /docker-entrypoint-initdb.d \
+    && chown -R postgres:postgres /var/lib/postgresql /docker-entrypoint-initdb.d
+
+COPY --chown=postgres:postgres --chmod=0755 make/photon/db/docker-entrypoint.sh /docker-entrypoint.sh
+COPY --chown=postgres:postgres --chmod=0755 make/photon/db/initdb.sh /initdb.sh
+COPY --chown=postgres:postgres --chmod=0755 make/photon/db/upgrade.sh /upgrade.sh
+COPY --chown=postgres:postgres --chmod=0755 make/photon/db/docker-healthcheck.sh /docker-healthcheck.sh
+COPY --chown=postgres:postgres make/photon/db/initial-registry.sql /docker-entrypoint-initdb.d/
+
+VOLUME ["/var/lib/postgresql/data"]
+ENTRYPOINT ["/docker-entrypoint.sh", "15", "18"]
+HEALTHCHECK CMD ["/docker-healthcheck.sh"]
+
+USER postgres
