@@ -115,7 +115,19 @@ func IsValidURL(address string) bool {
 		return false
 	}
 
-	return net.ParseIP(host) != nil || strings.Contains(host, ".")
+	if net.ParseIP(host) != nil || strings.Contains(host, ".") {
+		return true
+	}
+
+	if len(host) > 63 || strings.HasPrefix(host, "-") || strings.HasSuffix(host, "-") {
+		return false
+	}
+	for _, char := range host {
+		if (char < 'a' || char > 'z') && (char < 'A' || char > 'Z') && (char < '0' || char > '9') && char != '-' {
+			return false
+		}
+	}
+	return true
 }
 
 // SerializeJob encodes work.Job to json data.
