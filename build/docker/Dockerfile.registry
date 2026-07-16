@@ -1,7 +1,7 @@
 # Multi-stage Dockerfile for registry-photon built on DHI bases.
 ARG GO_IMAGE=dhi.io/golang:1.26.4-alpine3.24-dev
 ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24
-ARG DISTRIBUTION_VERSION=v2.8.3-harbor.1-rc.3
+ARG DISTRIBUTION_VERSION=v2.8.3-harbor.1
 ARG DISTRIBUTION_SRC=https://github.com/goharbor/distribution.git
 
 FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS builder

@@ -1,8 +1,8 @@
 # Multi-stage Dockerfile for harbor-trivy-adapter built on DHI bases.
 ARG GO_IMAGE=dhi.io/golang:1.26.4-alpine3.24-dev
-ARG TRIVY_IMAGE=dhi.io/trivy:0.69.3-debian13-dev
+ARG TRIVY_IMAGE=dhi.io/trivy:0.72.0-debian13-dev
 ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24
-ARG TRIVY_ADAPTER_VERSION=v0.35.1
+ARG TRIVY_ADAPTER_VERSION=v0.38.0-rc1
 
 FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS scanner-builder
 ARG TRIVY_ADAPTER_VERSION
@@ -17,7 +17,7 @@ RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
 FROM ${TRIVY_IMAGE} AS trivy-source
 
 FROM ${RUNTIME_IMAGE}
-ARG TRIVY_VERSION=v0.69.3
+ARG TRIVY_VERSION=v0.72.0
 
 ENV HARBOR_CA_BUNDLE=/home/scanner/ca-bundle.crt \
     SSL_CERT_FILE=/home/scanner/ca-bundle.crt \
