@@ -287,7 +287,7 @@ steps:
 
   - name: trivy-scan
     failure: ignore
-    image: "dhi.io/trivy:0.72.0-debian13-dev"
+    image: "aquasec/trivy:0.72.0"
     environment:
       TRIVY_USERNAME:
         from_secret: github_username

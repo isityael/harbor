@@ -33,7 +33,7 @@ panic_index = next((i for i, line in enumerate(lines) if "uploadpurging config k
 if panic_index is None:
     raise SystemExit("uploadpurging parser block not found")
 start = panic_index - 3
-end = panic_index + 2
+end = panic_index + 3
 replacement = [
     '\t\tif v, ok := mc["uploadpurging"]; ok {',
     '\t\t\tswitch typed := v.(type) {',
