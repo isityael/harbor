@@ -244,7 +244,7 @@ replace (
 	github.com/gocraft/work => github.com/goharbor/work v0.5.1
 	github.com/goharbor/harbor => ../
 	github.com/gomodule/redigo => github.com/gomodule/redigo v1.9.3
-	google.golang.org/api => google.golang.org/api v0.289.0
+	google.golang.org/api => google.golang.org/api v0.290.0
 )
 
 ignore portal
