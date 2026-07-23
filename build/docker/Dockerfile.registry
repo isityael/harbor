@@ -1,5 +1,5 @@
 # Multi-stage Dockerfile for registry-photon built on DHI bases.
-ARG GO_IMAGE=dhi.io/golang:1.26.5-alpine3.24-dev@sha256:711ea0b8f09f549c50f2f550dc26859d3e6441ca11d5640caecf69c29a862f0c
+ARG GO_IMAGE=dhi.io/golang:1.26.5-alpine3.24-dev@sha256:994b8bb183c3206ad14b8f71ca8b13cfcfdb793e9afe6565ed3d576e2fed546e
 ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24@sha256:037a503be3d6f50f01bde0ef366e9b9c84060a2db5781b076df40cdd706e5119
 ARG DISTRIBUTION_VERSION=v2.8.3-harbor.1
 ARG DISTRIBUTION_SRC=https://github.com/goharbor/distribution.git
@@ -21,9 +21,13 @@ WORKDIR /go/src/github.com/docker/distribution
 RUN apk add --no-cache python3
 RUN go get \
     github.com/gorilla/handlers@v1.5.2 \
+    github.com/miekg/dns@v1.0.10 \
+    github.com/prometheus/client_golang@v1.11.1 \
+    golang.org/x/net@v0.55.0 \
     golang.org/x/oauth2/google@v0.36.0 \
-    google.golang.org/grpc@v1.81.1 \
-    gopkg.in/square/go-jose.v1@v1.0.4 \
+    google.golang.org/grpc@v1.82.1 \
+    gopkg.in/square/go-jose.v1@v1.1.0 \
+    && go mod tidy \
     && go mod vendor
 RUN python3 - <<'PY'
 from pathlib import Path
