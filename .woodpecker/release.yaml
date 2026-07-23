@@ -41,7 +41,7 @@ steps:
       repo: ghcr.io/isityael/nginx-photon
       dockerfile: build/docker/Dockerfile.nginx
       context: .
-      tags: ["${CI_COMMIT_TAG}", latest]
+      tags: ["candidate-${CI_COMMIT_TAG}"]
       platforms: linux/amd64
       logins:
         - registry: ghcr.io
@@ -65,7 +65,7 @@ steps:
       repo: ghcr.io/isityael/harbor-portal
       dockerfile: build/docker/Dockerfile.portal
       context: .
-      tags: ["${CI_COMMIT_TAG}", latest]
+      tags: ["candidate-${CI_COMMIT_TAG}"]
       platforms: linux/amd64
       logins:
         - registry: ghcr.io
@@ -89,7 +89,7 @@ steps:
       repo: ghcr.io/isityael/harbor-core
       dockerfile: build/docker/Dockerfile.core
       context: .
-      tags: ["${CI_COMMIT_TAG}", latest]
+      tags: ["candidate-${CI_COMMIT_TAG}"]
       platforms: linux/amd64
       logins:
         - registry: ghcr.io
@@ -116,7 +116,7 @@ steps:
       repo: ghcr.io/isityael/harbor-jobservice
       dockerfile: build/docker/Dockerfile.jobservice
       context: .
-      tags: ["${CI_COMMIT_TAG}", latest]
+      tags: ["candidate-${CI_COMMIT_TAG}"]
       platforms: linux/amd64
       logins:
         - registry: ghcr.io
@@ -143,7 +143,7 @@ steps:
       repo: ghcr.io/isityael/registry-photon
       dockerfile: build/docker/Dockerfile.registry
       context: .
-      tags: ["${CI_COMMIT_TAG}", latest]
+      tags: ["candidate-${CI_COMMIT_TAG}"]
       platforms: linux/amd64
       logins:
         - registry: ghcr.io
@@ -167,7 +167,7 @@ steps:
       repo: ghcr.io/isityael/harbor-registryctl
       dockerfile: build/docker/Dockerfile.registryctl
       context: .
-      tags: ["${CI_COMMIT_TAG}", latest]
+      tags: ["candidate-${CI_COMMIT_TAG}"]
       platforms: linux/amd64
       logins:
         - registry: ghcr.io
@@ -194,7 +194,7 @@ steps:
       repo: ghcr.io/isityael/harbor-db
       dockerfile: build/docker/Dockerfile.db
       context: .
-      tags: ["${CI_COMMIT_TAG}", latest]
+      tags: ["candidate-${CI_COMMIT_TAG}"]
       platforms: linux/amd64
       logins:
         - registry: ghcr.io
@@ -218,7 +218,7 @@ steps:
       repo: ghcr.io/isityael/harbor-trivy-adapter
       dockerfile: build/docker/Dockerfile.trivy-adapter
       context: .
-      tags: ["${CI_COMMIT_TAG}", latest]
+      tags: ["candidate-${CI_COMMIT_TAG}"]
       platforms: linux/amd64
       logins:
         - registry: ghcr.io
@@ -242,7 +242,7 @@ steps:
       repo: ghcr.io/isityael/harbor-exporter
       dockerfile: build/docker/Dockerfile.exporter
       context: .
-      tags: ["${CI_COMMIT_TAG}", latest]
+      tags: ["candidate-${CI_COMMIT_TAG}"]
       platforms: linux/amd64
       logins:
         - registry: ghcr.io
@@ -269,7 +269,7 @@ steps:
       repo: ghcr.io/isityael/valkey-photon
       dockerfile: build/docker/Dockerfile.valkey
       context: .
-      tags: ["${CI_COMMIT_TAG}", latest]
+      tags: ["candidate-${CI_COMMIT_TAG}"]
       platforms: linux/amd64
       logins:
         - registry: ghcr.io
@@ -286,8 +286,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: trivy-scan
-    failure: ignore
-    image: "aquasec/trivy:0.72.0"
+    image: "aquasec/trivy:0.72.0@sha256:cffe3f5161a47a6823fbd23d985795b3ed72a4c806da4c4df16266c02accdd6f"
     environment:
       TRIVY_USERNAME:
         from_secret: github_username
@@ -296,9 +295,25 @@ steps:
     commands:
       - |
         for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
-          ref="ghcr.io/isityael/$${image}:${CI_COMMIT_TAG}"
+          ref="ghcr.io/isityael/$${image}:candidate-${CI_COMMIT_TAG}"
           trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed "$${ref}"
           trivy image --scanners vuln --skip-version-check --exit-code 0 --severity HIGH --ignore-unfixed "$${ref}"
+        done
+
+  - name: promote-ghcr
+    image: "dhi.io/crane:0.21.7-debian13-dev@sha256:9e10a9ed1d204f70873bd656d9d823f63ff0e9d138261fa34d85155499e1d982"
+    environment:
+      REGISTRY_USERNAME:
+        from_secret: github_username
+      REGISTRY_PASSWORD:
+        from_secret: github_token
+    commands:
+      - crane auth login ghcr.io -u "$${REGISTRY_USERNAME}" -p "$${REGISTRY_PASSWORD}"
+      - |
+        for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
+          candidate="ghcr.io/isityael/$${image}:candidate-${CI_COMMIT_TAG}"
+          crane cp "$${candidate}" "ghcr.io/isityael/$${image}:${CI_COMMIT_TAG}"
+          crane cp "$${candidate}" "ghcr.io/isityael/$${image}:latest"
         done
 
   - name: cosign-sign
