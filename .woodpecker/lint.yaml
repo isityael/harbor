@@ -47,12 +47,13 @@ steps:
 
   - name: build-check
     image: dhi.io/golang:1.26.5-debian13-dev@sha256:c15c327d115e8af76f50fb5dc9da2d81280527ff6da30b5eb423499eb42c5897
-    volumes:
-      - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
-      GOMODCACHE: /woodpecker/cache/harbor/go-mod
-      GOCACHE: /woodpecker/cache/harbor/go-build
+      # Compilation performs many concurrent metadata writes. Keep those on
+      # the workflow's block-backed workspace instead of the shared NFS cache.
+      GOMODCACHE: /woodpecker/.cache/harbor/go-mod
+      GOCACHE: /woodpecker/.cache/harbor/go-build
     commands:
+      - mkdir -p "$GOMODCACHE" "$GOCACHE"
       - cd src
       - echo "Building core..."
       - CGO_ENABLED=0 go build -o /dev/null ./core
