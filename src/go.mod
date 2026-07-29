@@ -69,10 +69,10 @@ require (
 
 require (
 	github.com/FZambia/sentinel/v2 v2.0.1
-	github.com/aws/aws-sdk-go-v2 v1.43.1
-	github.com/aws/aws-sdk-go-v2/config v1.32.32
-	github.com/aws/aws-sdk-go-v2/credentials v1.19.31
-	github.com/aws/aws-sdk-go-v2/service/ecr v1.60.1
+	github.com/aws/aws-sdk-go-v2 v1.43.2
+	github.com/aws/aws-sdk-go-v2/config v1.32.33
+	github.com/aws/aws-sdk-go-v2/credentials v1.19.32
+	github.com/aws/aws-sdk-go-v2/service/ecr v1.60.2
 	github.com/aws/smithy-go v1.27.5
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/casbin/casbin/v3 v3.10.0
