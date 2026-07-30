@@ -8,6 +8,7 @@
   "baseBranchPatterns": [
     "progressed"
   ],
+  "postUpdateOptions": ["gomodTidy"],
   "labels": [
     "release-note/bump-version"
   ],
