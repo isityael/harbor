@@ -39,7 +39,7 @@ require (
 	github.com/opencontainers/image-spec v1.1.1
 	github.com/prometheus/client_golang v1.24.1
 	github.com/prometheus/client_model v0.6.2
-	github.com/redis/go-redis/v9 v9.21.0
+	github.com/redis/go-redis/v9 v9.22.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
@@ -243,7 +243,7 @@ replace (
 	github.com/gocraft/work => github.com/goharbor/work v0.5.1
 	github.com/goharbor/harbor => ../
 	github.com/gomodule/redigo => github.com/gomodule/redigo v1.9.3
-	google.golang.org/api => google.golang.org/api v0.291.0
+	google.golang.org/api => google.golang.org/api v0.292.0
 )
 
 ignore portal
