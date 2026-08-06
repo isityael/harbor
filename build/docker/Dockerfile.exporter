@@ -1,4 +1,4 @@
-# Multi-stage Dockerfile for harbor-exporter built from sm-moshi/harbor.
+# Multi-stage Dockerfile for harbor-exporter built from isityael/harbor.
 ARG GO_IMAGE=dhi.io/golang:1.26.5-alpine3.24-dev@sha256:994b8bb183c3206ad14b8f71ca8b13cfcfdb793e9afe6565ed3d576e2fed546e
 ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24@sha256:037a503be3d6f50f01bde0ef366e9b9c84060a2db5781b076df40cdd706e5119
 
