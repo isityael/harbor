@@ -31,7 +31,9 @@ function initPG() {
         if [ "$POSTGRES_INITDB_XLOGDIR" ]; then
                 export POSTGRES_INITDB_ARGS="$POSTGRES_INITDB_ARGS --xlogdir $POSTGRES_INITDB_XLOGDIR"
         fi
-        initdb -D $1  -U postgres -E UTF-8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8 $POSTGRES_INITDB_ARGS
+        file_env 'POSTGRES_INITDB_COLLATE' 'C.UTF-8'
+        file_env 'POSTGRES_INITDB_CTYPE' 'C.UTF-8'
+        initdb -D $1  -U postgres -E UTF-8 --lc-collate="$POSTGRES_INITDB_COLLATE" --lc-ctype="$POSTGRES_INITDB_CTYPE" $POSTGRES_INITDB_ARGS
         # check password first so we can output the warning before postgres
         # messes it up
         file_env 'POSTGRES_PASSWORD'

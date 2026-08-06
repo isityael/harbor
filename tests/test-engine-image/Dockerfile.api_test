@@ -1,34 +1,38 @@
-# photon based image
-FROM photon:4.0
-ENV LANG C.UTF-8
+# DHI Debian-based API test image
+FROM dhi.io/debian-base:trixie-debian13-dev@sha256:5c45913e72c90581fc4cca57c3a7cd7dcac2d9fa44fce24fe4cfa342e5ccb7a6
+ENV LANG=C.UTF-8
 ENV HELM_EXPERIMENTAL_OCI=1
 ENV COSIGN_PASSWORD=Harbor12345
 ENV COSIGN_EXPERIMENTAL=1
 ENV COSIGN_OCI_EXPERIMENTAL=1
 ENV NOTATION_EXPERIMENTAL=1
 
+RUN mkdir -p /usr/local/bin
 COPY --from=tool_builder /tool/tools.tar.gz /usr/local/bin
 
-RUN tdnf update -y && tdnf install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
+    curl \
     git \
-    openjdk8 \
+    default-jdk-headless \
     iproute2 \
     iptables \
     build-essential \
     sed \
-    openssl-devel \
+    libssl-dev \
     tar \
-    which \
-    procps-ng \
-    gzip && \
-    tdnf erase -y toybox && \
-    tdnf install -y python3 python3-pip python3-setuptools httpd && \
-    pip3 install --upgrade pip pyasn1 google-apitools==0.5.31 gsutil python-dateutil \
+    procps \
+    gzip \
+    python3 \
+    python3-pip \
+    python3-setuptools \
+    libnss3-tools \
+    podman \
+    && pip3 install --break-system-packages --upgrade pip pyasn1 google-apitools==0.5.31 gsutil python-dateutil \
     robotframework==6.0.1 robotframework-sshlibrary robotframework-httplibrary \
     requests dbbot robotframework-seleniumlibrary robotframework-pabot \
     robotframework-JSONLibrary hurry.filesize --upgrade && \
-    tdnf clean all
+    rm -rf /var/lib/apt/lists/*
 
 RUN pwd && ls && \
     # Install docker
@@ -45,7 +49,5 @@ RUN chmod +x /usr/local/bin/dockerd-entrypoint.sh && \
     mkdir -p $HOME/.pki/nssdb && \
     echo Harbor12345 > password.ca && \
     certutil -d sql:$HOME/.pki/nssdb -N -f password.ca
-
-RUN tdnf install -y podman
 
 VOLUME /var/lib/docker

@@ -1,0 +1,364 @@
+# Harbor components — build, push, scan, and sign GHCR images.
+# Triggered by isityael v2.16.0 yael tag (v2.16.0-yael.1).
+#
+# Images pushed to ghcr.io/isityael only:
+#   nginx-photon, harbor-portal, harbor-core, harbor-jobservice,
+#   registry-photon, harbor-registryctl, harbor-db,
+#   harbor-trivy-adapter, harbor-exporter, valkey-photon
+#
+# Required secrets:
+#   github_username, github_token   — GHCR auth (GitHub PAT with packages:write)
+#   cosign_key, cosign_password     — cosign signing
+#   notation_key, notation_cert     — notation signing
+when:
+  - event: tag
+    ref: "refs/tags/v2.16.0-yael.*"
+
+clone:
+  git:
+    image: woodpeckerci/plugin-git
+    settings:
+      lfs: false
+      tags: false
+
+steps:
+  - name: validate-version
+    image: "dhi.io/busybox:1.37.0-debian13"
+    commands:
+      - test -n "$CI_COMMIT_TAG"
+      - test "$(cat VERSION)" = "$CI_COMMIT_TAG"
+      - |
+        case "$CI_COMMIT_TAG" in
+          v2.16.0-yael.*) ;;
+          *) echo "Refusing to release tag outside the v2.16.0-yael series: $CI_COMMIT_TAG"; exit 1 ;;
+        esac
+
+  - name: build-nginx
+    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    privileged: true
+    settings:
+      registry: ghcr.io
+      repo: ghcr.io/isityael/nginx-photon
+      dockerfile: build/docker/Dockerfile.nginx
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      platforms: linux/amd64
+      logins:
+        - registry: ghcr.io
+          username:
+            from_secret: github_username
+          password:
+            from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-portal
+    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    privileged: true
+    settings:
+      registry: ghcr.io
+      repo: ghcr.io/isityael/harbor-portal
+      dockerfile: build/docker/Dockerfile.portal
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      platforms: linux/amd64
+      logins:
+        - registry: ghcr.io
+          username:
+            from_secret: github_username
+          password:
+            from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-core
+    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    privileged: true
+    settings:
+      registry: ghcr.io
+      repo: ghcr.io/isityael/harbor-core
+      dockerfile: build/docker/Dockerfile.core
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      platforms: linux/amd64
+      logins:
+        - registry: ghcr.io
+          username:
+            from_secret: github_username
+          password:
+            from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      build_args:
+        - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
+        - "RELEASE_VERSION=${CI_COMMIT_TAG}"
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-jobservice
+    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    privileged: true
+    settings:
+      registry: ghcr.io
+      repo: ghcr.io/isityael/harbor-jobservice
+      dockerfile: build/docker/Dockerfile.jobservice
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      platforms: linux/amd64
+      logins:
+        - registry: ghcr.io
+          username:
+            from_secret: github_username
+          password:
+            from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      build_args:
+        - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
+        - "RELEASE_VERSION=${CI_COMMIT_TAG}"
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-registry
+    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    privileged: true
+    settings:
+      registry: ghcr.io
+      repo: ghcr.io/isityael/registry-photon
+      dockerfile: build/docker/Dockerfile.registry
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      platforms: linux/amd64
+      logins:
+        - registry: ghcr.io
+          username:
+            from_secret: github_username
+          password:
+            from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-registryctl
+    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    privileged: true
+    settings:
+      registry: ghcr.io
+      repo: ghcr.io/isityael/harbor-registryctl
+      dockerfile: build/docker/Dockerfile.registryctl
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      platforms: linux/amd64
+      logins:
+        - registry: ghcr.io
+          username:
+            from_secret: github_username
+          password:
+            from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      build_args:
+        - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
+        - "RELEASE_VERSION=${CI_COMMIT_TAG}"
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-db
+    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    privileged: true
+    settings:
+      registry: ghcr.io
+      repo: ghcr.io/isityael/harbor-db
+      dockerfile: build/docker/Dockerfile.db
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      platforms: linux/amd64
+      logins:
+        - registry: ghcr.io
+          username:
+            from_secret: github_username
+          password:
+            from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-trivy-adapter
+    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    privileged: true
+    settings:
+      registry: ghcr.io
+      repo: ghcr.io/isityael/harbor-trivy-adapter
+      dockerfile: build/docker/Dockerfile.trivy-adapter
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      platforms: linux/amd64
+      logins:
+        - registry: ghcr.io
+          username:
+            from_secret: github_username
+          password:
+            from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-exporter
+    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    privileged: true
+    settings:
+      registry: ghcr.io
+      repo: ghcr.io/isityael/harbor-exporter
+      dockerfile: build/docker/Dockerfile.exporter
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      platforms: linux/amd64
+      logins:
+        - registry: ghcr.io
+          username:
+            from_secret: github_username
+          password:
+            from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      build_args:
+        - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
+        - "RELEASE_VERSION=${CI_COMMIT_TAG}"
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-valkey
+    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    privileged: true
+    settings:
+      registry: ghcr.io
+      repo: ghcr.io/isityael/valkey-photon
+      dockerfile: build/docker/Dockerfile.valkey
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      platforms: linux/amd64
+      logins:
+        - registry: ghcr.io
+          username:
+            from_secret: github_username
+          password:
+            from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: trivy-scan
+    image: "aquasec/trivy:0.73.0@sha256:7cced7cae583819fc7806d4cbc0dbbc7cad18b99f7d3e235192e6da8c091045c"
+    environment:
+      TRIVY_USERNAME:
+        from_secret: github_username
+      TRIVY_PASSWORD:
+        from_secret: github_token
+    commands:
+      - |
+        for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
+          ref="ghcr.io/isityael/$${image}:candidate-${CI_COMMIT_TAG}"
+          trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed "$${ref}"
+          trivy image --scanners vuln --skip-version-check --exit-code 0 --severity HIGH --ignore-unfixed "$${ref}"
+        done
+
+  - name: promote-ghcr
+    image: "dhi.io/crane:0.21.7-debian13-dev@sha256:9e10a9ed1d204f70873bd656d9d823f63ff0e9d138261fa34d85155499e1d982"
+    environment:
+      REGISTRY_USERNAME:
+        from_secret: github_username
+      REGISTRY_PASSWORD:
+        from_secret: github_token
+    commands:
+      - crane auth login ghcr.io -u "$${REGISTRY_USERNAME}" -p "$${REGISTRY_PASSWORD}"
+      - |
+        for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
+          candidate="ghcr.io/isityael/$${image}:candidate-${CI_COMMIT_TAG}"
+          crane cp "$${candidate}" "ghcr.io/isityael/$${image}:${CI_COMMIT_TAG}"
+          crane cp "$${candidate}" "ghcr.io/isityael/$${image}:latest"
+        done
+
+  - name: cosign-sign
+    image: "dhi.io/cosign:3.0.5-debian13-dev"
+    environment:
+      COSIGN_EXPERIMENTAL: "1"
+      COSIGN_KEY:
+        from_secret: cosign_key
+      COSIGN_PASSWORD:
+        from_secret: cosign_password
+      REGISTRY_USERNAME:
+        from_secret: github_username
+      REGISTRY_PASSWORD:
+        from_secret: github_token
+    commands:
+      - echo "$COSIGN_KEY" > /tmp/cosign.key
+      - cosign login ghcr.io -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
+      - |
+        for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
+          cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 "ghcr.io/isityael/$${image}:${CI_COMMIT_TAG}"
+        done
+      - rm -f /tmp/cosign.key
+
+  - name: notation-sign
+    image: "dhi.io/notation:1.3.2-debian13-dev"
+    environment:
+      NOTATION_KEY:
+        from_secret: notation_key
+      NOTATION_CERT:
+        from_secret: notation_cert
+      REGISTRY_USERNAME:
+        from_secret: github_username
+      REGISTRY_PASSWORD:
+        from_secret: github_token
+    commands:
+      - mkdir -p /tmp/notation $HOME/.config/notation $HOME/.docker
+      - echo "$NOTATION_KEY" > /tmp/notation/harbor.key
+      - echo "$NOTATION_CERT" > /tmp/notation/harbor.crt
+      - |
+        cat > $HOME/.config/notation/signingkeys.json <<EOF
+        {"default":"harbor","keys":[{"name":"harbor","keyPath":"/tmp/notation/harbor.key","certPath":"/tmp/notation/harbor.crt"}]}
+        EOF
+      - printf '{"auths":{"ghcr.io":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
+      - |
+        for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
+          notation sign --force-referrers-tag=false --key harbor "ghcr.io/isityael/$${image}:${CI_COMMIT_TAG}"
+        done
+      - rm -rf /tmp/notation $HOME/.docker/config.json

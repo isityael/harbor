@@ -1,9 +1,4 @@
-FROM photon:5.0-20260214
+FROM dhi.io/debian-base:trixie-debian13-dev@sha256:5c45913e72c90581fc4cca57c3a7cd7dcac2d9fa44fce24fe4cfa342e5ccb7a6
 
-RUN tdnf install photon-repos -y \
-    && sed -i 's/enabled\s*=.*/enabled=0/g' /etc/yum.repos.d/*.repo \
-    && sed -i 's/enabled\s*=.*/enabled=1/g' /etc/yum.repos.d/photon-snapshot.repo \
-    && tdnf clean all \
-    && tdnf --disablerepo="*" --enablerepo="photon-snapshot" makecache \
-    && tdnf --disablerepo="*" --enablerepo="photon-snapshot" update -y \
-    && tdnf clean all
+RUN apt-get update && apt-get upgrade -y \
+    && rm -rf /var/lib/apt/lists/*

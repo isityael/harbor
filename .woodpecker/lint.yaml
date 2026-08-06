@@ -1,0 +1,66 @@
+# Harbor Go components — build verification pipeline
+# Runs on push/PR to the progressed branch
+#
+# Verifies the 4 Go components compile successfully. Full go vet is not
+# possible without swagger-generated code (server/v2.0/{models,restapi})
+# which requires `make gen_apis` and isn't checked in.
+#
+# Go module cache persisted via NFS (woodpecker-pipeline-cache) between runs.
+when:
+  - event: [push, pull_request]
+    branch: progressed
+
+clone:
+  git:
+    image: woodpeckerci/plugin-git
+    settings:
+      lfs: false
+      recursive: false
+      tags: false
+
+steps:
+  - name: generate-swagger
+    image: dhi.io/golang:1.26.5-debian13-dev@sha256:c15c327d115e8af76f50fb5dc9da2d81280527ff6da30b5eb423499eb42c5897
+    volumes:
+      - woodpecker-pipeline-cache:/woodpecker/cache
+    environment:
+      GOMODCACHE: /woodpecker/cache/harbor/go-mod
+      GOCACHE: /woodpecker/cache/harbor/go-build
+      GOBIN: /woodpecker/cache/harbor/bin
+      SWAGGER_BIN: /woodpecker/cache/harbor/bin/swagger-v0.33.1
+    commands:
+      - mkdir -p "$GOMODCACHE" "$GOCACHE" "$GOBIN"
+      - |
+        if [ ! -x "$SWAGGER_BIN" ]; then
+          go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1
+          mv "$GOBIN/swagger" "$SWAGGER_BIN"
+        fi
+      - timeout 10m "$SWAGGER_BIN" generate server
+        --template-dir=tools/swagger/templates
+        --exclude-main
+        --additional-initialism=CVE
+        --additional-initialism=GC
+        --additional-initialism=OIDC
+        -f api/v2.0/swagger.yaml
+        -A harbor
+        --target src/server/v2.0
+
+  - name: build-check
+    image: dhi.io/golang:1.26.5-debian13-dev@sha256:c15c327d115e8af76f50fb5dc9da2d81280527ff6da30b5eb423499eb42c5897
+    environment:
+      # Compilation performs many concurrent metadata writes. Keep those on
+      # the workflow's block-backed workspace instead of the shared NFS cache.
+      GOMODCACHE: /woodpecker/.cache/harbor/go-mod
+      GOCACHE: /woodpecker/.cache/harbor/go-build
+    commands:
+      - mkdir -p "$GOMODCACHE" "$GOCACHE"
+      - cd src
+      - echo "Building core..."
+      - CGO_ENABLED=0 go build -o /dev/null ./core
+      - echo "Building jobservice..."
+      - CGO_ENABLED=0 go build -o /dev/null ./jobservice
+      - echo "Building registryctl..."
+      - CGO_ENABLED=0 go build -o /dev/null ./registryctl
+      - echo "Building exporter..."
+      - CGO_ENABLED=0 go build -o /dev/null ./cmd/exporter
+      - echo "All 4 components compile successfully."

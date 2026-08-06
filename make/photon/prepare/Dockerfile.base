@@ -1,9 +1,8 @@
-FROM goharbor/photon:5.0
+FROM dhi.io/python:3.14.6-debian13-dev@sha256:9b72c38a520f44fafa1c4a3026e9b390eb3b4967c62d38be01400ecbb0232b65
 
-RUN tdnf install -y python3 python3-pip python3-PyYAML python3-jinja2 && tdnf clean all
 ARG pip_index_url=https://pypi.org/simple
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
 RUN pip3 install pipenv==2025.0.3 --index-url ${pip_index_url}
 
-#To install only htpasswd binary from photon package httpd
-RUN tdnf install -y rpm cpio apr-util
-RUN tdnf -y --downloadonly --downloaddir=/tmp/ install httpd && rpm2cpio /tmp/httpd-*.rpm | cpio -ivdm ./usr/bin/htpasswd && rm -f /tmp/*
+RUN apt-get update && apt-get install -y --no-install-recommends apache2-utils \
+    && rm -rf /var/lib/apt/lists/*

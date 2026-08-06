@@ -1,0 +1,50 @@
+# Multi-stage Dockerfile for harbor-exporter built from isityael/harbor.
+ARG GO_IMAGE=dhi.io/golang:1.26.5-alpine3.24-dev@sha256:994b8bb183c3206ad14b8f71ca8b13cfcfdb793e9afe6565ed3d576e2fed546e
+ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24@sha256:037a503be3d6f50f01bde0ef366e9b9c84060a2db5781b076df40cdd706e5119
+
+FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS builder
+ARG GITCOMMIT=unknown
+ARG RELEASE_VERSION=dev
+ARG TARGETOS=linux
+ARG TARGETARCH=amd64
+
+WORKDIR /harbor
+COPY src/ ./src/
+COPY api/ ./api/
+COPY tools/swagger/templates/ ./tools/swagger/templates/
+
+RUN go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1 \
+    && swagger generate server \
+    --template-dir=tools/swagger/templates \
+    --exclude-main \
+    --additional-initialism=CVE \
+    --additional-initialism=GC \
+    --additional-initialism=OIDC \
+    -f api/v2.0/swagger.yaml \
+    -A harbor \
+    --target src/server/v2.0
+
+RUN cd src && CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    go build -mod=mod -o /out/harbor_exporter \
+    -ldflags "-w -s \
+    -X github.com/goharbor/harbor/src/pkg/version.GitCommit=${GITCOMMIT} \
+    -X github.com/goharbor/harbor/src/pkg/version.ReleaseVersion=${RELEASE_VERSION}" \
+    ./cmd/exporter
+
+FROM ${RUNTIME_IMAGE}
+
+ENV HARBOR_CA_BUNDLE=/harbor/ca-bundle.crt \
+    SSL_CERT_FILE=/harbor/ca-bundle.crt
+
+USER 0
+RUN mkdir -p /harbor /etc/harbor/ssl /harbor_cust_cert \
+    && cp /etc/ssl/certs/ca-certificates.crt /harbor/ca-bundle.crt \
+    && chown -R 10000:10000 /harbor /etc/harbor/ssl /harbor_cust_cert
+
+COPY --from=builder --chown=10000:10000 --chmod=0755 /out/harbor_exporter /harbor/
+COPY --chown=10000:10000 --chmod=0755 make/photon/exporter/entrypoint.sh /harbor/
+COPY --chown=10000:10000 --chmod=0755 make/photon/common/install_cert.sh /harbor/
+
+WORKDIR /harbor
+USER 10000:10000
+ENTRYPOINT ["/harbor/entrypoint.sh"]

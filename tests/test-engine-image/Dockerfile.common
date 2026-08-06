@@ -1,24 +1,21 @@
-FROM ubuntu:20.04 as tool_builder
+FROM dhi.io/golang:1.26.5-debian13-dev@sha256:ae1f6a80aec9e82d8431115d9148f4c8e932efe04d706a51a30a5c0609a72ab9 AS tool_builder
 ENV TZ=Asia/Shanghai \
     DEBIAN_FRONTEND=noninteractive
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 WORKDIR /tool
 
-#RUN tdnf install -y \
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     wget \
     git \
+    gzip \
     tar \
     #go
     #ubuntu
     curl \
     libssl-dev \
-    uuid-dev
-#ubuntu
-RUN apt-get update && apt-get install -y software-properties-common && \
-    add-apt-repository -y ppa:longsleep/golang-backports && \
-    apt-get install -y golang-go
+    uuid-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN pwd && mkdir /tool/binary && \
     # Install CONTAINERD

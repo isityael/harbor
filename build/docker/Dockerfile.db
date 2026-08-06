@@ -1,0 +1,27 @@
+# Dockerfile for Harbor's internal PostgreSQL image built on a DHI PostgreSQL base.
+ARG POSTGRES_15_IMAGE=dhi.io/postgres:15.18-debian13-dev@sha256:b0fe2d7f82d746fec877874f4ac4d3e333b1fff011a9cc1e47cba2cfca5f8da8
+ARG RUNTIME_IMAGE=dhi.io/postgres:18.4-debian13-dev@sha256:7360ad8ea76a078cdf42aebc184def993c465af34200d4c88a134fb7bc32e59c
+
+FROM ${POSTGRES_15_IMAGE} AS postgres15
+
+FROM ${RUNTIME_IMAGE}
+
+ENV PGDATA=/var/lib/postgresql/data
+
+USER 0
+RUN mkdir -p /var/lib/postgresql/data /docker-entrypoint-initdb.d \
+    && chown -R postgres:postgres /var/lib/postgresql /docker-entrypoint-initdb.d
+
+COPY --from=postgres15 /opt/postgresql/15 /opt/postgresql/15
+
+COPY --chown=postgres:postgres --chmod=0755 make/photon/db/docker-entrypoint.sh /docker-entrypoint.sh
+COPY --chown=postgres:postgres --chmod=0755 make/photon/db/initdb.sh /initdb.sh
+COPY --chown=postgres:postgres --chmod=0755 make/photon/db/upgrade.sh /upgrade.sh
+COPY --chown=postgres:postgres --chmod=0755 make/photon/db/docker-healthcheck.sh /docker-healthcheck.sh
+COPY --chown=postgres:postgres make/photon/db/initial-registry.sql /docker-entrypoint-initdb.d/
+
+VOLUME ["/var/lib/postgresql/data"]
+ENTRYPOINT ["/docker-entrypoint.sh", "15", "18"]
+HEALTHCHECK CMD ["/docker-healthcheck.sh"]
+
+USER postgres
