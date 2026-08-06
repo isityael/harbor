@@ -857,7 +857,7 @@ export function isSameObject(a: any, b: any): boolean {
             if (c.hasOwnProperty(key)) {
                 if (!c[key]) {
                     // should not use triple-equals here
-                    // eslint-disable-next-line eqeqeq
+
                     if (a[key] != b[key]) {
                         return false;
                     }
@@ -872,7 +872,7 @@ export function isSameObject(a: any, b: any): boolean {
                         }
                     } else {
                         // should not use triple-equals here
-                        // eslint-disable-next-line eqeqeq
+
                         if (a[key] != b[key]) {
                             return false;
                         }

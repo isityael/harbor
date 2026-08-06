@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AppConfigService } from '../../../services/app-config.service';
 import { SkinableConfig } from '../../../services/skinable-config.service';
 
@@ -19,6 +19,7 @@ import { SkinableConfig } from '../../../services/skinable-config.service';
     selector: 'about-dialog',
     templateUrl: 'about-dialog.component.html',
     styleUrls: ['about-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class AboutDialogComponent implements OnInit {

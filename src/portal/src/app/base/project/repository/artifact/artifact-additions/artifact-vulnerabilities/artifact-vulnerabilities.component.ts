@@ -11,7 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { AdditionsService } from '../additions.service';
 import {
     ClrDatagridComparatorInterface,
@@ -51,6 +58,7 @@ import { PAGE_SIZE_OPTIONS } from 'src/app/shared/entities/shared.const';
     selector: 'hbr-artifact-vulnerabilities',
     templateUrl: './artifact-vulnerabilities.component.html',
     styleUrls: ['./artifact-vulnerabilities.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ArtifactVulnerabilitiesComponent implements OnInit, OnDestroy {

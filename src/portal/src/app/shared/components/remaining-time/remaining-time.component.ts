@@ -18,6 +18,7 @@ import {
     OnDestroy,
     SimpleChanges,
     OnChanges,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { RobotTimeRemainColor } from '../../../base/left-side-nav/system-robot-accounts/system-robot-util';
 const SEC: number = 1000;
@@ -29,6 +30,7 @@ const WARNING_DAYS = 7;
     selector: 'app-remaining-time',
     templateUrl: 'remaining-time.component.html',
     styleUrls: ['./remaining-time.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class RemainingTimeComponent implements OnInit, OnDestroy, OnChanges {

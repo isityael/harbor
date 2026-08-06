@@ -18,6 +18,7 @@ import {
     OnDestroy,
     OnInit,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { clone, compareValue } from '../../../../shared/units/utils';
 import { ErrorHandler } from '../../../../shared/units/error-handler';
@@ -49,6 +50,7 @@ const TARGET_BLANK = '_blank';
             useValue: localStorage.getItem(DEFAULT_LANG_LOCALSTORAGE_KEY),
         },
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class SecurityComponent implements OnInit, OnDestroy {

@@ -18,6 +18,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('JobLogService', () => {
@@ -30,7 +31,7 @@ describe('JobLogService', () => {
                     provide: JobLogService,
                     useClass: JobLogDefaultService,
                 },
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

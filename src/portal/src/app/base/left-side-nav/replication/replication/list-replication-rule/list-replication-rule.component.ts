@@ -20,6 +20,7 @@ import {
     OnInit,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { catchError, finalize, map } from 'rxjs/operators';
@@ -68,6 +69,7 @@ import { JobType } from '../../../job-service-dashboard/job-service-dashboard.in
     selector: 'hbr-list-replication-rule',
     templateUrl: './list-replication-rule.component.html',
     styleUrls: ['./list-replication-rule.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ListReplicationRuleComponent implements OnInit, OnDestroy {

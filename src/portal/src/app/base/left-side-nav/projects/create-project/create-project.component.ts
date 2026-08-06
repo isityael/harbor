@@ -30,6 +30,7 @@ import {
     SimpleChanges,
     AfterViewInit,
     ElementRef,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgForm, Validators } from '@angular/forms';
 import { forkJoin, fromEvent, Observable, Subscription } from 'rxjs';
@@ -63,6 +64,7 @@ const PAGE_SIZE: number = 100;
     selector: 'create-project',
     templateUrl: 'create-project.component.html',
     styleUrls: ['create-project.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class CreateProjectComponent
@@ -233,12 +235,10 @@ export class CreateProjectComponent
         ) {
             return true;
         }
-        if (
-            !(
-                this.currentForm.controls['create_project_name'].dirty ||
-                this.currentForm.controls['create_project_name'].touched
-            )
-        ) {
+        if (!(
+            this.currentForm.controls['create_project_name'].dirty ||
+            this.currentForm.controls['create_project_name'].touched
+        )) {
             return true;
         }
         if (this.checkOnGoing) {

@@ -18,7 +18,7 @@ import { OperationService } from '../operation/operation.service';
 import { MessageHandlerService } from '../../services/message-handler.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClarityModule } from '@clr/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { Robot } from '../../../../../ng-swagger-gen/models/robot';
 import {
     Action,

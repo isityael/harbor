@@ -12,7 +12,9 @@
                                 quotaHardLimitValue?.storageLimit === -1
                                     ? ('QUOTA.UNLIMITED' | translate)
                                     : getIntegerAndUnit(
-                                          quotaHardLimitValue?.storageLimit,
+                                          $safeNavigationMigration(
+                                              quotaHardLimitValue?.storageLimit
+                                          ),
                                           0
                                       ).partNumberHard
                             }}
@@ -75,76 +77,100 @@
                     'QUOTA.PLACEHOLDER' | translate
                 }}</clr-dg-placeholder>
                 @for (quota of quotaList; track quota) {
-                <clr-dg-row [clrDgItem]="quota">
-                    <clr-dg-cell>
-                        <a
-                            href="javascript:void(0)"
-                            (click)="goToLink(quota?.ref?.id)"
-                            >{{ quota?.ref?.name }}</a
-                        ></clr-dg-cell
-                    >
-                    <clr-dg-cell>{{ quota?.ref?.owner_name }}</clr-dg-cell>
-                    <clr-dg-cell>
-                        <div class="progress-block progress-min-width">
-                            <div
-                                class="progress success"
-                                [class.danger]="
-                                    quota.hard.storage !== -1
-                                        ? quota.used.storage /
-                                              quota.hard.storage >
-                                          quotaDangerCoefficient
-                                        : false
+                    <clr-dg-row [clrDgItem]="quota">
+                        <clr-dg-cell>
+                            <a
+                                href="javascript:void(0)"
+                                (click)="
+                                    goToLink(
+                                        $safeNavigationMigration(quota?.ref?.id)
+                                    )
                                 "
-                                [class.warning]="
-                                    quota.hard.storage !== -1
-                                        ? quota.used.storage /
-                                              quota.hard.storage >=
-                                              quotaWarningCoefficient &&
-                                          quota.used.storage /
-                                              quota.hard.storage <=
+                                >{{ quota?.ref?.name }}</a
+                            ></clr-dg-cell
+                        >
+                        <clr-dg-cell>{{ quota?.ref?.owner_name }}</clr-dg-cell>
+                        <clr-dg-cell>
+                            <div class="progress-block progress-min-width">
+                                <div
+                                    class="progress success"
+                                    [class.danger]="
+                                        quota.hard.storage !== -1
+                                            ? quota.used.storage /
+                                                  quota.hard.storage >
                                               quotaDangerCoefficient
-                                        : false
-                                ">
-                                <progress
-                                    value="{{
-                                        quota.hard.storage === -1
-                                            ? 0
-                                            : quota.used.storage
-                                    }}"
-                                    max="{{ quota.hard.storage }}"
-                                    data-displayval="100%"></progress>
+                                            : false
+                                    "
+                                    [class.warning]="
+                                        quota.hard.storage !== -1
+                                            ? quota.used.storage /
+                                                  quota.hard.storage >=
+                                                  quotaWarningCoefficient &&
+                                              quota.used.storage /
+                                                  quota.hard.storage <=
+                                                  quotaDangerCoefficient
+                                            : false
+                                    ">
+                                    <progress
+                                        value="{{
+                                            quota.hard.storage === -1
+                                                ? 0
+                                                : quota.used.storage
+                                        }}"
+                                        max="{{ quota.hard.storage }}"
+                                        data-displayval="100%"></progress>
+                                </div>
+                                <label class="min-label-width"
+                                    >{{
+                                        quota?.hard?.storage === -1
+                                            ? getSuitableUnit(
+                                                  $safeNavigationMigration(
+                                                      quota?.used?.storage
+                                                  )
+                                              )
+                                            : getIntegerAndUnit(
+                                                  $safeNavigationMigration(
+                                                      quota?.hard?.storage
+                                                  ),
+                                                  $safeNavigationMigration(
+                                                      quota?.used?.storage
+                                                  )
+                                              ).partNumberUsed +
+                                              getIntegerAndUnit(
+                                                  $safeNavigationMigration(
+                                                      quota?.hard?.storage
+                                                  ),
+                                                  $safeNavigationMigration(
+                                                      quota?.used?.storage
+                                                  )
+                                              ).partCharacterUsed
+                                    }}
+                                    {{ 'QUOTA.OF' | translate }}
+                                    {{
+                                        (quota?.hard?.storage === -1
+                                            ? 'QUOTA.UNLIMITED'
+                                            : getIntegerAndUnit(
+                                                  $safeNavigationMigration(
+                                                      quota?.hard?.storage
+                                                  ),
+                                                  $safeNavigationMigration(
+                                                      quota?.used?.storage
+                                                  )
+                                              ).partNumberHard +
+                                              getIntegerAndUnit(
+                                                  $safeNavigationMigration(
+                                                      quota?.hard?.storage
+                                                  ),
+                                                  $safeNavigationMigration(
+                                                      quota?.used?.storage
+                                                  )
+                                              ).partCharacterHard
+                                        ) | translate
+                                    }}
+                                </label>
                             </div>
-                            <label class="min-label-width"
-                                >{{
-                                    quota?.hard?.storage === -1
-                                        ? getSuitableUnit(quota?.used?.storage)
-                                        : getIntegerAndUnit(
-                                              quota?.hard?.storage,
-                                              quota?.used?.storage
-                                          ).partNumberUsed +
-                                          getIntegerAndUnit(
-                                              quota?.hard?.storage,
-                                              quota?.used?.storage
-                                          ).partCharacterUsed
-                                }}
-                                {{ 'QUOTA.OF' | translate }}
-                                {{
-                                    (quota?.hard?.storage === -1
-                                        ? 'QUOTA.UNLIMITED'
-                                        : getIntegerAndUnit(
-                                              quota?.hard?.storage,
-                                              quota?.used?.storage
-                                          ).partNumberHard +
-                                          getIntegerAndUnit(
-                                              quota?.hard?.storage,
-                                              quota?.used?.storage
-                                          ).partCharacterHard
-                                    ) | translate
-                                }}
-                            </label>
-                        </div>
-                    </clr-dg-cell>
-                </clr-dg-row>
+                        </clr-dg-cell>
+                    </clr-dg-row>
                 }
                 <clr-dg-footer>
                     <clr-dg-pagination
@@ -159,11 +185,11 @@
                             }}</clr-dg-page-size
                         >
                         @if (totalCount) {
-                        <span
-                            >{{ pagination.firstItem + 1 }} -
-                            {{ pagination.lastItem + 1 }}
-                            {{ 'DESTINATION.OF' | translate }}</span
-                        >
+                            <span
+                                >{{ pagination.firstItem + 1 }} -
+                                {{ pagination.lastItem + 1 }}
+                                {{ 'DESTINATION.OF' | translate }}</span
+                            >
                         }
                         {{ totalCount }} {{ 'SUMMARY.QUOTAS' | translate }}
                     </clr-dg-pagination>

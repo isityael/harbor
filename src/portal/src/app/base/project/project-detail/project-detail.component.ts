@@ -18,6 +18,7 @@ import {
     HostListener,
     OnDestroy,
     OnInit,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable, Subject, Subscription } from 'rxjs';
@@ -55,6 +56,7 @@ import { DOWN, SHOW_ELLIPSIS_WIDTH, UP } from './project-detail.const';
     selector: 'project-detail',
     templateUrl: 'project-detail.component.html',
     styleUrls: ['project-detail.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ProjectDetailComponent

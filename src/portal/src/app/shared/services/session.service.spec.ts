@@ -17,6 +17,7 @@ import { SessionService } from './session.service';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('SessionService', () => {
@@ -25,7 +26,7 @@ describe('SessionService', () => {
             imports: [],
             providers: [
                 SessionService,
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

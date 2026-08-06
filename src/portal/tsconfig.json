@@ -2,17 +2,23 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-        "baseUrl": "./",
         "outDir": "./dist/out-tsc",
         "sourceMap": true,
         "declaration": false,
-        "downlevelIteration": true,
+        "strict": false,
         "experimentalDecorators": true,
         "moduleResolution": "bundler",
         "importHelpers": true,
         "target": "ES2022",
         "module": "es2020",
-        "useDefineForClassFields": false
+        "useDefineForClassFields": false,
+        "paths": {
+            "@harbor/translate-module": [
+                "./src/app/shared/translate.module.ts"
+            ],
+            "ng-swagger-gen/*": ["./ng-swagger-gen/*"],
+            "src/*": ["./src/*"]
+        }
     },
     "exclude": ["cypress.config.ts"]
 }

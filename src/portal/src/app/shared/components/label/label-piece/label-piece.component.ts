@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, OnChanges } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnChanges,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { LabelColor } from '../../../entities/shared.const';
 import { Label } from '../../../../../../ng-swagger-gen/models/label';
 
@@ -19,6 +24,7 @@ import { Label } from '../../../../../../ng-swagger-gen/models/label';
     selector: 'hbr-label-piece',
     templateUrl: './label-piece.component.html',
     styleUrls: ['./label-piece.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class LabelPieceComponent implements OnChanges {

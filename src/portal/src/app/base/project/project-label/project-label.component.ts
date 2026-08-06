@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from '../../../shared/services/session.service';
 import { SessionUser } from '../../../shared/entities/session-user';
@@ -26,6 +26,7 @@ import { ErrorHandler } from '../../../shared/units/error-handler';
     selector: 'app-project-config',
     templateUrl: './project-label.component.html',
     styleUrls: ['./project-label.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ProjectLabelComponent implements OnInit {

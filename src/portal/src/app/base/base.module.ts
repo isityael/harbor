@@ -55,9 +55,9 @@ const routes: Routes = [
                 path: 'robot-accounts',
                 canActivate: [SystemAdminGuard],
                 loadChildren: () =>
-                    import(
-                        './left-side-nav/system-robot-accounts/system-robot-accounts.module'
-                    ).then(m => m.SystemRobotAccountsModule),
+                    import('./left-side-nav/system-robot-accounts/system-robot-accounts.module').then(
+                        m => m.SystemRobotAccountsModule
+                    ),
             },
             {
                 path: 'groups',
@@ -79,25 +79,25 @@ const routes: Routes = [
                 path: 'replications',
                 canActivate: [SystemAdminGuard],
                 loadChildren: () =>
-                    import(
-                        './left-side-nav/replication/replication.module'
-                    ).then(m => m.ReplicationModule),
+                    import('./left-side-nav/replication/replication.module').then(
+                        m => m.ReplicationModule
+                    ),
             },
             {
                 path: 'distribution',
                 canActivate: [SystemAdminGuard],
                 loadChildren: () =>
-                    import(
-                        './left-side-nav/distribution/distribution.module'
-                    ).then(m => m.DistributionModule),
+                    import('./left-side-nav/distribution/distribution.module').then(
+                        m => m.DistributionModule
+                    ),
             },
             {
                 path: 'interrogation-services',
                 canActivate: [SystemAdminGuard],
                 loadChildren: () =>
-                    import(
-                        './left-side-nav/interrogation-services/interrogation-services.module'
-                    ).then(m => m.InterrogationServicesModule),
+                    import('./left-side-nav/interrogation-services/interrogation-services.module').then(
+                        m => m.InterrogationServicesModule
+                    ),
             },
             {
                 path: 'labels',
@@ -111,25 +111,25 @@ const routes: Routes = [
                 path: 'project-quotas',
                 canActivate: [SystemAdminGuard],
                 loadChildren: () =>
-                    import(
-                        './left-side-nav/project-quotas/project-quotas.module'
-                    ).then(m => m.ProjectQuotasModule),
+                    import('./left-side-nav/project-quotas/project-quotas.module').then(
+                        m => m.ProjectQuotasModule
+                    ),
             },
             {
                 path: 'clearing-job',
                 canActivate: [SystemAdminGuard],
                 loadChildren: () =>
-                    import(
-                        './left-side-nav/clearing-job/clearing-job.module'
-                    ).then(m => m.ClearingJobModule),
+                    import('./left-side-nav/clearing-job/clearing-job.module').then(
+                        m => m.ClearingJobModule
+                    ),
             },
             {
                 path: 'job-service-dashboard',
                 canActivate: [SystemAdminGuard],
                 loadChildren: () =>
-                    import(
-                        './left-side-nav/job-service-dashboard/job-service-dashboard.module'
-                    ).then(m => m.JobServiceDashboardModule),
+                    import('./left-side-nav/job-service-dashboard/job-service-dashboard.module').then(
+                        m => m.JobServiceDashboardModule
+                    ),
             },
             {
                 path: 'configs',
@@ -153,9 +153,9 @@ const routes: Routes = [
             {
                 path: 'projects/:id/repositories',
                 loadChildren: () =>
-                    import(
-                        './project/repository/artifact/artifact.module'
-                    ).then(m => m.ArtifactModule),
+                    import('./project/repository/artifact/artifact.module').then(
+                        m => m.ArtifactModule
+                    ),
                 canActivate: [MemberGuard],
                 resolve: {
                     projectResolver: ProjectRoutingResolver,

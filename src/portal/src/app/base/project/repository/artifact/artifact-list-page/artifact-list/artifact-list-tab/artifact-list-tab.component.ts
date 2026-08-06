@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
@@ -97,6 +103,7 @@ const FALSE: string = 'false';
     selector: 'artifact-list-tab',
     templateUrl: './artifact-list-tab.component.html',
     styleUrls: ['./artifact-list-tab.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ArtifactListTabComponent implements OnInit, OnDestroy {
@@ -353,8 +360,7 @@ export class ArtifactListTabComponent implements OnInit, OnDestroy {
         let sortBy: any = '';
         if (state.sort) {
             sortBy = state.sort.by as
-                | string
-                | ClrDatagridComparatorInterface<any>;
+                string | ClrDatagridComparatorInterface<any>;
             sortBy = sortBy.fieldName ? sortBy.fieldName : sortBy;
             sortBy = state.sort.reverse ? `-${sortBy}` : sortBy;
         }

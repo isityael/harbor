@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ListProjectComponent } from './list-project/list-project.component';
 import { ConfigurationService } from '../../../services/config.service';
@@ -35,6 +41,7 @@ import { getSortingString } from '../../../shared/units/utils';
     selector: 'projects',
     templateUrl: 'projects.component.html',
     styleUrls: ['./projects.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ProjectsComponent implements OnInit, OnDestroy {

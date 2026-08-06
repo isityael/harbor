@@ -14,28 +14,34 @@
                     </div>
                     <div>
                         @if (execution && isInProgress()) {
-                        <div class="status-progress">
-                            <span class="spinner spinner-inline"></span>
-                            <span>{{
-                                'REPLICATION.IN_PROGRESS' | translate
-                            }}</span>
-                        </div>
-                        } @if (execution && isSuccess()) {
-                        <div class="status-success">
-                            <clr-icon
-                                size="18"
-                                shape="success-standard"
-                                class="color-green"></clr-icon>
-                            <span>{{ 'REPLICATION.SUCCESS' | translate }}</span>
-                        </div>
-                        } @if (execution && isFailed()) {
-                        <div class="status-failed">
-                            <clr-icon
-                                size="18"
-                                shape="error-standard"
-                                class="color-red"></clr-icon>
-                            <span>{{ 'REPLICATION.FAILURE' | translate }}</span>
-                        </div>
+                            <div class="status-progress">
+                                <span class="spinner spinner-inline"></span>
+                                <span>{{
+                                    'REPLICATION.IN_PROGRESS' | translate
+                                }}</span>
+                            </div>
+                        }
+                        @if (execution && isSuccess()) {
+                            <div class="status-success">
+                                <clr-icon
+                                    size="18"
+                                    shape="success-standard"
+                                    class="color-green"></clr-icon>
+                                <span>{{
+                                    'REPLICATION.SUCCESS' | translate
+                                }}</span>
+                            </div>
+                        }
+                        @if (execution && isFailed()) {
+                            <div class="status-failed">
+                                <clr-icon
+                                    size="18"
+                                    shape="error-standard"
+                                    class="color-red"></clr-icon>
+                                <span>{{
+                                    'REPLICATION.FAILURE' | translate
+                                }}</span>
+                            </div>
                         }
                     </div>
                 </div>
@@ -47,7 +53,7 @@
                     <label
                         >{{ 'REPLICATION.CREATION_TIME' | translate }} :</label
                     >
-                    <span>{{ startTime() | harborDatetime : 'short' }}</span>
+                    <span>{{ startTime() | harborDatetime: 'short' }}</span>
                 </div>
             </div>
             <div class="flex-block">
@@ -117,40 +123,40 @@
                 'P2P_PROVIDER.TASKS_PLACEHOLDER' | translate
             }}</clr-dg-placeholder>
             @for (t of tasks; track t) {
-            <clr-dg-row [clrDgItem]="t">
-                <clr-dg-cell>{{ t.id }}</clr-dg-cell>
-                <clr-dg-cell>{{ t.execution_id }}</clr-dg-cell>
-                <clr-dg-cell
-                    >{{ t.status
-                    }}<clr-tooltip>
-                        @if (t.status_message) {
-                        <clr-icon
-                            clrTooltipTrigger
-                            shape="info-circle"
-                            size="20"></clr-icon>
+                <clr-dg-row [clrDgItem]="t">
+                    <clr-dg-cell>{{ t.id }}</clr-dg-cell>
+                    <clr-dg-cell>{{ t.execution_id }}</clr-dg-cell>
+                    <clr-dg-cell
+                        >{{ t.status
+                        }}<clr-tooltip>
+                            @if (t.status_message) {
+                                <clr-icon
+                                    clrTooltipTrigger
+                                    shape="info-circle"
+                                    size="20"></clr-icon>
+                            }
+                            <clr-tooltip-content
+                                [clrPosition]="'left'"
+                                clrSize="md"
+                                *clrIfOpen>
+                                <span>{{ t.status_message }}</span>
+                            </clr-tooltip-content>
+                        </clr-tooltip></clr-dg-cell
+                    >
+                    <clr-dg-cell>{{
+                        t.creation_time | harborDatetime: 'short'
+                    }}</clr-dg-cell>
+                    <clr-dg-cell>
+                        @if (t.status !== 'Initialized') {
+                            <a
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                [href]="viewLog(t.id)">
+                                <clr-icon shape="list"></clr-icon>
+                            </a>
                         }
-                        <clr-tooltip-content
-                            [clrPosition]="'left'"
-                            clrSize="md"
-                            *clrIfOpen>
-                            <span>{{ t.status_message }}</span>
-                        </clr-tooltip-content>
-                    </clr-tooltip></clr-dg-cell
-                >
-                <clr-dg-cell>{{
-                    t.creation_time | harborDatetime : 'short'
-                }}</clr-dg-cell>
-                <clr-dg-cell>
-                    @if (t.status !== 'Initialized') {
-                    <a
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        [href]="viewLog(t.id)">
-                        <clr-icon shape="list"></clr-icon>
-                    </a>
-                    }
-                </clr-dg-cell>
-            </clr-dg-row>
+                    </clr-dg-cell>
+                </clr-dg-row>
             }
             <clr-dg-footer>
                 <clr-dg-pagination
@@ -165,11 +171,11 @@
                         }}</clr-dg-page-size
                     >
                     @if (totalCount) {
-                    <span
-                        >{{ pagination.firstItem + 1 }} -
-                        {{ pagination.lastItem + 1 }}
-                        {{ 'REPLICATION.OF' | translate }}</span
-                    >
+                        <span
+                            >{{ pagination.firstItem + 1 }} -
+                            {{ pagination.lastItem + 1 }}
+                            {{ 'REPLICATION.OF' | translate }}</span
+                        >
                     }
                     {{ totalCount }} {{ 'REPLICATION.ITEMS' | translate }}
                 </clr-dg-pagination>

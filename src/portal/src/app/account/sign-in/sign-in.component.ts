@@ -17,6 +17,7 @@ import {
     Input,
     OnInit,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
@@ -50,6 +51,7 @@ const expireDays = 10;
     selector: 'sign-in',
     templateUrl: 'sign-in.component.html',
     styleUrls: ['sign-in.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class SignInComponent implements AfterViewChecked, OnInit {

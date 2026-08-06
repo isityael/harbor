@@ -18,6 +18,7 @@ import {
     Input,
     OnInit,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { ADDITIONS } from './models';
 import { AdditionLinks } from '../../../../../../../ng-swagger-gen/models/addition-links';
@@ -30,6 +31,7 @@ import { ArtifactListPageService } from '../artifact-list-page/artifact-list-pag
     selector: 'artifact-additions',
     templateUrl: './artifact-additions.component.html',
     styleUrls: ['./artifact-additions.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ArtifactAdditionsComponent implements AfterViewChecked, OnInit {

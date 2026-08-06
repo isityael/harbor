@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {
     BrowserAnimationsModule,
@@ -28,6 +29,7 @@ import { GlobalConfirmationDialogComponent } from './global-confirmation-dialog.
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('ConfirmationDialogComponent', () => {
@@ -60,7 +62,7 @@ describe('ConfirmationDialogComponent', () => {
                     provide: ConfirmationDialogService,
                     useValue: mockConfirmationDialogService,
                 },
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         }).compileComponents();

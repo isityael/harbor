@@ -20,6 +20,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('ArtifactService', () => {
@@ -33,7 +34,7 @@ describe('ArtifactService', () => {
                 },
                 IconService,
                 DomSanitizer,
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

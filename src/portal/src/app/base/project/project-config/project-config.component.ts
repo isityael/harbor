@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
     CommonRoutes,
@@ -25,6 +25,7 @@ import { Project } from '../project';
     selector: 'app-project-config',
     templateUrl: './project-config.component.html',
     styleUrls: ['./project-config.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ProjectConfigComponent implements OnInit {

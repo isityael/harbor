@@ -26,6 +26,7 @@ import {
     HTTP_INTERCEPTORS,
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieModule } from 'ngx-cookie';
@@ -33,8 +34,8 @@ import {
     MissingTranslationHandler,
     MissingTranslationHandlerParams,
     TranslateLoader,
-    TranslateModule,
 } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import {
     ProjectDefaultService,
     ProjectService,
@@ -104,7 +105,7 @@ class MyMissingTranslationHandler implements MissingTranslationHandler {
             provide: UserPermissionService,
             useClass: UserPermissionDefaultService,
         },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
     ],
 })
 export class AppModule {}

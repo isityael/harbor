@@ -23,6 +23,7 @@ import {
     Output,
     SimpleChanges,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import {
     convertKey,
@@ -36,6 +37,7 @@ import { Permission } from '../../../../../ng-swagger-gen/models/permission';
     selector: 'robot-permissions-panel',
     templateUrl: './robot-permissions-panel.component.html',
     styleUrls: ['./robot-permissions-panel.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class RobotPermissionsPanelComponent implements OnChanges, DoCheck {

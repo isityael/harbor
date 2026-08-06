@@ -20,6 +20,7 @@ import {
     OnInit,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -37,6 +38,7 @@ import { UserEntity } from '../../../../../../ng-swagger-gen/models/user-entity'
     selector: 'add-member',
     templateUrl: 'add-member.component.html',
     styleUrls: ['add-member.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class AddMemberComponent implements OnInit, OnDestroy {

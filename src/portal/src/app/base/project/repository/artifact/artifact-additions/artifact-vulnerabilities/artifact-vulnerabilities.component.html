@@ -43,7 +43,11 @@
                             <hbr-vulnerability-bar
                                 (submitStopFinish)="submitStopFinish($event)"
                                 [summary]="
-                                    handleScanOverview(artifact?.scan_overview)
+                                    handleScanOverview(
+                                        $safeNavigationMigration(
+                                            artifact?.scan_overview
+                                        )
+                                    )
                                 "
                                 [inputScanner]="scanner"
                                 (submitFinish)="submitFinish($event)"
@@ -151,7 +155,9 @@
                     <div
                         class="clr-row mr-1"
                         *ngFor="
-                            let item of res?.vendor_attributes?.CVSS | keyvalue
+                            let item of $safeNavigationMigration(
+                                res?.vendor_attributes?.CVSS
+                            ) | keyvalue
                         ">
                         <div class="clr-col">{{ item?.key }}:</div>
                         <div class="clr-col">{{ item?.value?.V3Score }}</div>
@@ -190,13 +196,15 @@
                 <div class="report">
                     <i *ngIf="scanner">{{
                         'VULNERABILITY.REPORTED_BY'
-                            | translate : { scanner: getScannerInfo(scanner) }
+                            | translate: { scanner: getScannerInfo(scanner) }
                     }}</i>
                 </div>
                 <clr-dg-pagination
                     #pagination
                     [clrDgPageSize]="pageSize"
-                    [clrDgTotalItems]="scanningResults?.length">
+                    [clrDgTotalItems]="
+                        $safeNavigationMigration(scanningResults?.length)
+                    ">
                     <clr-dg-page-size
                         [clrPageSizeOptions]="clrPageSizeOptions"
                         >{{

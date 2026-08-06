@@ -19,6 +19,7 @@ import {
     OnInit,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import {
@@ -46,6 +47,7 @@ import { PayloadFormatType } from '../../../../../../ng-swagger-gen/models/paylo
     selector: 'add-webhook-form',
     templateUrl: './add-webhook-form.component.html',
     styleUrls: ['./add-webhook-form.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class AddWebhookFormComponent implements OnInit, OnDestroy {
@@ -68,7 +70,7 @@ export class AddWebhookFormComponent implements OnInit, OnDestroy {
     originValue: WebhookPolicy;
     isModify: boolean;
     @Input() isOpen: boolean;
-    // eslint-disable-next-line @angular-eslint/no-output-native
+
     @Output() close = new EventEmitter<boolean>();
     @ViewChild('webhookForm', { static: true }) currentForm: NgForm;
     @ViewChild(InlineAlertComponent) inlineAlert: InlineAlertComponent;

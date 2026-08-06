@@ -20,6 +20,7 @@ import {
     OnInit,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AppConfigService } from '../../../../services/app-config.service';
@@ -40,6 +41,7 @@ import { MessageHandlerService } from '../../../../shared/services/message-handl
     selector: 'add-group',
     templateUrl: './add-group.component.html',
     styleUrls: ['./add-group.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class AddGroupComponent implements OnInit, OnDestroy {

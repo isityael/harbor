@@ -358,8 +358,7 @@ export interface ClrDatagridStateInterface {
         reverse: boolean;
     };
     filters?: (
-        | { property: string; value: string }
-        | ClrDatagridFilterInterface<any>
+        { property: string; value: string } | ClrDatagridFilterInterface<any>
     )[];
 }
 

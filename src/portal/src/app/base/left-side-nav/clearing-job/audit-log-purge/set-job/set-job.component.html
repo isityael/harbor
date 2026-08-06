@@ -14,31 +14,36 @@
                     }}</span>
                     <span class="mr-3">
                         @if (loadingLastCompletedTime) {
-                        <span class="spinner spinner-inline"></span>
-                        } @if (!loadingLastCompletedTime) { @if
-                        (!lastCompletedTime) {
-                        <span>{{ 'SCHEDULE.NONE' | translate }}</span>
-                        } @if (lastCompletedTime) {
-                        <span
-                            >{{ lastCompletedTime | harborDatetime }}@if
-                            (isDryRun) {
-                            <span
-                                >({{
-                                    'TAG_RETENTION.DRY_RUN' | translate
-                                }})</span
-                            >
-                            }</span
-                        >
-                        } }
+                            <span class="spinner spinner-inline"></span>
+                        }
+                        @if (!loadingLastCompletedTime) {
+                            @if (!lastCompletedTime) {
+                                <span>{{ 'SCHEDULE.NONE' | translate }}</span>
+                            }
+                            @if (lastCompletedTime) {
+                                <span
+                                    >{{ lastCompletedTime | harborDatetime }}
+                                    @if (isDryRun) {
+                                        <span
+                                            >({{
+                                                'TAG_RETENTION.DRY_RUN'
+                                                    | translate
+                                            }})</span
+                                        >
+                                    }
+                                </span>
+                            }
+                        }
                     </span>
                 </div>
                 <div class="p-06">
                     @if (nextScheduledTime) {
-                    <span class="mr-1 font-style">{{
-                        'CLEARANCES.NEXT_SCHEDULED_TIME' | translate
-                    }}</span>
-                    } @if (nextScheduledTime) {
-                    <span>{{ nextScheduledTime | harborDatetime }}</span>
+                        <span class="mr-1 font-style">{{
+                            'CLEARANCES.NEXT_SCHEDULED_TIME' | translate
+                        }}</span>
+                    }
+                    @if (nextScheduledTime) {
+                        <span>{{ nextScheduledTime | harborDatetime }}</span>
                     }
                 </div>
             </div>
@@ -97,13 +102,15 @@
                         <clr-icon
                             class="clr-validate-icon"
                             shape="exclamation-circle"></clr-icon>
-                        @if ( (retentionTimeNgModel.dirty ||
-                        retentionTimeNgModel.touched) &&
-                        (retentionTimeNgModel.invalid ||
-                        !isRetentionTimeValid()) ) {
-                        <clr-control-error class="max-width-2rem">
-                            {{ 'CLEARANCES.KEEP_IN_ERROR' | translate }}
-                        </clr-control-error>
+                        @if (
+                            (retentionTimeNgModel.dirty ||
+                                retentionTimeNgModel.touched) &&
+                            (retentionTimeNgModel.invalid ||
+                                !isRetentionTimeValid())
+                        ) {
+                            <clr-control-error class="max-width-2rem">
+                                {{ 'CLEARANCES.KEEP_IN_ERROR' | translate }}
+                            </clr-control-error>
                         }
                     </div>
                     <div
@@ -113,7 +120,7 @@
                                 (retentionTimeNgModel.dirty ||
                                     retentionTimeNgModel.touched) &&
                                 (retentionTimeNgModel.invalid ||
-                                    !isRetentionTimeValid())
+                                    !isRetentionTimeValid()),
                         }">
                         <select
                             [(ngModel)]="retentionUnit"
@@ -138,7 +145,7 @@
                     (retentionTimeNgModel.dirty ||
                         retentionTimeNgModel.touched) &&
                     retentionTimeNgModel.invalid
-                )
+                ),
             }">
             <span class="font-style required flex-200"
                 >{{ 'CLEARANCES.INCLUDED_EVENT_TYPES' | translate
@@ -159,28 +166,29 @@
             >
             <div class="clr-control-container">
                 @for (item of eventTypes; track item) {
-                <div class="clr-checkbox-wrapper float-left">
-                    <input
-                        type="checkbox"
-                        id="{{ item.id }}"
-                        name="eventTypes"
-                        value="{{ item.value }}"
-                        class="clr-checkbox"
-                        (change)="setEventType(item.value)"
-                        [checked]="hasEventType(item.value)" />
-                    <label for="{{ item.id }}" class="clr-control-label">{{
-                        item.label
-                    }}</label>
-                </div>
-                } @if (!(selectedEventTypes?.length > 0)) {
-                <div class="clr-subtext-wrapper">
-                    <clr-icon
-                        class="clr-validate-icon"
-                        shape="exclamation-circle"></clr-icon>
-                    <span class="clr-subtext">{{
-                        'CLEARANCES.INCLUDED_EVENT_TYPE_ERROR' | translate
-                    }}</span>
-                </div>
+                    <div class="clr-checkbox-wrapper float-left">
+                        <input
+                            type="checkbox"
+                            id="{{ item.id }}"
+                            name="eventTypes"
+                            value="{{ item.value }}"
+                            class="clr-checkbox"
+                            (change)="setEventType(item.value)"
+                            [checked]="hasEventType(item.value)" />
+                        <label for="{{ item.id }}" class="clr-control-label">{{
+                            item.label
+                        }}</label>
+                    </div>
+                }
+                @if (!(selectedEventTypes?.length > 0)) {
+                    <div class="clr-subtext-wrapper">
+                        <clr-icon
+                            class="clr-validate-icon"
+                            shape="exclamation-circle"></clr-icon>
+                        <span class="clr-subtext">{{
+                            'CLEARANCES.INCLUDED_EVENT_TYPE_ERROR' | translate
+                        }}</span>
+                    </div>
                 }
             </div>
         </div>

@@ -66,29 +66,31 @@
                                             !selectedRow.is_default
                                         )
                                     ">
-                                    @if ( selectedRow && selectedRow.disabled )
-                                    {
-                                    <span>
-                                        <clr-icon
-                                            class="margin-top-2"
-                                            size="16"
-                                            shape="success-standard"></clr-icon>
-                                        <span class="margin-left-10">{{
-                                            'WEBHOOK.ENABLED_BUTTON' | translate
-                                        }}</span>
-                                    </span>
-                                    } @if ( !( selectedRow &&
-                                    selectedRow.disabled ) ) {
-                                    <span>
-                                        <clr-icon
-                                            class="margin-top-2"
-                                            size="16"
-                                            shape="ban"></clr-icon>
-                                        <span class="margin-left-10">{{
-                                            'WEBHOOK.DISABLED_BUTTON'
-                                                | translate
-                                        }}</span>
-                                    </span>
+                                    @if (selectedRow && selectedRow.disabled) {
+                                        <span>
+                                            <clr-icon
+                                                class="margin-top-2"
+                                                size="16"
+                                                shape="success-standard"></clr-icon>
+                                            <span class="margin-left-10">{{
+                                                'WEBHOOK.ENABLED_BUTTON'
+                                                    | translate
+                                            }}</span>
+                                        </span>
+                                    }
+                                    @if (
+                                        !(selectedRow && selectedRow.disabled)
+                                    ) {
+                                        <span>
+                                            <clr-icon
+                                                class="margin-top-2"
+                                                size="16"
+                                                shape="ban"></clr-icon>
+                                            <span class="margin-left-10">{{
+                                                'WEBHOOK.DISABLED_BUTTON'
+                                                    | translate
+                                            }}</span>
+                                        </span>
                                     }
                                 </button>
                                 <div class="dropdown-divider"></div>
@@ -149,74 +151,77 @@
                 {{ 'SCANNER.NO_SCANNER' | translate }}
             </clr-dg-placeholder>
             @for (scanner of scanners; track scanner) {
-            <clr-dg-row [clrDgItem]="scanner">
-                <clr-dg-cell class="position-relative">
-                    <span>{{ scanner.name }}</span>
-                    @if (scanner.is_default) {
-                    <span class="label label-info ml-1">{{
-                        'SCANNER.DEFAULT' | translate
-                    }}</span>
-                    }
-                </clr-dg-cell>
-                <clr-dg-cell>{{ scanner.url }}</clr-dg-cell>
-                <clr-dg-cell class="position-relative">
-                    @if (scanner.loadingMetadata) {
-                    <span class="spinner spinner-inline ml-2"></span>
-                    } @else { @if (scanner.metadata) {
-                    <span class="label label-success">{{
-                        'SCANNER.HEALTHY' | translate
-                    }}</span>
-                    } @else {
-                    <span class="label label-danger">{{
-                        'SCANNER.UNHEALTHY' | translate
-                    }}</span>
-                    } }
-                </clr-dg-cell>
-                <clr-dg-cell>
-                    @if (!scanner.disabled) {
-                    <div class="icon-wrap">
-                        <clr-icon
-                            shape="check-circle"
-                            size="20"
-                            status="success"
-                            class="enabled-icon"></clr-icon>
-                        <span class="margin-left-5px">{{
-                            'WEBHOOK.ENABLED' | translate
-                        }}</span>
-                    </div>
-                    } @if (scanner.disabled) {
-                    <div class="icon-wrap">
-                        <clr-icon
-                            shape="exclamation-triangle"
-                            size="20"
-                            status="warning"></clr-icon>
-                        <span class="margin-left-5px">{{
-                            'WEBHOOK.DISABLED' | translate
-                        }}</span>
-                    </div>
-                    }
-                </clr-dg-cell>
-                <clr-dg-cell>{{
-                    scanner.auth ? scanner.auth : 'None'
-                }}</clr-dg-cell>
-                <clr-dg-cell>{{
-                    (supportCapability(scanner, 'vulnerability')
-                        ? 'SCANNER.SUPPORTED'
-                        : 'SCANNER.NOT_SUPPORTED'
-                    ) | translate
-                }}</clr-dg-cell>
-                <clr-dg-cell>{{
-                    (supportCapability(scanner, 'sbom')
-                        ? 'SCANNER.SUPPORTED'
-                        : 'SCANNER.NOT_SUPPORTED'
-                    ) | translate
-                }}</clr-dg-cell>
-                <clr-dg-cell>{{ scanner.description }}</clr-dg-cell>
-                <scanner-metadata
-                    *clrIfExpanded
-                    [uid]="scanner.uuid"
-                    ngProjectAs="clr-dg-row-detail"></scanner-metadata>
-            </clr-dg-row>
+                <clr-dg-row [clrDgItem]="scanner">
+                    <clr-dg-cell class="position-relative">
+                        <span>{{ scanner.name }}</span>
+                        @if (scanner.is_default) {
+                            <span class="label label-info ml-1">{{
+                                'SCANNER.DEFAULT' | translate
+                            }}</span>
+                        }
+                    </clr-dg-cell>
+                    <clr-dg-cell>{{ scanner.url }}</clr-dg-cell>
+                    <clr-dg-cell class="position-relative">
+                        @if (scanner.loadingMetadata) {
+                            <span class="spinner spinner-inline ml-2"></span>
+                        } @else {
+                            @if (scanner.metadata) {
+                                <span class="label label-success">{{
+                                    'SCANNER.HEALTHY' | translate
+                                }}</span>
+                            } @else {
+                                <span class="label label-danger">{{
+                                    'SCANNER.UNHEALTHY' | translate
+                                }}</span>
+                            }
+                        }
+                    </clr-dg-cell>
+                    <clr-dg-cell>
+                        @if (!scanner.disabled) {
+                            <div class="icon-wrap">
+                                <clr-icon
+                                    shape="check-circle"
+                                    size="20"
+                                    status="success"
+                                    class="enabled-icon"></clr-icon>
+                                <span class="margin-left-5px">{{
+                                    'WEBHOOK.ENABLED' | translate
+                                }}</span>
+                            </div>
+                        }
+                        @if (scanner.disabled) {
+                            <div class="icon-wrap">
+                                <clr-icon
+                                    shape="exclamation-triangle"
+                                    size="20"
+                                    status="warning"></clr-icon>
+                                <span class="margin-left-5px">{{
+                                    'WEBHOOK.DISABLED' | translate
+                                }}</span>
+                            </div>
+                        }
+                    </clr-dg-cell>
+                    <clr-dg-cell>{{
+                        scanner.auth ? scanner.auth : 'None'
+                    }}</clr-dg-cell>
+                    <clr-dg-cell>{{
+                        (supportCapability(scanner, 'vulnerability')
+                            ? 'SCANNER.SUPPORTED'
+                            : 'SCANNER.NOT_SUPPORTED'
+                        ) | translate
+                    }}</clr-dg-cell>
+                    <clr-dg-cell>{{
+                        (supportCapability(scanner, 'sbom')
+                            ? 'SCANNER.SUPPORTED'
+                            : 'SCANNER.NOT_SUPPORTED'
+                        ) | translate
+                    }}</clr-dg-cell>
+                    <clr-dg-cell>{{ scanner.description }}</clr-dg-cell>
+                    <scanner-metadata
+                        *clrIfExpanded
+                        [uid]="scanner.uuid"
+                        ngProjectAs="clr-dg-row-detail"></scanner-metadata>
+                </clr-dg-row>
             }
             <clr-dg-footer>
                 <clr-dg-pagination
@@ -231,11 +236,11 @@
                         }}</clr-dg-page-size
                     >
                     @if (total) {
-                    <span
-                        >{{ pagination.firstItem + 1 }} -
-                        {{ pagination.lastItem + 1 }}
-                        {{ 'DESTINATION.OF' | translate }}</span
-                    >
+                        <span
+                            >{{ pagination.firstItem + 1 }} -
+                            {{ pagination.lastItem + 1 }}
+                            {{ 'DESTINATION.OF' | translate }}</span
+                        >
                     }
                     {{ total }} {{ 'DESTINATION.ITEMS' | translate }}
                 </clr-dg-pagination>

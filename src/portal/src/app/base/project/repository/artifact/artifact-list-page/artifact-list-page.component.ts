@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Project } from '../../../project';
 import { ArtifactListPageService } from './artifact-list-page.service';
@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
     selector: 'artifact-list-page',
     templateUrl: 'artifact-list-page.component.html',
     styleUrls: ['./artifact-list-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ArtifactListPageComponent implements OnDestroy {

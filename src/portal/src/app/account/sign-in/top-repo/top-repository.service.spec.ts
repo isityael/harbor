@@ -17,6 +17,7 @@ import { TopRepoService } from './top-repository.service';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('TopRepoService', () => {
@@ -25,7 +26,7 @@ describe('TopRepoService', () => {
             imports: [],
             providers: [
                 TopRepoService,
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

@@ -20,6 +20,7 @@ import { SkinableConfig } from './skinable-config.service';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('SkinableConfig', () => {
@@ -46,7 +47,7 @@ describe('SkinableConfig', () => {
             imports: [],
             providers: [
                 SkinableConfig,
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

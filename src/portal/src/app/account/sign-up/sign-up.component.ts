@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Output,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Modal } from '../../shared/services';
 import { NewUserFormComponent } from '../../shared/components/new-user-form/new-user-form.component';
 import { User } from '../../base/left-side-nav/user/user';
@@ -23,6 +29,7 @@ import { InlineAlertComponent } from '../../shared/components/inline-alert/inlin
     selector: 'sign-up',
     templateUrl: 'sign-up.component.html',
     styleUrls: ['../../common.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class SignUpComponent {

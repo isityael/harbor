@@ -64,17 +64,17 @@
                 'AUDIT_LOG.NOT_FOUND' | translate
             }}</clr-dg-placeholder>
             @for (l of recentLogs; track l) {
-            <clr-dg-row>
-                <clr-dg-cell>{{
-                    l.op_time | harborDatetime : 'short'
-                }}</clr-dg-cell>
-                <clr-dg-cell>{{ l.username }}</clr-dg-cell>
-                <clr-dg-cell>{{ l.resource }}</clr-dg-cell>
-                <clr-dg-cell>{{ l.resource_type }}</clr-dg-cell>
-                <clr-dg-cell>{{ l.operation }}</clr-dg-cell>
-                <clr-dg-cell>{{ l.operation_description }}</clr-dg-cell>
-                <clr-dg-cell>{{ l.operation_result }}</clr-dg-cell>
-            </clr-dg-row>
+                <clr-dg-row>
+                    <clr-dg-cell>{{
+                        l.op_time | harborDatetime: 'short'
+                    }}</clr-dg-cell>
+                    <clr-dg-cell>{{ l.username }}</clr-dg-cell>
+                    <clr-dg-cell>{{ l.resource }}</clr-dg-cell>
+                    <clr-dg-cell>{{ l.resource_type }}</clr-dg-cell>
+                    <clr-dg-cell>{{ l.operation }}</clr-dg-cell>
+                    <clr-dg-cell>{{ l.operation_description }}</clr-dg-cell>
+                    <clr-dg-cell>{{ l.operation_result }}</clr-dg-cell>
+                </clr-dg-row>
             }
             <clr-dg-footer>
                 <clr-dg-pagination
@@ -86,12 +86,12 @@
                         'PAGINATION.PAGE_SIZE' | translate
                     }}</clr-dg-page-size>
                     @if (totalCount) {
-                    <span
-                        >{{ pagination.firstItem + 1 }} -
-                        {{ pagination.lastItem + 1 }}
-                        {{ 'AUDIT_LOG.OF' | translate }} {{ totalCount }}
-                        {{ 'AUDIT_LOG.ITEMS' | translate }}</span
-                    >
+                        <span
+                            >{{ pagination.firstItem + 1 }} -
+                            {{ pagination.lastItem + 1 }}
+                            {{ 'AUDIT_LOG.OF' | translate }} {{ totalCount }}
+                            {{ 'AUDIT_LOG.ITEMS' | translate }}</span
+                        >
                     }
                 </clr-dg-pagination>
             </clr-dg-footer>

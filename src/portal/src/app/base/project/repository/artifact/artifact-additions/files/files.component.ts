@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, OnInit } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { AdditionLink } from 'ng-swagger-gen/models';
 import { AdditionsService } from '../additions.service';
@@ -23,6 +28,7 @@ import { formatSize } from 'src/app/shared/units/utils';
     selector: 'hbr-artifact-files',
     templateUrl: './files.component.html',
     styleUrls: ['./files.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ArtifactFilesComponent implements OnInit {

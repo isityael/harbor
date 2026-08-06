@@ -19,6 +19,7 @@ import {
     OnInit,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import {
     catchError,
@@ -109,6 +110,7 @@ const STATUS_MAP = {
     selector: 'hbr-replication',
     templateUrl: './replication.component.html',
     styleUrls: ['./replication.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ReplicationComponent implements OnInit, OnDestroy {

@@ -83,31 +83,35 @@
         <clr-dg-cell>{{ j.count || 0 }}</clr-dg-cell>
         <clr-dg-cell>
             <span class="container">
-                @if (showWarning(j?.latency)) {
-                <cds-icon
-                    size="20"
-                    class="warning"
-                    shape="exclamation-triangle"></cds-icon>
+                @if (showWarning($safeNavigationMigration(j?.latency))) {
+                    <cds-icon
+                        size="20"
+                        class="warning"
+                        shape="exclamation-triangle"></cds-icon>
                 }
-                <span class="ml-5px">{{ getDuration(j?.latency) || 0 }}</span>
+                <span class="ml-5px">{{
+                    getDuration($safeNavigationMigration(j?.latency)) || 0
+                }}</span>
             </span>
         </clr-dg-cell>
-        <clr-dg-cell>{{ isPaused(j?.paused) | translate }}</clr-dg-cell>
+        <clr-dg-cell>{{
+            isPaused($safeNavigationMigration(j?.paused)) | translate
+        }}</clr-dg-cell>
     </clr-dg-row>
     <clr-dg-footer>
         <clr-dg-pagination
             #pagination
             [clrDgPageSize]="pageSize"
-            [clrDgTotalItems]="jobQueue?.length">
+            [clrDgTotalItems]="$safeNavigationMigration(jobQueue?.length)">
             <clr-dg-page-size [clrPageSizeOptions]="clrPageSizeOptions">{{
                 'PAGINATION.PAGE_SIZE' | translate
             }}</clr-dg-page-size>
             @if (jobQueue?.length) {
-            <span>
-                {{ pagination.firstItem + 1 }} -
-                {{ pagination.lastItem + 1 }}
-                {{ 'GROUP.OF' | translate }}
-            </span>
+                <span>
+                    {{ pagination.firstItem + 1 }} -
+                    {{ pagination.lastItem + 1 }}
+                    {{ 'GROUP.OF' | translate }}
+                </span>
             }
             {{ jobQueue?.length }} {{ 'GROUP.ITEMS' | translate }}
         </clr-dg-pagination>

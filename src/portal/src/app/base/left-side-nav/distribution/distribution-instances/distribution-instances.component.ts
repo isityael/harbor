@@ -12,7 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { MessageHandlerService } from '../../../../shared/services/message-handler.service';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewChild,
+    OnDestroy,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import {
     Subscription,
     Observable,
@@ -65,6 +71,7 @@ const KRAKEN: string = 'kraken';
     selector: 'dist-instances',
     templateUrl: './distribution-instances.component.html',
     styleUrls: ['./distribution-instances.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class DistributionInstancesComponent implements OnInit, OnDestroy {

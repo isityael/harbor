@@ -18,6 +18,7 @@ import {
     OnDestroy,
     OnInit,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import {
@@ -48,6 +49,7 @@ import { AuditLogEventType } from 'ng-swagger-gen/models';
     selector: 'system-settings',
     templateUrl: './system-settings.component.html',
     styleUrls: ['./system-settings.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class SystemSettingsComponent

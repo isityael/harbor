@@ -22,7 +22,13 @@ import {
 } from 'rxjs/operators';
 import { SessionService } from '../../../shared/services/session.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewChild,
+    OnDestroy,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { AddGroupModalComponent } from './add-group-modal/add-group-modal.component';
 import { MessageHandlerService } from '../../../shared/services/message-handler.service';
 import { throwError as observableThrowError } from 'rxjs';
@@ -57,6 +63,7 @@ import { FilterComponent } from '../../../shared/components/filter/filter.compon
     selector: 'app-group',
     templateUrl: './group.component.html',
     styleUrls: ['./group.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class GroupComponent implements OnInit, OnDestroy {

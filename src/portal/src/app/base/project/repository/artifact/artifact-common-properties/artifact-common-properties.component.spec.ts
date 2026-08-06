@@ -18,9 +18,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
     TranslateNoOpLoader,
     TranslateLoader,
-    TranslateModule,
     TranslateService,
 } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { ExtraAttrs } from '../../../../../../../ng-swagger-gen/models/extra-attrs';
 
 describe('ArtifactCommonPropertiesComponent', () => {

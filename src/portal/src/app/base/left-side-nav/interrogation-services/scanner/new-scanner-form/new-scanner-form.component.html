@@ -21,9 +21,11 @@
                         [hidden]="!checkOnGoing"></span>
                 </div>
                 @if (!isNameValid) {
-                <clr-control-error>
-                    <span id="name-error">{{ nameTooltip | translate }}</span>
-                </clr-control-error>
+                    <clr-control-error>
+                        <span id="name-error">{{
+                            nameTooltip | translate
+                        }}</span>
+                    </clr-control-error>
                 }
             </div>
         </div>
@@ -67,11 +69,11 @@
                         [hidden]="!checkEndpointOnGoing"></span>
                 </div>
                 @if (!isEndpointValid || showEndpointError) {
-                <clr-control-error>
-                    <span id="endpoint-error">{{
-                        endpointTooltip | translate
-                    }}</span>
-                </clr-control-error>
+                    <clr-control-error>
+                        <span id="endpoint-error">{{
+                            endpointTooltip | translate
+                        }}</span>
+                    </clr-control-error>
                 }
             </div>
         </div>
@@ -103,111 +105,114 @@
         </div>
         <ng-container formGroupName="accessCredential">
             @if (auth === 'Basic') {
-            <div class="clr-form-control">
-                <label class="required clr-control-label">{{
-                    'SCANNER.USERNAME' | translate
-                }}</label>
-                <div
-                    class="clr-control-container"
-                    [class.clr-error]="!isUserNameValid">
-                    <div class="clr-input-wrapper">
-                        <input
-                            formControlName="username"
-                            autocomplete="off"
-                            class="clr-input width-280"
-                            type="text"
-                            id="scanner-username" />
-                        <clr-icon
-                            class="clr-validate-icon"
-                            shape="exclamation-circle"></clr-icon>
+                <div class="clr-form-control">
+                    <label class="required clr-control-label">{{
+                        'SCANNER.USERNAME' | translate
+                    }}</label>
+                    <div
+                        class="clr-control-container"
+                        [class.clr-error]="!isUserNameValid">
+                        <div class="clr-input-wrapper">
+                            <input
+                                formControlName="username"
+                                autocomplete="off"
+                                class="clr-input width-280"
+                                type="text"
+                                id="scanner-username" />
+                            <clr-icon
+                                class="clr-validate-icon"
+                                shape="exclamation-circle"></clr-icon>
+                        </div>
+                        @if (!isUserNameValid) {
+                            <clr-control-error>
+                                {{ 'SCANNER.USERNAME_REQUIRED' | translate }}
+                            </clr-control-error>
+                        }
                     </div>
-                    @if (!isUserNameValid) {
-                    <clr-control-error>
-                        {{ 'SCANNER.USERNAME_REQUIRED' | translate }}
-                    </clr-control-error>
-                    }
                 </div>
-            </div>
-            } @if (auth === 'Basic') {
-            <div class="clr-form-control">
-                <label class="required clr-control-label">{{
-                    'SCANNER.PASSWORD' | translate
-                }}</label>
-                <div
-                    class="clr-control-container"
-                    [class.clr-error]="!isPasswordValid">
-                    <div class="clr-input-wrapper">
-                        <input
-                            formControlName="password"
-                            autocomplete="off"
-                            class="clr-input width-280"
-                            type="password"
-                            id="scanner-password" />
-                        <clr-icon
-                            class="clr-validate-icon"
-                            shape="exclamation-circle"></clr-icon>
+            }
+            @if (auth === 'Basic') {
+                <div class="clr-form-control">
+                    <label class="required clr-control-label">{{
+                        'SCANNER.PASSWORD' | translate
+                    }}</label>
+                    <div
+                        class="clr-control-container"
+                        [class.clr-error]="!isPasswordValid">
+                        <div class="clr-input-wrapper">
+                            <input
+                                formControlName="password"
+                                autocomplete="off"
+                                class="clr-input width-280"
+                                type="password"
+                                id="scanner-password" />
+                            <clr-icon
+                                class="clr-validate-icon"
+                                shape="exclamation-circle"></clr-icon>
+                        </div>
+                        @if (!isPasswordValid) {
+                            <clr-control-error>
+                                <span id="pwd-error">{{
+                                    'SCANNER.PASSWORD_REQUIRED' | translate
+                                }}</span>
+                            </clr-control-error>
+                        }
                     </div>
-                    @if (!isPasswordValid) {
-                    <clr-control-error>
-                        <span id="pwd-error">{{
-                            'SCANNER.PASSWORD_REQUIRED' | translate
-                        }}</span>
-                    </clr-control-error>
-                    }
                 </div>
-            </div>
-            } @if (auth === 'Bearer') {
-            <div class="clr-form-control">
-                <label class="required clr-control-label">{{
-                    'SCANNER.TOKEN' | translate
-                }}</label>
-                <div
-                    class="clr-control-container"
-                    [class.clr-error]="!isTokenValid">
-                    <div class="clr-input-wrapper">
-                        <input
-                            formControlName="token"
-                            autocomplete="off"
-                            class="clr-input width-280"
-                            type="text"
-                            id="scanner-token" />
-                        <clr-icon
-                            class="clr-validate-icon"
-                            shape="exclamation-circle"></clr-icon>
+            }
+            @if (auth === 'Bearer') {
+                <div class="clr-form-control">
+                    <label class="required clr-control-label">{{
+                        'SCANNER.TOKEN' | translate
+                    }}</label>
+                    <div
+                        class="clr-control-container"
+                        [class.clr-error]="!isTokenValid">
+                        <div class="clr-input-wrapper">
+                            <input
+                                formControlName="token"
+                                autocomplete="off"
+                                class="clr-input width-280"
+                                type="text"
+                                id="scanner-token" />
+                            <clr-icon
+                                class="clr-validate-icon"
+                                shape="exclamation-circle"></clr-icon>
+                        </div>
+                        @if (!isTokenValid) {
+                            <clr-control-error>
+                                {{ 'SCANNER.TOKEN_REQUIRED' | translate }}
+                            </clr-control-error>
+                        }
                     </div>
-                    @if (!isTokenValid) {
-                    <clr-control-error>
-                        {{ 'SCANNER.TOKEN_REQUIRED' | translate }}
-                    </clr-control-error>
-                    }
                 </div>
-            </div>
-            } @if (auth === 'APIKey') {
-            <div class="clr-form-control">
-                <label class="required clr-control-label">{{
-                    'SCANNER.API_KEY' | translate
-                }}</label>
-                <div
-                    class="clr-control-container"
-                    [class.clr-error]="!isApiKeyValid">
-                    <div class="clr-input-wrapper">
-                        <input
-                            formControlName="apiKey"
-                            autocomplete="off"
-                            class="clr-input width-280"
-                            type="text"
-                            id="scanner-apiKey" />
-                        <clr-icon
-                            class="clr-validate-icon"
-                            shape="exclamation-circle"></clr-icon>
+            }
+            @if (auth === 'APIKey') {
+                <div class="clr-form-control">
+                    <label class="required clr-control-label">{{
+                        'SCANNER.API_KEY' | translate
+                    }}</label>
+                    <div
+                        class="clr-control-container"
+                        [class.clr-error]="!isApiKeyValid">
+                        <div class="clr-input-wrapper">
+                            <input
+                                formControlName="apiKey"
+                                autocomplete="off"
+                                class="clr-input width-280"
+                                type="text"
+                                id="scanner-apiKey" />
+                            <clr-icon
+                                class="clr-validate-icon"
+                                shape="exclamation-circle"></clr-icon>
+                        </div>
+                        @if (!isApiKeyValid) {
+                            <clr-control-error>
+                                {{ 'SCANNER.API_KEY_REQUIRED' | translate }}
+                            </clr-control-error>
+                        }
                     </div>
-                    @if (!isApiKeyValid) {
-                    <clr-control-error>
-                        {{ 'SCANNER.API_KEY_REQUIRED' | translate }}
-                    </clr-control-error>
-                    }
                 </div>
-            </div>
             }
         </ng-container>
         <div class="clr-form-control">

@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MessageHandlerService } from '../../../shared/services/message-handler.service';
 import { TopRepoService } from './top-repository.service';
 import { Repository } from '../../../../../ng-swagger-gen/models/repository';
@@ -22,6 +22,7 @@ import { ListMode } from '../../../shared/entities/shared.const';
     templateUrl: 'top-repo.component.html',
     styleUrls: ['top-repo.component.scss'],
     providers: [TopRepoService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class TopRepoComponent implements OnInit {

@@ -13,7 +13,11 @@
 // limitations under the License.
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SessionService } from '../../services/session.service';
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import {
+    Component,
+    NO_ERRORS_SCHEMA,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { PlatformLocation } from '@angular/common';
 import { NavigatorComponent } from './navigator.component';
 import { CookieService } from 'ngx-cookie';
@@ -101,6 +105,7 @@ describe('NavigatorComponent', () => {
     selector: 'test-component-wrapper',
     template:
         '<clr-main-container><navigator></navigator></clr-main-container>',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 class TestComponentWrapperComponent {}

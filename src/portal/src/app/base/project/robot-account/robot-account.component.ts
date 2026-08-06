@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ClrDatagridStateInterface, ClrLoadingState } from '@clr/angular';
 import {
     catchError,
@@ -69,6 +75,7 @@ import { Permissions } from '../../../../../ng-swagger-gen/models/permissions';
     selector: 'app-robot-account',
     templateUrl: './robot-account.component.html',
     styleUrls: ['./robot-account.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class RobotAccountComponent implements OnInit, OnDestroy {

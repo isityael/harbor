@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Output,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Scanner } from '../scanner';
 import { NewScannerFormComponent } from '../new-scanner-form/new-scanner-form.component';
 import { ClrLoadingState } from '@clr/angular';
@@ -27,6 +33,7 @@ import { clone } from '../../../../../shared/units/utils';
     selector: 'new-scanner-modal',
     templateUrl: 'new-scanner-modal.component.html',
     styleUrls: ['../../../../../common.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class NewScannerModalComponent {

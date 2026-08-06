@@ -25,6 +25,7 @@ import {
     HttpResponse,
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 import { Robot } from '../../../../../ng-swagger-gen/models/robot';
 import { delay } from 'rxjs/operators';
@@ -34,7 +35,8 @@ import {
     Resource,
 } from '../../left-side-nav/system-robot-accounts/system-robot-util';
 import { ConfirmationDialogService } from '../../global-confirmation-dialog/confirmation-dialog.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -165,7 +167,7 @@ describe('RobotAccountComponent', () => {
                     useValue: mockUserPermissionService,
                 },
                 { provide: RobotService, useValue: fakedRobotService },
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         }).compileComponents();

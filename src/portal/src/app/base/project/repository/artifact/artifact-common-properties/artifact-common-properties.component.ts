@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnChanges,
+    SimpleChanges,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Artifact } from '../../../../../../../ng-swagger-gen/models/artifact';
 
@@ -30,6 +36,7 @@ enum Types {
     selector: 'artifact-common-properties',
     templateUrl: './artifact-common-properties.component.html',
     styleUrls: ['./artifact-common-properties.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ArtifactCommonPropertiesComponent implements OnChanges {

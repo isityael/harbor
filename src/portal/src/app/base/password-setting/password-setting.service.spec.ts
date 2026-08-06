@@ -21,6 +21,7 @@ import { CURRENT_BASE_HREF } from '../../shared/units/utils';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('PasswordSettingService', () => {
@@ -32,7 +33,7 @@ describe('PasswordSettingService', () => {
             imports: [],
             providers: [
                 PasswordSettingService,
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

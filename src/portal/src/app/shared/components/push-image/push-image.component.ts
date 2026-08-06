@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, ViewChild } from '@angular/core';
+import {
+    Component,
+    Input,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { CopyInputComponent } from './copy-input.component';
 import { InlineAlertComponent } from '../inline-alert/inline-alert.component';
 
@@ -20,6 +25,7 @@ import { InlineAlertComponent } from '../inline-alert/inline-alert.component';
     templateUrl: './push-image.component.html',
     styleUrls: ['./push-image.scss'],
     providers: [],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class PushImageButtonComponent {

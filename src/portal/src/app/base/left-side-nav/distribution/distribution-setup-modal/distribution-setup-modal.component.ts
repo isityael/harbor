@@ -20,6 +20,7 @@ import {
     OnInit,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
@@ -52,6 +53,7 @@ const DEFAULT_PROVIDER: string = 'dragonfly';
     selector: 'dist-setup-modal',
     templateUrl: './distribution-setup-modal.component.html',
     styleUrls: ['./distribution-setup-modal.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class DistributionSetupModalComponent implements OnInit, OnDestroy {
@@ -445,11 +447,11 @@ export class DistributionSetupModalComponent implements OnInit, OnDestroy {
             if (this.model.endpoint !== this.originModelForEdit.endpoint) {
                 return true;
             }
-            // eslint-disable-next-line eqeqeq
+
             if (this.model.enabled != this.originModelForEdit.enabled) {
                 return true;
             }
-            // eslint-disable-next-line eqeqeq
+
             if (this.model.insecure != this.originModelForEdit.insecure) {
                 return true;
             }

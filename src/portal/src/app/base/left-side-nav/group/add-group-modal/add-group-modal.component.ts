@@ -18,6 +18,7 @@ import {
     EventEmitter,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MessageHandlerService } from '../../../../shared/services/message-handler.service';
@@ -31,6 +32,7 @@ import { UsergroupService } from '../../../../../../ng-swagger-gen/services/user
     selector: 'hbr-add-group-modal',
     templateUrl: './add-group-modal.component.html',
     styleUrls: ['./add-group-modal.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class AddGroupModalComponent implements OnInit {
@@ -70,8 +72,8 @@ export class AddGroupModalComponent implements OnInit {
             group_type: this.isLdapMode
                 ? GroupType.LDAP_TYPE
                 : this.isHttpAuthMode
-                ? GroupType.HTTP_TYPE
-                : GroupType.OIDC_TYPE,
+                  ? GroupType.HTTP_TYPE
+                  : GroupType.OIDC_TYPE,
         };
     }
 
@@ -141,8 +143,8 @@ export class AddGroupModalComponent implements OnInit {
             group_type: this.isLdapMode
                 ? GroupType.LDAP_TYPE
                 : this.isHttpAuthMode
-                ? GroupType.HTTP_TYPE
-                : GroupType.OIDC_TYPE,
+                  ? GroupType.HTTP_TYPE
+                  : GroupType.OIDC_TYPE,
         };
         this.groupForm.reset();
     }

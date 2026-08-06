@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { TestBed, inject } from '@angular/core/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { MessageHandlerService } from './message-handler.service';
 import { MessageService } from '../components/global-message/message.service';
 import { SessionService } from './session.service';

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { OidcOnboardService } from './oidc-onboard.service';
 import { UntypedFormControl } from '@angular/forms';
 import { CommonRoutes } from '../shared/entities/shared.const';
@@ -22,6 +22,7 @@ import { errorHandler } from '../shared/units/shared.utils';
     selector: 'app-oidc-onboard',
     templateUrl: './oidc-onboard.component.html',
     styleUrls: ['./oidc-onboard.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class OidcOnboardComponent implements OnInit {

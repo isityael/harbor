@@ -5,7 +5,9 @@
     <div class="card-block donut-chart">
         <app-donut-chart
             [denominator]="denominator"
-            [numerator]="busyWorkers?.length"></app-donut-chart>
+            [numerator]="
+                $safeNavigationMigration(busyWorkers?.length)
+            "></app-donut-chart>
     </div>
     <div class="card-footer">
         <button

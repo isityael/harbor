@@ -28,7 +28,6 @@ import {
     standalone: false,
 })
 export class ClipboardDirective implements OnDestroy {
-    // eslint-disable-next-line @angular-eslint/no-input-rename
     @Input('ngxClipboard') public targetElm: HTMLInputElement;
 
     @Input() public cbContent: string;

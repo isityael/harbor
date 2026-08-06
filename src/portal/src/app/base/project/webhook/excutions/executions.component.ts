@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, OnDestroy } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnDestroy,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { WebhookPolicy } from '../../../../../../ng-swagger-gen/models/webhook-policy';
 import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -40,6 +45,7 @@ import {
     selector: 'app-executions',
     templateUrl: './executions.component.html',
     styleUrls: ['./executions.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ExecutionsComponent implements OnDestroy {

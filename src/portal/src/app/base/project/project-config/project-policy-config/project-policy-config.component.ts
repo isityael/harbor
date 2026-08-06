@@ -11,7 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    Input,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { compareValue, clone } from '../../../../shared/units/utils';
 import { validateRepositoryFilterPattern } from '../../../../shared/units/repository-filter.util';
 import {
@@ -118,6 +125,7 @@ const PAGE_SIZE: number = 100;
     selector: 'hbr-project-policy-config',
     templateUrl: './project-policy-config.component.html',
     styleUrls: ['./project-policy-config.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ProjectPolicyConfigComponent implements OnInit {
@@ -487,13 +495,11 @@ export class ProjectPolicyConfigComponent implements OnInit {
 
     addSystem() {
         this.showAddModal = false;
-        if (
-            !(
-                this.systemAllowlist &&
-                this.systemAllowlist.items &&
-                this.systemAllowlist.items.length > 0
-            )
-        ) {
+        if (!(
+            this.systemAllowlist &&
+            this.systemAllowlist.items &&
+            this.systemAllowlist.items.length > 0
+        )) {
             return;
         }
         if (this.projectAllowlist && !this.projectAllowlist.items) {
