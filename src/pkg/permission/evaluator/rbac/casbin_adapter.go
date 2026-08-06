@@ -18,8 +18,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/casbin/casbin/model"
-	"github.com/casbin/casbin/persist"
+	"github.com/casbin/casbin/v3/model"
+	"github.com/casbin/casbin/v3/persist"
 
 	"github.com/goharbor/harbor/src/pkg/permission/types"
 )

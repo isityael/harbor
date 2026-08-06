@@ -50,14 +50,14 @@ end
 var acquireScript = redis.NewScript(increaseWithLimitText)
 
 // Acquire tries to acquire a connection, returns true if successful
-func (c *ConnLimiter) Acquire(ctx context.Context, rdb *redis.Client, key string, limit int) bool {
+func (c *ConnLimiter) Acquire(ctx context.Context, rdb *redis.Client, key string, limit int) (bool, error) {
 	result, err := acquireScript.Run(ctx, rdb, []string{key}, fmt.Sprintf("%v", limit)).Int()
 	if err != nil {
 		log.Errorf("failed to get the connection lock in redis, error %v", err)
-		return false
+		return false, err
 	}
 	log.Debugf("Acquire script result is %d", result)
-	return result == 1
+	return result == 1, nil
 }
 
 var decreaseText = `

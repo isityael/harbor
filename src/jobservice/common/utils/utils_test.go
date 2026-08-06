@@ -82,6 +82,7 @@ func (suite *UtilsTestSuite) TestIsValidURL() {
 	assert.True(suite.T(), IsValidURL("https://www.google.com"), "https://www.google.com should be a valid URL")
 	assert.True(suite.T(), IsValidURL("http://www.google.com/index"), "http://www.google.com/index should be a valid URL")
 	assert.True(suite.T(), IsValidURL("www.google.com"), "www.google.com should be a valid URL")
+	assert.True(suite.T(), IsValidURL("http://harbor-core:80/service/notifications/tasks/1"), "Kubernetes service URL should be valid")
 	assert.False(suite.T(), IsValidURL(""), "empty string should not be a valid URL")
 	assert.False(suite.T(), IsValidURL("not_a_url"), "not_a_url should not be a valid URL")
 }

@@ -14,7 +14,11 @@
 
 package export
 
-import "github.com/bmatcuk/doublestar"
+import (
+	"strings"
+
+	"github.com/bmatcuk/doublestar/v4"
+)
 
 const (
 	CVEIDMatches      = "cveIdMatches"
@@ -65,6 +69,9 @@ func (vds *defaultVulnerabilitySelector) Select(vulnDataRecords []Data, decorati
 func (vds *defaultVulnerabilitySelector) match(pattern, str string) (bool, error) {
 	if len(pattern) == 0 {
 		return true, nil
+	}
+	if strings.HasSuffix(pattern, "/**") && str == strings.TrimSuffix(pattern, "/**") {
+		return false, nil
 	}
 	return doublestar.Match(pattern, str)
 }
