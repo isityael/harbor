@@ -453,136 +453,181 @@
                                 </clr-tooltip>
                             </div>
                         }
-                    </clr-dg-cell>
-                    <clr-dg-cell>
-                        @if (artifact.signed === 'checking') {
-                            <span class="spinner spinner-inline ml-2"></span>
-                        }
-                        @if (artifact.signed === 'true') {
-                            <clr-icon
-                                shape="check-circle"
-                                size="20"
-                                class="signed"></clr-icon>
-                        }
-                        @if (artifact.signed === 'false') {
-                            <clr-icon
-                                shape="times-circle"
-                                size="16"
-                                class="color-red"></clr-icon>
-                        }
-                    </clr-dg-cell>
-                    <clr-dg-cell>
-                        <div class="cell">
-                            {{
-                                artifact.size
-                                    ? sizeTransform(artifact.size + '')
-                                    : ''
-                            }}
-                        </div>
-                    </clr-dg-cell>
-                    <clr-dg-cell>
-                        <div class="cell">
-                            @if (!hasVul(artifact)) {
-                                <span>
-                                    {{
-                                        'ARTIFACT.SCAN_UNSUPPORTED' | translate
-                                    }}
-                                </span>
-                            }
-                            @if (hasVul(artifact)) {
-                                <hbr-vulnerability-bar
-                                    (submitStopFinish)="
-                                        submitStopFinish($event)
-                                    "
-                                    (scanFinished)="scanFinished($event)"
-                                    [inputScanner]="
-                                        $safeNavigationMigration(
-                                            handleScanOverview(
-                                                artifact.scan_overview
-                                            )?.scanner
-                                        )
-                                    "
-                                    (submitFinish)="submitFinish($event)"
-                                    [projectName]="projectName"
-                                    [repoName]="repoName"
-                                    [artifactDigest]="artifact.digest"
-                                    [summary]="
-                                        handleScanOverview(
-                                            artifact.scan_overview
-                                        )
-                                    ">
-                                </hbr-vulnerability-bar>
-                            }
-                        </div>
-                    </clr-dg-cell>
-                    <clr-dg-cell>
-                        <div class="cell">
-                            @if (artifact?.accessoryLoading) {
-                                <span
-                                    class="spinner spinner-inline ml-2"></span>
-                            }
-                            @if (
-                                !hasSbom(artifact) &&
-                                !artifact?.accessoryLoading
-                            ) {
-                                <span>
-                                    {{
-                                        'ARTIFACT.SBOM_UNSUPPORTED' | translate
-                                    }}
-                                </span>
-                            }
-                            @if (
-                                hasSbom(artifact) &&
-                                !artifact?.accessoryLoading &&
-                                !hasChild(artifact)
-                            ) {
-                                <hbr-sbom-bar
-                                    (submitStopFinish)="
-                                        submitSbomStopFinish($event)
-                                    "
-                                    (scanFinished)="sbomFinished($event)"
-                                    [inputScanner]="
-                                        $safeNavigationMigration(
-                                            handleSbomOverview(
-                                                artifact.sbom_overview
-                                            )?.scanner
-                                        )
-                                    "
-                                    (submitFinish)="submitSbomFinish($event)"
-                                    [projectName]="projectName"
-                                    [projectId]="projectId"
-                                    [repoName]="repoName"
-                                    [accessories]="
-                                        $safeNavigationMigration(
-                                            artifact?.accessories
-                                        )
-                                    "
-                                    [artifactDigest]="
-                                        $safeNavigationMigration(
-                                            artifact?.digest
-                                        )
-                                    "
-                                    [sbomDigest]="
-                                        $safeNavigationMigration(
-                                            artifact?.sbomDigest
-                                        )
-                                    "
-                                    [sbomOverview]="
-                                        $safeNavigationMigration(
-                                            artifact?.sbom_overview
-                                        )
-                                    ">
-                                </hbr-sbom-bar>
-                            }
-                        </div>
-                    </clr-dg-cell>
-                    <clr-dg-cell>
-                        @if (artifact.annotationsArray?.length) {
-                            <div class="cell">
-                                <div class="bar-state">
-                                    <span class="label not-scan">{{
-                                        artifact.annotationsArray[0]
-                                    }}</span>
+<app-pull-command
+    [registryUrl]="registryUrl"
+    [projectName]="projectName"
+    [repoName]="repoName"
+    [artifact]="artifact"
+    class="fix-width"></app-pull-command>
+</div>
+</clr-dg-cell>
+@if (depth) {
+<clr-dg-cell>
+    <div class="cell">
+        {{ artifact.platform?.os }}
+        /{{ artifact.platform?.architecture
+        }}{{
+            artifact.platform?.variant
+                ? '/' + artifact.platform?.variant
+                : ''
+        }}
+    </div>
+</clr-dg-cell>
+}
+<clr-dg-cell class="center">
+    @if (artifact.tags) {
+    <div class="truncated width-p-100">
+        <clr-tooltip class="width-p-100">
+            <div clrTooltipTrigger class="center">
+                <div class="center width-p-100">
+                    <span #tagsSpan class="tag-text">{{
+                        tagsString(artifact?.tags)
+                    }}</span>
+                    @if (artifact?.tags?.length > 1 &&
+                    isEllipsisActive(tagsSpan)) {
+                    <span class="tag-count"
+                        >({{ artifact?.tagNumber }})</span
+                    >
+                    }
+                </div>
+            </div>
+        </clr-tooltip>
+    </div>
+    }
+</clr-dg-cell>
+<clr-dg-cell>
+    @if (artifact.signed === 'checking') {
+        <span class="spinner spinner-inline ml-2"></span>
+    }
+    @if (artifact.signed === 'true') {
+        <clr-icon
+            shape="check-circle"
+            size="20"
+            class="signed"></clr-icon>
+    }
+    @if (artifact.signed === 'false') {
+        <clr-icon
+            shape="times-circle"
+            size="16"
+            class="color-red"></clr-icon>
+    }
+</clr-dg-cell>
+<clr-dg-cell>
+    <div class="cell">
+        {{
+            artifact.size
+                ? sizeTransform(artifact.size + '')
+                : ''
+        }}
+    </div>
+</clr-dg-cell>
+<clr-dg-cell>
+    <div class="cell">
+        @if (!hasVul(artifact)) {
+            <span>
+                {{
+                    'ARTIFACT.SCAN_UNSUPPORTED' | translate
+                }}
+            </span>
+        }
+        @if (hasVul(artifact)) {
+            <hbr-vulnerability-bar
+                (submitStopFinish)="
+                    submitStopFinish($event)
+                "
+                (scanFinished)="scanFinished($event)"
+                [inputScanner]="
+                    $safeNavigationMigration(
+                        handleScanOverview(
+                            artifact.scan_overview
+                        )?.scanner
+                    )
+                "
+                (submitFinish)="submitFinish($event)"
+                [projectName]="projectName"
+                [repoName]="repoName"
+                [artifactDigest]="artifact.digest"
+                [summary]="
+                    handleScanOverview(
+                        artifact.scan_overview
+                    )
+                ">
+            </hbr-vulnerability-bar>
+        }
+    </div>
+</clr-dg-cell>
+<clr-dg-cell>
+    <div class="cell">
+        @if (artifact?.accessoryLoading) {
+            <span
+                class="spinner spinner-inline ml-2"></span>
+        }
+        @if (
+            !hasSbom(artifact) &&
+            !artifact?.accessoryLoading
+        ) {
+            <span>
+                {{
+                    'ARTIFACT.SBOM_UNSUPPORTED' | translate
+                }}
+            </span>
+        }
+        @if (
+            hasSbom(artifact) &&
+            !artifact?.accessoryLoading &&
+            !hasChild(artifact)
+        ) {
+            <hbr-sbom-bar
+                (submitStopFinish)="
+                    submitSbomStopFinish($event)
+                "
+                (scanFinished)="sbomFinished($event)"
+                [inputScanner]="
+                    $safeNavigationMigration(
+                        handleSbomOverview(
+                            artifact.sbom_overview
+                        )?.scanner
+                    )
+                "
+                (submitFinish)="submitSbomFinish($event)"
+                [projectName]="projectName"
+                [projectId]="projectId"
+                [repoName]="repoName"
+                [accessories]="
+                    $safeNavigationMigration(
+                        artifact?.accessories
+                    )
+                "
+                [artifactDigest]="
+                    $safeNavigationMigration(
+                        artifact?.digest
+                    )
+                "
+                [sbomDigest]="
+                    $safeNavigationMigration(
+                        artifact?.sbomDigest
+                    )
+                "
+                [sbomOverview]="
+                    $safeNavigationMigration(
+                        artifact?.sbom_overview
+                    )
+                ">
+            </hbr-sbom-bar>
+        }
+    </div>
+</clr-dg-cell>
+<clr-dg-cell>
+    @if (artifact.annotationsArray?.length) {
+        <div class="cell">
+            <div class="bar-state">
+                <span class="label not-scan">{{
+                    artifact.annotationsArray[0]
+                }}</span>
+            </div>
+        </div>
+    }
+</clr-dg-cell>
                                 </div>
                                 <div
                                     class="signpost-item"
