@@ -86,72 +86,20 @@
                             }
                         </select>
                     </div>
-                </div>
-                <div class="row-inline ml-2" clrInline>
-                    <label class="clr-control-label">
-                        {{ 'PROJECT.CONNECTION_LIMIT' | translate }}
-                    </label>
-                    <div
-                        class="clr-control-container ml-1"
-                        [class.clr-error]="maxUpstreamConnError">
-                        <input
-                            type="number"
-                            id="max_upstream_conn"
-                            [(ngModel)]="projectPolicy.MaxUpstreamConn"
-                            name="max_upstream_conn"
-                            [disabled]="!allowUpdateProxyCacheConfiguration"
-                            class="clr-input width-164 mr-10 clr-input-underline"
-                            autocomplete="off" />
-                        @if (maxUpstreamConnError) {
-                            <clr-icon
-                                class="clr-validate-icon"
-                                shape="exclamation-circle"></clr-icon>
-                        }
-                        @if (maxUpstreamConnError) {
-                            <clr-control-error class="tooltip-content">
-                                {{
-                                    'PROJECT.PROXY_CACHE_MAX_UPSTREAM_CONN_INPUT_TIP'
-                                        | translate
-                                }}
-                            </clr-control-error>
-                        }
-                    </div>
-                </div>
-                <div class="row-inline ml-2" clrInline>
-                    <clr-checkbox-wrapper class="ml-1">
-                        <input
-                            id="proxy_referrer_api"
-                            type="checkbox"
-                            clrCheckbox
-                            [(ngModel)]="projectPolicy.ProxyReferrerAPI"
-                            name="proxy_referrer_api"
-                            [disabled]="!allowUpdateProxyCacheConfiguration" />
-                        <label for="proxy_referrer_api">
-                            {{ 'PROJECT.PROXY_REFERRER_API_LABEL' | translate }}
-                            <clr-tooltip>
-                                <clr-icon
-                                    clrTooltipTrigger
-                                    shape="info-circle"
-                                    size="24"></clr-icon>
-                                <clr-tooltip-content
-                                    clrPosition="top-left"
-                                    clrSize="lg"
-                                    *clrIfOpen>
-                                    <span>{{
-                                        'PROJECT.PROXY_REFERRER_API_TIP'
-                                            | translate
-                                    }}</span>
-                                </clr-tooltip-content>
-                            </clr-tooltip>
-                        </label>
-                    </clr-checkbox-wrapper>
+                    @if (bandwidthError) {
+                    <clr-control-error class="tooltip-content">
+                        {{ 'PROJECT.SPEED_LIMIT_TIP' | translate }}
+                    </clr-control-error>
+                    }
                 </div>
             </div>
-        }
-        @if (isSystemAdmin && projectPolicy.ProxyCacheEnabled) {
-            <clr-checkbox-container>
-                <label class="clr-control-label"></label>
-                <clr-checkbox-wrapper id="proxy-cache-local-on-not-found">
+            <div class="row-inline ml-2" clrInline>
+                <label class="clr-control-label">
+                    {{ 'PROJECT.CONNECTION_LIMIT' | translate }}
+                </label>
+                <div
+                    class="clr-control-container ml-1"
+                    [class.clr-error]="maxUpstreamConnError">
                     <input
                         type="number"
                         id="max_upstream_conn"
@@ -168,7 +116,8 @@
                     } @if (maxUpstreamConnError) {
                     <clr-control-error class="tooltip-content">
                         {{
-                            'PROJECT.PROXY_CACHE_LOCAL_ON_NOT_FOUND' | translate
+                            'PROJECT.PROXY_CACHE_MAX_UPSTREAM_CONN_INPUT_TIP'
+                                | translate
                         }}
                     </clr-control-error>
                     }
@@ -336,11 +285,11 @@
         <clr-checkbox-container
             id="prevent-vulenrability-image"
             class="margin-top-05">
-            <label>
-                @if (!!isProxyCacheProject) {
-                    <span>{{ 'PROJECT_CONFIG.SECURITY' | translate }}</span>
-                }
-            </label>
+            <label
+                >@if (!!isProxyCacheProject) {
+                <span>{{ 'PROJECT_CONFIG.SECURITY' | translate }}</span>
+                }</label
+            >
             <clr-checkbox-wrapper>
                 <input
                     type="checkbox"
@@ -372,9 +321,9 @@
                                     "
                                     [disabled]="!projectPolicy.PreventVulImg">
                                     @for (s of severityOptions; track s) {
-                                        <option [ngValue]="s.severity">
-                                            {{ s.severityLevel | translate }}
-                                        </option>
+                                    <option [ngValue]="s.severity">
+                                        {{ s.severityLevel | translate }}
+                                    </option>
                                     }
                                 </select>
                             </div>
@@ -424,202 +373,133 @@
             </clr-control-helper>
         </clr-checkbox-container>
         @if (systemInfo) {
-            <div
-                class="clr-form-control"
-                [class.clr-form-control-disabled]="!hasChangeConfigRole">
-                <label class="clr-control-label">{{
-                    'CVE_ALLOWLIST.CVE_ALLOWLIST' | translate
-                }}</label>
-                <div class="w-100 clr-control-container">
-                    <div class="config-subtext">
-                        <div>
-                            <span>{{
-                                'CVE_ALLOWLIST.PRO_ALLOWLIST_EXPLAIN'
-                                    | translate
-                            }}</span>
-                        </div>
-                        <div>
-                            <span>{{
-                                'CVE_ALLOWLIST.PRO_OR_SYS' | translate
-                            }}</span>
-                        </div>
-                        <div>
-                            <span>{{
-                                'CVE_ALLOWLIST.MERGE_INTO' | translate
-                            }}</span>
-                        </div>
-                        @if (hasExpired) {
-                            <div>
-                                @if (isUseSystemAllowlist()) {
-                                    <span class="label label-warning">{{
-                                        'CVE_ALLOWLIST.WARNING_SYS' | translate
-                                    }}</span>
-                                }
-                                @if (!isUseSystemAllowlist()) {
-                                    <span class="label label-warning">{{
-                                        'CVE_ALLOWLIST.WARNING_PRO' | translate
-                                    }}</span>
-                                }
-                            </div>
+        <div
+            class="clr-form-control"
+            [class.clr-form-control-disabled]="!hasChangeConfigRole">
+            <label class="clr-control-label">{{
+                'CVE_ALLOWLIST.CVE_ALLOWLIST' | translate
+            }}</label>
+            <div class="w-100 clr-control-container">
+                <div class="config-subtext">
+                    <div>
+                        <span>{{
+                            'CVE_ALLOWLIST.PRO_ALLOWLIST_EXPLAIN' | translate
+                        }}</span>
+                    </div>
+                    <div>
+                        <span>{{
+                            'CVE_ALLOWLIST.PRO_OR_SYS' | translate
+                        }}</span>
+                    </div>
+                    <div>
+                        <span>{{
+                            'CVE_ALLOWLIST.MERGE_INTO' | translate
+                        }}</span>
+                    </div>
+                    @if (hasExpired) {
+                    <div>
+                        @if (isUseSystemAllowlist()) {
+                        <span class="label label-warning">{{
+                            'CVE_ALLOWLIST.WARNING_SYS' | translate
+                        }}</span>
+                        } @if (!isUseSystemAllowlist()) {
+                        <span class="label label-warning">{{
+                            'CVE_ALLOWLIST.WARNING_PRO' | translate
+                        }}</span>
                         }
                     </div>
-                    <clr-radio-container clrInline>
-                        <clr-radio-wrapper>
-                            <input
-                                id="use-system"
-                                [attr.disabled]="
-                                    !hasChangeConfigRole ? 'disabled' : null
+                    }
+                </div>
+                <clr-radio-container clrInline>
+                    <clr-radio-wrapper>
+                        <input
+                            id="use-system"
+                            [attr.disabled]="
+                                !hasChangeConfigRole ? 'disabled' : null
+                            "
+                            type="radio"
+                            clrRadio
+                            name="systemAllowlistOrProjectAllowlist"
+                            required
+                            value="true"
+                            [(ngModel)]="systemAllowlistOrProjectAllowlist" />
+                        <label>{{
+                            'CVE_ALLOWLIST.SYS_ALLOWLIST' | translate
+                        }}</label>
+                    </clr-radio-wrapper>
+                    <clr-radio-wrapper>
+                        <input
+                            id="use-project"
+                            [attr.disabled]="
+                                !hasChangeConfigRole ? 'disabled' : null
+                            "
+                            type="radio"
+                            clrRadio
+                            name="systemAllowlistOrProjectAllowlist"
+                            required
+                            value="false"
+                            [(ngModel)]="systemAllowlistOrProjectAllowlist" />
+                        <label>{{
+                            'CVE_ALLOWLIST.PRO_ALLOWLIST' | translate
+                        }}</label>
+                    </clr-radio-wrapper>
+                </clr-radio-container>
+                <div class="clr-row width-90per">
+                    <div class="clr-col position-relative col-flex-grow-0">
+                        <div>
+                            <button
+                                id="show-add-modal"
+                                [disabled]="
+                                    isUseSystemAllowlist() ||
+                                    !hasChangeConfigRole
                                 "
-                                type="radio"
-                                clrRadio
-                                name="systemAllowlistOrProjectAllowlist"
-                                required
-                                value="true"
-                                [(ngModel)]="
-                                    systemAllowlistOrProjectAllowlist
-                                " />
-                            <label>{{
-                                'CVE_ALLOWLIST.SYS_ALLOWLIST' | translate
-                            }}</label>
-                        </clr-radio-wrapper>
-                        <clr-radio-wrapper>
-                            <input
-                                id="use-project"
-                                [attr.disabled]="
-                                    !hasChangeConfigRole ? 'disabled' : null
+                                (click)="showAddModal = !showAddModal"
+                                class="btn btn-link">
+                                {{ 'CVE_ALLOWLIST.ADD' | translate }}
+                            </button>
+                            <button
+                                id="add-system"
+                                [disabled]="
+                                    isUseSystemAllowlist() ||
+                                    !hasChangeConfigRole
                                 "
-                                type="radio"
-                                clrRadio
-                                name="systemAllowlistOrProjectAllowlist"
-                                required
-                                value="false"
-                                [(ngModel)]="
-                                    systemAllowlistOrProjectAllowlist
-                                " />
-                            <label>{{
-                                'CVE_ALLOWLIST.PRO_ALLOWLIST' | translate
-                            }}</label>
-                        </clr-radio-wrapper>
-                    </clr-radio-container>
-                    <div class="clr-row width-90per">
-                        <div class="clr-col position-relative col-flex-grow-0">
+                                (click)="addSystem()"
+                                class="btn btn-link ml-1">
+                                {{ 'CVE_ALLOWLIST.ADD_SYSTEM' | translate }}
+                            </button>
+                        </div>
+                        @if (showAddModal && !isUseSystemAllowlist()) {
+                        <div class="add-modal add-modal-dark">
+                            <clr-icon
+                                (click)="showAddModal = false"
+                                class="float-lg-right margin-top-4"
+                                shape="window-close"></clr-icon>
+                            <div>
+                                <clr-textarea-container
+                                    class="flex-direction-column">
+                                    <label>{{
+                                        'CVE_ALLOWLIST.ENTER' | translate
+                                    }}</label>
+                                    <textarea
+                                        id="allowlist-textarea"
+                                        class="w-100"
+                                        clrTextarea
+                                        [(ngModel)]="cveIds"
+                                        name="cveIds"></textarea>
+                                    <clr-control-helper>{{
+                                        'CVE_ALLOWLIST.HELP' | translate
+                                    }}</clr-control-helper>
+                                </clr-textarea-container>
+                            </div>
                             <div>
                                 <button
-                                    id="show-add-modal"
-                                    [disabled]="
-                                        isUseSystemAllowlist() ||
-                                        !hasChangeConfigRole
-                                    "
-                                    (click)="showAddModal = !showAddModal"
+                                    id="add-to-allowlist"
+                                    [disabled]="isDisabled()"
+                                    (click)="addToProjectAllowlist()"
                                     class="btn btn-link">
                                     {{ 'CVE_ALLOWLIST.ADD' | translate }}
                                 </button>
-                                <button
-                                    id="add-system"
-                                    [disabled]="
-                                        isUseSystemAllowlist() ||
-                                        !hasChangeConfigRole
-                                    "
-                                    (click)="addSystem()"
-                                    class="btn btn-link ml-1">
-                                    {{ 'CVE_ALLOWLIST.ADD_SYSTEM' | translate }}
-                                </button>
                             </div>
-                            @if (showAddModal && !isUseSystemAllowlist()) {
-                                <div class="add-modal add-modal-dark">
-                                    <clr-icon
-                                        (click)="showAddModal = false"
-                                        class="float-lg-right margin-top-4"
-                                        shape="window-close"></clr-icon>
-                                    <div>
-                                        <clr-textarea-container
-                                            class="flex-direction-column">
-                                            <label>{{
-                                                'CVE_ALLOWLIST.ENTER'
-                                                    | translate
-                                            }}</label>
-                                            <textarea
-                                                id="allowlist-textarea"
-                                                class="w-100"
-                                                clrTextarea
-                                                [(ngModel)]="cveIds"
-                                                name="cveIds"></textarea>
-                                            <clr-control-helper>{{
-                                                'CVE_ALLOWLIST.HELP' | translate
-                                            }}</clr-control-helper>
-                                        </clr-textarea-container>
-                                    </div>
-                                    <div>
-                                        <button
-                                            id="add-to-allowlist"
-                                            [disabled]="isDisabled()"
-                                            (click)="addToProjectAllowlist()"
-                                            class="btn btn-link">
-                                            {{
-                                                'CVE_ALLOWLIST.ADD' | translate
-                                            }}
-                                        </button>
-                                    </div>
-                                </div>
-                            }
-                            @if (isUseSystemAllowlist()) {
-                                <ul class="allowlist-window">
-                                    @if (systemAllowlist?.items?.length < 1) {
-                                        <li class="none">
-                                            {{
-                                                'CVE_ALLOWLIST.NONE' | translate
-                                            }}
-                                        </li>
-                                    }
-                                    @for (
-                                        item of systemAllowlist?.items;
-                                        track item
-                                    ) {
-                                        <li>
-                                            <a
-                                                href="javascript:void(0)"
-                                                (click)="
-                                                    goToDetail(item.cve_id)
-                                                "
-                                                >{{ item.cve_id }}</a
-                                            >
-                                        </li>
-                                    }
-                                </ul>
-                            }
-                            @if (!isUseSystemAllowlist()) {
-                                <ul class="allowlist-window">
-                                    @if (projectAllowlist?.items?.length < 1) {
-                                        <li class="none">
-                                            {{
-                                                'CVE_ALLOWLIST.NONE' | translate
-                                            }}
-                                        </li>
-                                    }
-                                    @for (
-                                        item of projectAllowlist?.items;
-                                        track item;
-                                        let i = $index
-                                    ) {
-                                        <li>
-                                            <a
-                                                href="javascript:void(0)"
-                                                (click)="
-                                                    goToDetail(item.cve_id)
-                                                "
-                                                >{{ item.cve_id }}</a
-                                            >
-                                            <a
-                                                class="float-lg-right"
-                                                href="javascript:void(0)"
-                                                (click)="deleteItem(i)">
-                                                <clr-icon
-                                                    shape="times-circle"></clr-icon>
-                                            </a>
-                                        </li>
-                                    }
-                                </ul>
-                            }
                         </div>
                         } @if (isUseSystemAllowlist()) {
                         <ul class="allowlist-window">
@@ -702,34 +582,33 @@
                                     value="{{ systemExpiresDateString }}" />
                                 }
                             </div>
-                            <div class="clr-row">
-                                <label
-                                    for="neverExpires"
-                                    class="clr-col-3"></label>
-                                <clr-checkbox-wrapper>
-                                    <input
-                                        [disabled]="
-                                            isUseSystemAllowlist() ||
-                                            !hasChangeConfigRole
-                                        "
-                                        [checked]="neverExpires"
-                                        [(ngModel)]="neverExpires"
-                                        type="checkbox"
-                                        clrCheckbox
-                                        name="neverExpires"
-                                        id="neverExpires" />
-                                    <label>
-                                        {{
-                                            'CVE_ALLOWLIST.NEVER_EXPIRES'
-                                                | translate
-                                        }}
-                                    </label>
-                                </clr-checkbox-wrapper>
-                            </div>
+                        </div>
+                        <div class="clr-row">
+                            <label for="neverExpires" class="clr-col-3"></label>
+                            <clr-checkbox-wrapper>
+                                <input
+                                    [disabled]="
+                                        isUseSystemAllowlist() ||
+                                        !hasChangeConfigRole
+                                    "
+                                    [checked]="neverExpires"
+                                    [(ngModel)]="neverExpires"
+                                    type="checkbox"
+                                    clrCheckbox
+                                    name="neverExpires"
+                                    id="neverExpires" />
+                                <label>
+                                    {{
+                                        'CVE_ALLOWLIST.NEVER_EXPIRES'
+                                            | translate
+                                    }}
+                                </label>
+                            </clr-checkbox-wrapper>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         }
         <button
             type="button"
