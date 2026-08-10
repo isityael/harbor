@@ -20,7 +20,7 @@ require (
 	github.com/go-openapi/spec v0.22.9
 	github.com/go-openapi/strfmt v0.27.0
 	github.com/go-openapi/swag v0.28.0
-	github.com/go-openapi/validate v0.26.1
+	github.com/go-openapi/validate v0.26.3
 	github.com/gocarina/gocsv v0.0.0-20260628180327-50907998929c
 	github.com/gocraft/work v0.5.1
 	github.com/golang-jwt/jwt/v5 v5.3.1
@@ -45,7 +45,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/tencentcloud/tencentcloud-sdk-go v3.0.233+incompatible
 	github.com/vmihailenco/msgpack/v5 v5.4.1
-	github.com/volcengine/volcengine-go-sdk v1.2.45
+	github.com/volcengine/volcengine-go-sdk v1.2.46
 	go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux v0.70.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.70.0
 	go.opentelemetry.io/otel v1.45.0
@@ -55,7 +55,7 @@ require (
 	go.pinniped.dev v0.47.0
 	go.uber.org/ratelimit v0.3.1
 	golang.org/x/crypto v0.54.0 // indirect
-	golang.org/x/net v0.57.0
+	golang.org/x/net v0.57.0 // indirect
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/sync v0.22.0
 	golang.org/x/text v0.40.0
@@ -73,7 +73,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.32.35
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.34
 	github.com/aws/aws-sdk-go-v2/service/ecr v1.60.4
-	github.com/aws/smithy-go v1.27.6
+	github.com/aws/smithy-go v1.27.7
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/casbin/casbin/v3 v3.10.0
 	github.com/cenkalti/backoff/v7 v7.0.0
