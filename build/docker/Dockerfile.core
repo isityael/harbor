@@ -9,11 +9,13 @@ ARG TARGETOS=linux
 ARG TARGETARCH=amd64
 
 WORKDIR /harbor
+COPY src/go.mod src/go.sum ./src/
+RUN --mount=type=cache,target=/go/pkg/mod cd src && go mod download
 COPY src/ ./src/
 COPY api/ ./api/
 COPY tools/swagger/templates/ ./tools/swagger/templates/
 
-RUN go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1 \
+RUN --mount=type=cache,target=/go/pkg/mod go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1 \
     && swagger generate server \
     --template-dir=tools/swagger/templates \
     --exclude-main \
@@ -24,7 +26,8 @@ RUN go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1 \
     -A harbor \
     --target src/server/v2.0
 
-RUN cd src && CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build \
+    cd src && CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     go build -mod=mod -o /out/harbor_core \
     -ldflags "-w -s \
     -X github.com/goharbor/harbor/src/pkg/version.GitCommit=${GITCOMMIT} \
