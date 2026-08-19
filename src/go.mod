@@ -1,6 +1,6 @@
 module github.com/goharbor/harbor/src
 
-go 1.26.5
+go 1.26.6
 
 require (
 	github.com/FZambia/sentinel v1.1.1
@@ -21,7 +21,7 @@ require (
 	github.com/go-asn1-ber/asn1-ber v1.5.8
 	github.com/go-ldap/ldap/v3 v3.4.14
 	github.com/go-openapi/errors v0.22.8
-	github.com/go-openapi/loads v0.25.0
+	github.com/go-openapi/loads v0.25.1
 	github.com/go-openapi/runtime v0.33.0
 	github.com/go-openapi/spec v0.22.9
 	github.com/go-openapi/strfmt v0.27.0
