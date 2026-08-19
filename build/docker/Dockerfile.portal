@@ -16,6 +16,8 @@ COPY api/v2.0/swagger.yaml /build_dir/swagger.yaml
 COPY src/portal /build_dir
 
 ENV NPM_CONFIG_REGISTRY=${npm_registry}
+# The release image never runs Cypress; avoid downloading its browser binary during the build.
+ENV CYPRESS_INSTALL_BINARY=0
 RUN npm ci
 RUN npm run generate-build-timestamp
 RUN node --max_old_space_size=2048 'node_modules/@angular/cli/bin/ng' build --configuration production
