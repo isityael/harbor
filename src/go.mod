@@ -19,7 +19,7 @@ require (
 	github.com/go-openapi/runtime v0.33.0
 	github.com/go-openapi/spec v0.22.9
 	github.com/go-openapi/strfmt v0.27.0
-	github.com/go-openapi/swag v0.28.0
+	github.com/go-openapi/swag v0.29.0
 	github.com/go-openapi/validate v0.26.3
 	github.com/gocarina/gocsv v0.0.0-20260628180327-50907998929c
 	github.com/gocraft/work v0.5.1
