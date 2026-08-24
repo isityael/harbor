@@ -3183,8 +3183,8 @@ github.com/aws/smithy-go v1.13.5/go.mod h1:Tg+OJXh4MB2R/uN61Ko2f6hTZwB/ZYGOtib8J
 github.com/aws/smithy-go v1.20.1/go.mod h1:krry+ya/rV9RDcV/Q16kpu6ypI4K2czasz0NC3qS14E=
 github.com/aws/smithy-go v1.22.2/go.mod h1:irrKGvNn1InZwb2d7fkIRNucdfwR8R+Ts3wxYa/cJHg=
 github.com/aws/smithy-go v1.22.3/go.mod h1:t1ufH5HMublsJYulve2RKmHDC15xu1f26kHCp/HgceI=
-github.com/aws/smithy-go v1.27.8 h1:FR0dxZfIlV7Z8eh2iHfIofdunw382XsDV3Mxt9nUvRY=
-github.com/aws/smithy-go v1.27.8/go.mod h1:YE2RhdIuDbA5E5bTdciG9KrW3+TiEONeUWCqxX9i1Fc=
+github.com/aws/smithy-go v1.27.9 h1:flT/ACSU1ksz3V+8wj8kN8DOB9tsc/ggWPTJXIieRpw=
+github.com/aws/smithy-go v1.27.9/go.mod h1:YE2RhdIuDbA5E5bTdciG9KrW3+TiEONeUWCqxX9i1Fc=
 github.com/bazelbuild/rules_go v0.49.0/go.mod h1:Dhcz716Kqg1RHNWos+N6MlXNkjNP2EwZQ0LukRKJfMs=
 github.com/beego/beego/v2 v2.3.10 h1:53us+Lzc/bwFwjyRi62+FKFEcWiIbmKbhW4/FQ3aNEw=
 github.com/beego/beego/v2 v2.3.10/go.mod h1:IY3bkfRge4Yj2XhgdMuvznM4HK/ovxQLOHJxAJ+QRgo=
@@ -4287,8 +4287,8 @@ github.com/vmihailenco/tagparser/v2 v2.0.0/go.mod h1:Wri+At7QHww0WTrCBeu4J6bNtoV
 github.com/volcengine/volc-sdk-golang v1.0.23/go.mod h1:AfG/PZRUkHJ9inETvbjNifTDgut25Wbkm2QoYBTbvyU=
 github.com/volcengine/volc-sdk-golang v1.0.252 h1:Gtyj+E0k5KV2oQhHs47Op4uMQhR+RYGwhpEHkukwk/4=
 github.com/volcengine/volc-sdk-golang v1.0.252/go.mod h1:zHJlaqiMbIB+0mcrsZPTwOb3FB7S/0MCfqlnO8R7hlM=
-github.com/volcengine/volcengine-go-sdk v1.2.48 h1:RyADovt3Zfs7MQng/RxBBM+Nv9PqRyInXZQ58WJxRUg=
-github.com/volcengine/volcengine-go-sdk v1.2.48/go.mod h1:5duonraYH9kPPB5/Ke2y63atELLRymBSgCo9ItIZqEM=
+github.com/volcengine/volcengine-go-sdk v1.2.49 h1:P5XUUhYxwEGoD39uLy/1XQ90M++hWpLo6bL1ncU+v0o=
+github.com/volcengine/volcengine-go-sdk v1.2.49/go.mod h1:5duonraYH9kPPB5/Ke2y63atELLRymBSgCo9ItIZqEM=
 github.com/x448/float16 v0.8.4 h1:qLwI1I70+NjRFUR3zs1JPUCgaCXSh3SW62uAKT1mSBM=
 github.com/x448/float16 v0.8.4/go.mod h1:14CWIYCyZA/cWjXOioeEpHeN/83MdbZDRQHoFcYsOfg=
 github.com/xdg-go/pbkdf2 v1.0.0/go.mod h1:jrpuAogTd400dnrH08LKmI/xc1MbPOebTwRqcT5RDeI=
