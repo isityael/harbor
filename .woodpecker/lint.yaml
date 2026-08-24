@@ -35,6 +35,14 @@ steps:
       cache_key: 'woodpecker/harbor/go/amd64/go1.26-{{ checksum "src/go.sum" }}'
       mount: [.cache/harbor]
 
+  - name: renovate-go-artifacts
+    image: dhi.io/golang:1.26.5-debian13-dev@sha256:c15c327d115e8af76f50fb5dc9da2d81280527ff6da30b5eb423499eb42c5897
+    environment:
+      GOMODCACHE: ${CI_WORKSPACE}/.cache/harbor/go-mod
+      GOCACHE: ${CI_WORKSPACE}/.cache/harbor/go-build
+    commands:
+      - bash .ci/test-renovate-go-artifacts.sh
+
   - name: generate-swagger
     image: dhi.io/golang:1.26.5-debian13-dev@sha256:c15c327d115e8af76f50fb5dc9da2d81280527ff6da30b5eb423499eb42c5897
     environment:
