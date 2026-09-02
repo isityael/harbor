@@ -9,7 +9,7 @@ require (
 	github.com/beego/beego/v2 v2.3.10
 	github.com/beego/i18n v0.0.0-20161101132742-e9308947f407
 	github.com/cloudevents/sdk-go/v2 v2.16.2
-	github.com/coreos/go-oidc/v3 v3.20.0
+	github.com/coreos/go-oidc/v3 v3.21.0
 	github.com/docker/distribution v2.8.3+incompatible
 	github.com/docker/libtrust v0.0.0-20160708172513-aabc10ec26b7
 	github.com/go-asn1-ber/asn1-ber v1.5.8
@@ -242,7 +242,7 @@ replace (
 	github.com/gocraft/work => github.com/goharbor/work v0.5.1
 	github.com/goharbor/harbor => ../
 	github.com/gomodule/redigo => github.com/gomodule/redigo v1.9.3
-	google.golang.org/api => google.golang.org/api v0.296.0
+	google.golang.org/api => google.golang.org/api v0.297.0
 )
 
 ignore portal
