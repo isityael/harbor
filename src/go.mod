@@ -21,7 +21,7 @@ require (
 	github.com/go-openapi/strfmt v0.27.2
 	github.com/go-openapi/swag v0.29.2
 	github.com/go-openapi/validate v1.0.0 // indirect
-	github.com/gocarina/gocsv v0.0.0-20260905190356-869064524258
+	github.com/gocarina/gocsv v0.0.0-20260908110832-9ab82d65b1cc
 	github.com/gocraft/work v0.5.1
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/golang-migrate/migrate/v4 v4.19.1
