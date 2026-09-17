@@ -3285,8 +3285,8 @@ github.com/aws/aws-sdk-go-v2/internal/ini v1.8.3/go.mod h1:H5O/EsxDWyU+LP/V8i5sm
 github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.3 h1:fuSCw4Z2qfRCztMPO3GXJNSiEp6Wee+WOLwrHHUMy9c=
 github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.3/go.mod h1:6SxcHheD1pPR5+kWm1wGvjlL/YqUsh267sAfEmN4K7A=
 github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.8.1/go.mod h1:CM+19rL1+4dFWnOQKwDc7H1KwXTz+h61oUSHyhV0b3o=
-github.com/aws/aws-sdk-go-v2/service/ecr v1.65.0 h1:k2IY7d2YZW6eY3jgTL5szmtmnpZgCvHhbhSC59714p8=
-github.com/aws/aws-sdk-go-v2/service/ecr v1.65.0/go.mod h1:iSlv4VibruxMhWfiKrNbn97Yjhe2855EFrgUitSESfM=
+github.com/aws/aws-sdk-go-v2/service/ecr v1.66.0 h1:9i19IigAYxnAxTUQcsxkiIXeeytHllTOetWBhr1DTQs=
+github.com/aws/aws-sdk-go-v2/service/ecr v1.66.0/go.mod h1:iSlv4VibruxMhWfiKrNbn97Yjhe2855EFrgUitSESfM=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.11.1/go.mod h1:JKpmtYhhPs7D97NL/ltqz7yCkERFW5dOlHyVl66ZYF8=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.12.3/go.mod h1:0yKJC/kb8sAnmlYa6Zs3QVYqaC8ug2AbnNChv5Ox3uA=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.19 h1:bAdDl/HkGCcGPoe25ToSHEw23VIxt6CT5fLcg111BKg=
@@ -4179,8 +4179,8 @@ github.com/olekukonko/errors v1.3.0/go.mod h1:ppzxA5jBKcO1vIpCXQ9ZqgDh8iwODz6OXI
 github.com/olekukonko/ll v0.1.8 h1:ysHCJRGHYKzmBSdz9w5AySztx7lG8SQY+naTGYUbsz8=
 github.com/olekukonko/ll v0.1.8/go.mod h1:RPRC6UcscfFZgjo1nulkfMH5IM0QAYim0LfnMvUuozw=
 github.com/olekukonko/tablewriter v0.0.0-20170122224234-a0225b3f23b5/go.mod h1:vsDQFd/mU46D+Z4whnwzcISnGGzXWMclvtLoiIKAKIo=
-github.com/olekukonko/tablewriter v1.1.4 h1:ORUMI3dXbMnRlRggJX3+q7OzQFDdvgbN9nVWj1drm6I=
-github.com/olekukonko/tablewriter v1.1.4/go.mod h1:+kedxuyTtgoZLwif3P1Em4hARJs+mVnzKxmsCL/C5RY=
+github.com/olekukonko/tablewriter v1.1.5 h1:4LoZSfMySpMQY3PT8RWJsJeuEuMIoo9xGRgvmqjg6IQ=
+github.com/olekukonko/tablewriter v1.1.5/go.mod h1:+kedxuyTtgoZLwif3P1Em4hARJs+mVnzKxmsCL/C5RY=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.7.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.12.1/go.mod h1:zj2OWP4+oCPe1qIXoGWkgMRwljMUYCdkwsT2108oapk=
@@ -4437,8 +4437,8 @@ github.com/vmihailenco/tagparser/v2 v2.0.0/go.mod h1:Wri+At7QHww0WTrCBeu4J6bNtoV
 github.com/volcengine/volc-sdk-golang v1.0.23/go.mod h1:AfG/PZRUkHJ9inETvbjNifTDgut25Wbkm2QoYBTbvyU=
 github.com/volcengine/volc-sdk-golang v1.0.252 h1:Gtyj+E0k5KV2oQhHs47Op4uMQhR+RYGwhpEHkukwk/4=
 github.com/volcengine/volc-sdk-golang v1.0.252/go.mod h1:zHJlaqiMbIB+0mcrsZPTwOb3FB7S/0MCfqlnO8R7hlM=
-github.com/volcengine/volcengine-go-sdk v1.2.52 h1:L0RxzqCF/d69flYDgEua5BDRxZNglJRc6DUti7zmpr4=
-github.com/volcengine/volcengine-go-sdk v1.2.52/go.mod h1:DURKPVQ8Rsi4OQu4/NPjUyjla3MeHPgXT/qV+400fAw=
+github.com/volcengine/volcengine-go-sdk v1.2.53 h1:aWooc5D8+Tx+R+Z7VsIp8aJCbWgfGdb687tq8G5b2JI=
+github.com/volcengine/volcengine-go-sdk v1.2.53/go.mod h1:DURKPVQ8Rsi4OQu4/NPjUyjla3MeHPgXT/qV+400fAw=
 github.com/x448/float16 v0.8.4 h1:qLwI1I70+NjRFUR3zs1JPUCgaCXSh3SW62uAKT1mSBM=
 github.com/x448/float16 v0.8.4/go.mod h1:14CWIYCyZA/cWjXOioeEpHeN/83MdbZDRQHoFcYsOfg=
 github.com/xdg-go/pbkdf2 v1.0.0/go.mod h1:jrpuAogTd400dnrH08LKmI/xc1MbPOebTwRqcT5RDeI=
