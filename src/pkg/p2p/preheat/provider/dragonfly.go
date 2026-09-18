@@ -203,7 +203,7 @@ func (dd *DragonflyDriver) GetHealth() (*DriverStatus, error) {
 	}
 
 	url := fmt.Sprintf("%s%s", strings.TrimSuffix(dd.instance.Endpoint, "/"), dragonflyHealthPath)
-	url, err := lib.ValidateHTTPURL(url)
+	url, err := lib.NormalizeAndValidateHTTPURL(url)
 	if err != nil {
 		return nil, err
 	}

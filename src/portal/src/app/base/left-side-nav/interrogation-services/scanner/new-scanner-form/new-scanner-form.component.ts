@@ -34,6 +34,7 @@ import {
     switchMap,
 } from 'rxjs/operators';
 import { ScannerService } from '../../../../../../../ng-swagger-gen/services/scanner.service';
+import { equalEndpoint } from '../../../../../shared/units/utils';
 
 @Component({
     selector: 'new-scanner-form',
@@ -142,7 +143,7 @@ export class NewScannerFormComponent implements AfterViewInit, OnDestroy {
                         if (
                             this.isEdit &&
                             this.originValue &&
-                            this.originValue.url === endpointUrl
+                            equalEndpoint(this.originValue.url, endpointUrl)
                         ) {
                             return false;
                         }
@@ -170,8 +171,10 @@ export class NewScannerFormComponent implements AfterViewInit, OnDestroy {
                         if (response && response.length > 0) {
                             response.forEach(s => {
                                 if (
-                                    s.url ===
-                                    this.newScannerForm.get('url').value
+                                    equalEndpoint(
+                                        s.url,
+                                        this.newScannerForm.get('url').value
+                                    )
                                 ) {
                                     this.isEndpointUrlExisting = true;
                                     return;
