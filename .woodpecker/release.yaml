@@ -21,6 +21,12 @@ clone:
       lfs: false
       tags: false
 
+# Mount the pipeline PVC at its working directory. This avoids a non-root
+# permission-init container having to create /woodpecker/src on NFS.
+workspace:
+  base: /woodpecker
+  path: /
+
 steps:
   - name: validate-version
     image: "dhi.io/busybox:1.37.0-debian13"
