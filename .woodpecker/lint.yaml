@@ -6,6 +6,8 @@
 # which requires `make gen_apis` and isn't checked in.
 #
 # Go dependencies are restored from Garage S3 into this pipeline's workspace.
+# Cache paths are exported in commands: CI_WORKSPACE is only set at step
+# runtime, so `${CI_WORKSPACE}` in `environment:` expands to an empty string.
 when:
   - event: [push, pull_request]
     branch: progressed
@@ -37,20 +39,15 @@ steps:
 
   - name: renovate-go-artifacts
     image: dhi.io/golang:1.26.5-debian13-dev@sha256:c15c327d115e8af76f50fb5dc9da2d81280527ff6da30b5eb423499eb42c5897
-    environment:
-      GOMODCACHE: ${CI_WORKSPACE}/.cache/harbor/go-mod
-      GOCACHE: ${CI_WORKSPACE}/.cache/harbor/go-build
     commands:
+      - export GOMODCACHE="$${CI_WORKSPACE}/.cache/harbor/go-mod" GOCACHE="$${CI_WORKSPACE}/.cache/harbor/go-build"
       - bash .ci/test-renovate-go-artifacts.sh
 
   - name: generate-swagger
     image: dhi.io/golang:1.26.5-debian13-dev@sha256:c15c327d115e8af76f50fb5dc9da2d81280527ff6da30b5eb423499eb42c5897
-    environment:
-      GOMODCACHE: ${CI_WORKSPACE}/.cache/harbor/go-mod
-      GOCACHE: ${CI_WORKSPACE}/.cache/harbor/go-build
-      GOBIN: ${CI_WORKSPACE}/.cache/harbor/bin
-      SWAGGER_BIN: ${CI_WORKSPACE}/.cache/harbor/bin/swagger-v0.33.1
     commands:
+      - export GOMODCACHE="$${CI_WORKSPACE}/.cache/harbor/go-mod" GOCACHE="$${CI_WORKSPACE}/.cache/harbor/go-build"
+      - export GOBIN="$${CI_WORKSPACE}/.cache/harbor/bin" SWAGGER_BIN="$${CI_WORKSPACE}/.cache/harbor/bin/swagger-v0.33.1"
       - mkdir -p "$GOMODCACHE" "$GOCACHE" "$GOBIN"
       - |
         if [ ! -x "$SWAGGER_BIN" ]; then
@@ -69,21 +66,13 @@ steps:
 
   - name: build-check
     image: dhi.io/golang:1.26.5-debian13-dev@sha256:c15c327d115e8af76f50fb5dc9da2d81280527ff6da30b5eb423499eb42c5897
-    environment:
-      GOMODCACHE: ${CI_WORKSPACE}/.cache/harbor/go-mod
-      GOCACHE: ${CI_WORKSPACE}/.cache/harbor/go-build
     commands:
+      - export GOMODCACHE="$${CI_WORKSPACE}/.cache/harbor/go-mod" GOCACHE="$${CI_WORKSPACE}/.cache/harbor/go-build"
       - mkdir -p "$GOMODCACHE" "$GOCACHE"
       - cd src
       - go mod verify
-      - echo "Building core..."
-      - CGO_ENABLED=0 go build -mod=mod -o /dev/null ./core
-      - echo "Building jobservice..."
-      - CGO_ENABLED=0 go build -mod=mod -o /dev/null ./jobservice
-      - echo "Building registryctl..."
-      - CGO_ENABLED=0 go build -mod=mod -o /dev/null ./registryctl
-      - echo "Building exporter..."
-      - CGO_ENABLED=0 go build -mod=mod -o /dev/null ./cmd/exporter
+      # One invocation builds all four in parallel and discards the binaries.
+      - CGO_ENABLED=0 go build -mod=mod ./core ./jobservice ./registryctl ./cmd/exporter
       - echo "All 4 components compile successfully."
 
   - name: rebuild-go-cache
