@@ -39,7 +39,7 @@ steps:
         esac
 
   - name: build-nginx
-    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
       registry: ghcr.io
@@ -65,7 +65,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-portal
-    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
       registry: ghcr.io
@@ -91,7 +91,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-core
-    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
       registry: ghcr.io
@@ -120,7 +120,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-jobservice
-    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
       registry: ghcr.io
@@ -149,7 +149,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-registry
-    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
       registry: ghcr.io
@@ -175,7 +175,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-registryctl
-    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
       registry: ghcr.io
@@ -204,7 +204,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-db
-    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
       registry: ghcr.io
@@ -230,7 +230,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-trivy-adapter
-    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
       registry: ghcr.io
@@ -256,7 +256,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-exporter
-    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
       registry: ghcr.io
@@ -285,7 +285,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-valkey
-    image: woodpeckerci/plugin-docker-buildx:6.1.1@sha256:9a22c00b4952e405d11e66d29772edbeb1f7b24f27f71cda251ecb838e725e86
+    image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
       registry: ghcr.io
