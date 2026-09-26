@@ -30,13 +30,6 @@
   ],
   "packageRules": [
     {
-      "description": "Disable dhi.io images — private registry, Renovate cannot resolve digests",
-      "enabled": false,
-      "matchPackageNames": [
-        "/^dhi\\.io//"
-      ]
-    },
-    {
       "description": "Disable digest pinning and updates for all Docker images",
       "matchManagers": [
         "dockerfile",
@@ -49,6 +42,16 @@
         "digest"
       ],
       "enabled": false
+    },
+    {
+      "description": "DHI rebuilds a tag in place to ship Debian security fixes, so dhi.io digest refreshes stay on (the shared base config resolves dhi.io and groups these as dhi base images)",
+      "matchPackageNames": [
+        "/^dhi\\.io//"
+      ],
+      "matchUpdateTypes": [
+        "digest"
+      ],
+      "enabled": true
     },
     {
       "description": "Group all goharbor Docker images (test fixtures + docker-compose)",
