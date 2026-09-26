@@ -349,7 +349,7 @@ steps:
 
   - name: promote-ghcr
     depends_on: [trivy-scan]
-    image: "dhi.io/crane:0.21.7-debian13-dev@sha256:9e10a9ed1d204f70873bd656d9d823f63ff0e9d138261fa34d85155499e1d982"
+    image: "dhi.io/crane:0.21.9-debian13-dev@sha256:3fb565e1e3aef17a5f7bf9bb697e88cdad502f94b775f8998db7ac94ee164994"
     environment:
       REGISTRY_USERNAME:
         from_secret: github_username
@@ -366,7 +366,7 @@ steps:
 
   - name: cosign-sign
     depends_on: [promote-ghcr]
-    image: "dhi.io/cosign:3.0.5-debian13-dev"
+    image: "dhi.io/cosign:3.1.3-debian13-dev"
     environment:
       COSIGN_EXPERIMENTAL: "1"
       COSIGN_KEY:
