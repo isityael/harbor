@@ -54,6 +54,12 @@
       "enabled": true
     },
     {
+      "description": "harbor-db pairs an upgrade-source and a runtime PostgreSQL major with the entrypoint's \"15\" \"18\" arguments (.ci/test-db-image-pins.sh); a major move is a deliberate upgrade, never a Renovate bump",
+      "matchPackageNames": ["dhi.io/postgres"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
       "description": "Group all goharbor Docker images (test fixtures + docker-compose)",
       "groupName": "goharbor docker images",
       "matchManagers": [
