@@ -27,8 +27,12 @@ workspace:
   base: /woodpecker
   path: /
 
+# The ten images are independent. They build three at a time (the three
+# slowest first), because every pod of a workflow is pinned to one worker and
+# each buildx pod may use up to 4Gi. Serial builds took 22-36 min.
 steps:
   - name: validate-version
+    depends_on: []
     image: "dhi.io/busybox:1.37.0-debian13"
     commands:
       - test -n "$CI_COMMIT_TAG"
@@ -39,6 +43,7 @@ steps:
         esac
 
   - name: build-nginx
+    depends_on: [build-registryctl, build-exporter, build-registry]
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
@@ -65,6 +70,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-portal
+    depends_on: [validate-version]
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
@@ -91,6 +97,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-core
+    depends_on: [validate-version]
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
@@ -120,6 +127,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-jobservice
+    depends_on: [validate-version]
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
@@ -149,6 +157,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-registry
+    depends_on: [build-portal, build-core, build-jobservice]
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
@@ -175,6 +184,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-registryctl
+    depends_on: [build-portal, build-core, build-jobservice]
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
@@ -204,6 +214,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-db
+    depends_on: [build-registryctl, build-exporter, build-registry]
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
@@ -230,6 +241,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-trivy-adapter
+    depends_on: [build-registryctl, build-exporter, build-registry]
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
@@ -256,6 +268,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-exporter
+    depends_on: [build-portal, build-core, build-jobservice]
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
@@ -285,6 +298,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: build-valkey
+    depends_on: [build-registryctl, build-exporter, build-registry]
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
@@ -311,6 +325,7 @@ steps:
       buildkit_driveropt: "network=host"
 
   - name: trivy-scan
+    depends_on: [build-portal, build-core, build-jobservice, build-registryctl, build-exporter, build-registry, build-trivy-adapter, build-db, build-valkey, build-nginx]
     image: "aquasec/trivy:0.74.0@sha256:62b1e65e8869bc4b4c6aa4fa2b21595256c7c2f6018a9d9ad61caf87187c1969"
     environment:
       TRIVY_USERNAME:
@@ -319,13 +334,21 @@ steps:
         from_secret: github_token
     commands:
       - |
+        # Scan every image before failing so one release run reports all
+        # CRITICAL findings, not just the first image that has one.
+        failed=""
         for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
           ref="ghcr.io/isityael/$${image}:candidate-${CI_COMMIT_TAG}"
-          trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed "$${ref}"
+          trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed "$${ref}" || failed="$${failed} $${image}"
           trivy image --scanners vuln --skip-version-check --exit-code 0 --severity HIGH --ignore-unfixed "$${ref}"
         done
+        if [ -n "$${failed}" ]; then
+          echo "CRITICAL vulnerabilities in:$${failed}" >&2
+          exit 1
+        fi
 
   - name: promote-ghcr
+    depends_on: [trivy-scan]
     image: "dhi.io/crane:0.21.7-debian13-dev@sha256:9e10a9ed1d204f70873bd656d9d823f63ff0e9d138261fa34d85155499e1d982"
     environment:
       REGISTRY_USERNAME:
@@ -342,6 +365,7 @@ steps:
         done
 
   - name: cosign-sign
+    depends_on: [promote-ghcr]
     image: "dhi.io/cosign:3.0.5-debian13-dev"
     environment:
       COSIGN_EXPERIMENTAL: "1"
@@ -363,6 +387,7 @@ steps:
       - rm -f /tmp/cosign.key
 
   - name: notation-sign
+    depends_on: [cosign-sign]
     image: "dhi.io/notation:1.3.2-debian13-dev"
     environment:
       NOTATION_KEY:

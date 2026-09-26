@@ -10,7 +10,6 @@ on:
       - make/**
       - build/**
       - VERSION
-      - .woodpecker/lint.yaml
       - .woodpecker/release.yaml
       - .forgejo/workflows/release-tag.yaml
   workflow_dispatch:
