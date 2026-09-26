@@ -22,6 +22,15 @@ clone:
       tags: false
 
 steps:
+  # Seconds-long repo contracts, first so a broken pin fails before the Go work.
+  # harbor-db's image pins are only built at release time, so without this a
+  # PR that moves the PostgreSQL upgrade stage to the wrong major merged green.
+  - name: repo-contracts
+    image: dhi.io/golang:1.26.5-debian13-dev@sha256:c15c327d115e8af76f50fb5dc9da2d81280527ff6da30b5eb423499eb42c5897
+    commands:
+      - bash .ci/test-db-image-pins.sh
+      - bash .ci/test-auto-release.sh
+
   - name: renovate-go-artifacts
     image: dhi.io/golang:1.26.5-debian13-dev@sha256:c15c327d115e8af76f50fb5dc9da2d81280527ff6da30b5eb423499eb42c5897
     volumes:
