@@ -1,5 +1,5 @@
 # Dockerfile for Harbor's nginx gateway built on a DHI nginx base.
-ARG RUNTIME_IMAGE=dhi.io/nginx:1.31.6-debian13-dev@sha256:8f09c007249e38bf96913610e21747f3c3c8d685f3a1da41250ce0b7e98fbd56
+ARG RUNTIME_IMAGE=dhi.io/nginx:1.31.6-debian13-dev@sha256:1478a971c8696b8a71b748570ba5f3964c8af2a9393c56c6c1d8aa2e9b432d88
 
 FROM ${RUNTIME_IMAGE}
 
