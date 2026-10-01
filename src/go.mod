@@ -76,7 +76,7 @@ require (
 	github.com/aws/smithy-go v1.28.2
 	github.com/bmatcuk/doublestar/v4 v4.10.2
 	github.com/casbin/casbin/v3 v3.10.0
-	github.com/cenkalti/backoff/v7 v7.0.0
+	github.com/cenkalti/backoff/v7 v7.0.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/goccy/go-yaml v1.19.2
 	github.com/jackc/pgx/v5 v5.11.0
@@ -86,9 +86,9 @@ require (
 
 require (
 	cloud.google.com/go v0.123.0 // indirect
-	cloud.google.com/go/auth v0.23.3 // indirect
-	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
-	cloud.google.com/go/compute/metadata v0.9.1 // indirect
+	cloud.google.com/go/auth v0.24.0 // indirect
+	cloud.google.com/go/auth/oauth2adapt v0.3.0 // indirect
+	cloud.google.com/go/compute/metadata v0.10.0 // indirect
 	cloud.google.com/go/iam v1.12.0 // indirect
 	github.com/Azure/azure-sdk-for-go v68.0.0+incompatible // indirect
 	github.com/Azure/go-autorest v14.2.0+incompatible // indirect
@@ -157,7 +157,7 @@ require (
 	github.com/google/s2a-go v0.1.10 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.22 // indirect
 	github.com/googleapis/gax-go v1.0.3 // indirect
-	github.com/googleapis/gax-go/v2 v2.24.1 // indirect
+	github.com/googleapis/gax-go/v2 v2.26.2 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.30.0 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
@@ -242,7 +242,7 @@ replace (
 	github.com/gocraft/work => github.com/goharbor/work v0.5.1
 	github.com/goharbor/harbor => ../
 	github.com/gomodule/redigo => github.com/gomodule/redigo v1.9.3
-	google.golang.org/api => google.golang.org/api v0.299.0
+	google.golang.org/api => google.golang.org/api v0.300.0
 )
 
 ignore portal
