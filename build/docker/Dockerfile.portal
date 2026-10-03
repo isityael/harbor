@@ -1,6 +1,6 @@
 # Multi-stage Dockerfile for harbor-portal built on DHI bases.
-ARG NODE_IMAGE=dhi.io/node:26.10.0-debian13-dev@sha256:0556b3ec03bf92b2a499d3615038ce15a922795b8f638aef3b8757507494f154
-ARG RUNTIME_IMAGE=dhi.io/nginx:1.31.6-debian13-dev@sha256:1478a971c8696b8a71b748570ba5f3964c8af2a9393c56c6c1d8aa2e9b432d88
+ARG NODE_IMAGE=dhi.io/node:26.10.0-debian13-dev@sha256:989bf83884f9a8197fffbf981b5304ff0e5a79870bce63fc279930b7ab07a4fc
+ARG RUNTIME_IMAGE=dhi.io/nginx:1.31.6-debian13-dev@sha256:32e434084ff7e82629abc090c534fa0b02ebf1a7465f8029314bf9e95349c3a1
 
 FROM --platform=$BUILDPLATFORM ${NODE_IMAGE} AS nodeportal
 WORKDIR /build_dir
