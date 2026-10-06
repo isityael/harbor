@@ -1,6 +1,6 @@
 # Dockerfile for Harbor's internal PostgreSQL image built on a DHI PostgreSQL base.
-ARG POSTGRES_15_IMAGE=dhi.io/postgres:15.19-debian13-dev@sha256:4bcfad9713b9706bd7115b3d2984b8d691eac7a67230c65a774b0ef9b91eeff7
-ARG RUNTIME_IMAGE=dhi.io/postgres:18.6-debian13-dev@sha256:934071ebbde716cae249348d0b7cb23900328c751e9b11df03907dd26c7b3304
+ARG POSTGRES_15_IMAGE=dhi.io/postgres:15.19-debian13-dev@sha256:c4b11b56b5cebbace22f7b4dc6a9a17cd24d6026e0202f4d855a0e74e5071e37
+ARG RUNTIME_IMAGE=dhi.io/postgres:18.6-debian13-dev@sha256:2547592fc99aa1aee4a4b43f49512523f360f54ec6c16d07b0f078ba08267a78
 
 FROM ${POSTGRES_15_IMAGE} AS postgres15
 
