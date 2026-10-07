@@ -9,6 +9,7 @@
 
 @mixin text-overflow-param($width) {
     width: $width;
+
     @include text-overflow;
 }
 
