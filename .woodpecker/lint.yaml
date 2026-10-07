@@ -26,13 +26,13 @@ steps:
   # harbor-db's image pins are only built at release time, so without this a
   # PR that moves the PostgreSQL upgrade stage to the wrong major merged green.
   - name: repo-contracts
-    image: dhi.io/golang:1.27.1-debian13-dev@sha256:74de22d4df55d889f4a4217a582149afe5ac26a2f2b01c97f1b322fe2079b005
+    image: dhi.io/golang:1.27.1-debian13-dev@sha256:921767b6ce6c775687c4709168c143a0b7c56ce2bb049872110cc26027735bb3
     commands:
       - bash .ci/test-db-image-pins.sh
       - bash .ci/test-auto-release.sh
 
   - name: renovate-go-artifacts
-    image: dhi.io/golang:1.27.1-debian13-dev@sha256:74de22d4df55d889f4a4217a582149afe5ac26a2f2b01c97f1b322fe2079b005
+    image: dhi.io/golang:1.27.1-debian13-dev@sha256:921767b6ce6c775687c4709168c143a0b7c56ce2bb049872110cc26027735bb3
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
@@ -42,7 +42,7 @@ steps:
       - bash .ci/test-renovate-go-artifacts.sh
 
   - name: generate-swagger
-    image: dhi.io/golang:1.27.1-debian13-dev@sha256:74de22d4df55d889f4a4217a582149afe5ac26a2f2b01c97f1b322fe2079b005
+    image: dhi.io/golang:1.27.1-debian13-dev@sha256:921767b6ce6c775687c4709168c143a0b7c56ce2bb049872110cc26027735bb3
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
@@ -67,7 +67,7 @@ steps:
         --target src/server/v2.0
 
   - name: build-check
-    image: dhi.io/golang:1.27.1-debian13-dev@sha256:74de22d4df55d889f4a4217a582149afe5ac26a2f2b01c97f1b322fe2079b005
+    image: dhi.io/golang:1.27.1-debian13-dev@sha256:921767b6ce6c775687c4709168c143a0b7c56ce2bb049872110cc26027735bb3
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
