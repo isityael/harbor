@@ -1,5 +1,5 @@
 # Multi-stage Dockerfile for harbor-trivy-adapter built on DHI bases.
-ARG GO_IMAGE=dhi.io/golang:1.27.1-alpine3.24-dev@sha256:89778e746908997996f8e1de415d9834154eac97a43298ea54bdb74f78116430
+ARG GO_IMAGE=dhi.io/golang:1.27.1-alpine3.24-dev@sha256:c064f917ac262a07d24d3255eeeb57bd5d96d24218897d1d81edd35e9f411f45
 ARG TRIVY_IMAGE=aquasec/trivy:0.75.0@sha256:af6acf9a6b85dfe389a1941505c0ce9efef52a4719635e1a962f022a3d855daa
 ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24@sha256:a741d4f1ccaf31f9394a36477e50df4620a8030dbff3d9a2ea8e84672b683ada
 ARG TRIVY_ADAPTER_VERSION=v0.38.0-rc1
