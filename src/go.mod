@@ -15,12 +15,12 @@ require (
 	github.com/go-asn1-ber/asn1-ber v1.5.8
 	github.com/go-ldap/ldap/v3 v3.4.15
 	github.com/go-openapi/errors v0.22.9
-	github.com/go-openapi/loads v0.25.3
+	github.com/go-openapi/loads v0.25.3 // indirect
 	github.com/go-openapi/runtime v0.33.3
-	github.com/go-openapi/spec v1.0.1
+	github.com/go-openapi/spec v1.0.1 // indirect
 	github.com/go-openapi/strfmt v0.27.3
 	github.com/go-openapi/swag v0.29.2
-	github.com/go-openapi/validate v1.0.0
+	github.com/go-openapi/validate v1.0.0 // indirect
 	github.com/gocarina/gocsv v0.0.0-20260926200228-b2c6eb8fefab
 	github.com/gocraft/work v0.5.1
 	github.com/golang-jwt/jwt/v5 v5.3.1
@@ -57,8 +57,8 @@ require (
 	golang.org/x/crypto v0.57.0 // indirect
 	golang.org/x/net v0.59.0 // indirect
 	golang.org/x/oauth2 v0.37.0
-	golang.org/x/sync v0.23.0
-	golang.org/x/text v0.42.0
+	golang.org/x/sync v0.24.0
+	golang.org/x/text v0.43.0
 	golang.org/x/time v0.16.0
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	k8s.io/api v0.37.1
