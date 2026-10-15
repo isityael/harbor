@@ -7,7 +7,7 @@ WORKDIR /build_dir
 
 ARG npm_registry=https://registry.npmjs.org
 
-RUN npm install --global --force npm@12.0.1
+RUN npm install --global --force npm@12.2.0
 
 COPY ./api/v2.0/swagger.yaml /build_dir/swagger.yaml
 COPY src/portal /build_dir

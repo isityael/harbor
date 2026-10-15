@@ -31,6 +31,16 @@ steps:
       - bash .ci/test-db-image-pins.sh
       - bash .ci/test-auto-release.sh
 
+  # Validate clean Linux npm resolution before release-only image builds.
+  - name: portal-lockfiles
+    image: dhi.io/node:26.11.1-debian13-dev@sha256:45c70bf430695765dc3227298e548c6c393e3a53b92aaf1a7f8389c22902bce0
+    commands:
+      - npm install --global --force npm@12.2.0
+      - cd src/portal
+      - npm ci --dry-run --ignore-scripts --no-audit --no-fund
+      - cd app-swagger-ui
+      - npm ci --dry-run --ignore-scripts --no-audit --no-fund
+
   - name: renovate-go-artifacts
     image: dhi.io/golang:1.27.2-debian13-dev@sha256:58f9e2927dd152c3759c9123c97f48d9376c5d1a704b7246b70a31f041c78515
     volumes:
@@ -49,11 +59,11 @@ steps:
       GOMODCACHE: /woodpecker/cache/harbor/go-mod
       GOCACHE: /woodpecker/cache/harbor/go-build
     commands:
-      - export GOBIN=/woodpecker/cache/harbor/bin SWAGGER_BIN=/woodpecker/cache/harbor/bin/swagger-v0.33.1
+      - export GOBIN=/woodpecker/cache/harbor/bin SWAGGER_BIN=/woodpecker/cache/harbor/bin/swagger-v0.36.6
       - mkdir -p "$GOMODCACHE" "$GOCACHE" "$GOBIN"
       - |
         if [ ! -x "$SWAGGER_BIN" ]; then
-          go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1
+          go install github.com/go-swagger/go-swagger/cmd/swagger@v0.36.6
           mv "$GOBIN/swagger" "$SWAGGER_BIN"
         fi
       - timeout 10m "$SWAGGER_BIN" generate server

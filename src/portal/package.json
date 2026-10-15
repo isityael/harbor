@@ -103,7 +103,10 @@
         "typescript-eslint": "8.71.2"
     },
     "overrides": {
-        "yargs": "17.7.2"
+        "yargs": "17.7.2",
+        "ngx-markdown": {
+            "katex": "$katex"
+        }
     },
     "allowScripts": {
         "msgpackr-extract@3.0.4": true,

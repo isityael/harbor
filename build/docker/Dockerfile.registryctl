@@ -44,7 +44,7 @@ COPY src/ ./src/
 COPY api/ ./api/
 COPY tools/swagger/templates/ ./tools/swagger/templates/
 
-RUN --mount=type=cache,target=/go/pkg/mod go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1 \
+RUN --mount=type=cache,target=/go/pkg/mod go install github.com/go-swagger/go-swagger/cmd/swagger@v0.36.6 \
     && swagger generate server \
     --template-dir=tools/swagger/templates \
     --exclude-main \
