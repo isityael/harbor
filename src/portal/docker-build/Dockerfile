@@ -2,7 +2,7 @@ FROM dhi.io/node:26.11.1-debian13-dev@sha256:45c70bf430695765dc3227298e548c6c393
 
 WORKDIR /build_dir
 
-RUN npm install --global --force npm@12.0.1
+RUN npm install --global --force npm@12.2.0
 
 COPY src/portal /build_dir
 COPY api/v2.0/swagger.yaml /build_dir/swagger.yaml

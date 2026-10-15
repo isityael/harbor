@@ -49,11 +49,11 @@ steps:
       GOMODCACHE: /woodpecker/cache/harbor/go-mod
       GOCACHE: /woodpecker/cache/harbor/go-build
     commands:
-      - export GOBIN=/woodpecker/cache/harbor/bin SWAGGER_BIN=/woodpecker/cache/harbor/bin/swagger-v0.33.1
+      - export GOBIN=/woodpecker/cache/harbor/bin SWAGGER_BIN=/woodpecker/cache/harbor/bin/swagger-v0.36.6
       - mkdir -p "$GOMODCACHE" "$GOCACHE" "$GOBIN"
       - |
         if [ ! -x "$SWAGGER_BIN" ]; then
-          go install github.com/go-swagger/go-swagger/cmd/swagger@v0.33.1
+          go install github.com/go-swagger/go-swagger/cmd/swagger@v0.36.6
           mv "$GOBIN/swagger" "$SWAGGER_BIN"
         fi
       - timeout 10m "$SWAGGER_BIN" generate server
