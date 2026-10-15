@@ -11,6 +11,11 @@ ARG TARGETARCH=amd64
 
 WORKDIR /src
 RUN git clone --depth 1 --branch "${TRIVY_ADAPTER_VERSION}" https://github.com/goharbor/harbor-scanner-trivy.git .
+# Patch the adapter's networking and Redis dependencies while preserving its upstream
+# go-containerregistry replacement and Docker API major version.
+RUN go get golang.org/x/net@v0.61.0 golang.org/x/crypto@v0.58.0 \
+    golang.org/x/sys@v0.49.0 golang.org/x/text@v0.43.0 \
+    github.com/redis/go-redis/v9@v9.23.0
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     go build -mod=mod -o /out/scanner-trivy cmd/scanner-trivy/main.go
 
