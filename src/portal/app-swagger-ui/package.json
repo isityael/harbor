@@ -2,10 +2,10 @@
     "name": "harbor-swagger-ui",
     "version": "2.10.0",
     "description": "Swagger UI for Harbor APIs",
-    "packageManager": "npm@12.0.1",
+    "packageManager": "npm@12.2.0",
     "engines": {
         "node": ">=26.5.0",
-        "npm": ">=12.0.1"
+        "npm": ">=12.2.0"
     },
     "scripts": {
         "build": "webpack --config webpack.prod.js && mv dist/index.html dist/swagger-ui-index.html",
@@ -14,13 +14,13 @@
     "dependencies": {
         "css-loader": "^7.1.5",
         "style-loader": "^4.0.0",
-        "swagger-ui": "5.32.15"
+        "swagger-ui": "5.33.2"
     },
     "devDependencies": {
         "clean-webpack-plugin": "^4.0.0",
         "copy-webpack-plugin": "^14.0.0",
         "html-webpack-plugin": "^5.6.8",
-        "webpack": "^5.111.0",
+        "webpack": "^5.111.1",
         "webpack-cli": "^7.2.3",
         "webpack-dev-server": "^6.0.0"
     },

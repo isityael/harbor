@@ -131,13 +131,13 @@ PREPARE_VERSION_NAME=versions
 
 #versions
 REGISTRYVERSION=v2.8.3-patch-redis
-TRIVYVERSION=v0.72.0
-TRIVYADAPTERVERSION=v0.38.0-rc1
+TRIVYVERSION=v0.75.0
+TRIVYADAPTERVERSION=v0.39.1
 
-NODEBUILDIMAGE=dhi.io/node:26.5.0-debian13-dev@sha256:728bf5fbed66fdcbe3474b5fb343a1480ee093dfd4da6dd5afaf5337ac66150c
+NODEBUILDIMAGE=dhi.io/node:26.11.1-debian13-dev@sha256:45c70bf430695765dc3227298e548c6c393e3a53b92aaf1a7f8389c22902bce0
 
 # version of registry for pulling the source code
-REGISTRY_SRC_TAG=v2.8.3-harbor.1
+REGISTRY_SRC_TAG=v2.8.3-harbor.2
 # source of upstream distribution code
 DISTRIBUTION_SRC=https://github.com/goharbor/distribution.git
 
@@ -176,7 +176,7 @@ GOINSTALL=$(GOCMD) install
 GOTEST=$(GOCMD) test
 GODEP=$(GOTEST) -i
 GOFMT=gofmt -w
-GOBUILDIMAGE=dhi.io/golang:1.26.5-alpine3.24-dev@sha256:711ea0b8f09f549c50f2f550dc26859d3e6441ca11d5640caecf69c29a862f0c
+GOBUILDIMAGE=dhi.io/golang:1.27.2-alpine3.24-dev@sha256:9a9160e3c89a37572e35271c65a2b38a2d1671c8ab0d6abee19ce3d6cecb9be9
 GOBUILDPATHINCONTAINER=/harbor
 
 # go build
@@ -361,7 +361,7 @@ gen_apis: check_docker
 
 MOCKERY_IMAGENAME=$(IMAGENAMESPACE)/mockery
 MOCKERY_VERSION=v2.53.3
-MOCKERY=$(RUNCONTAINER)/src ${MOCKERY_IMAGENAME}:${MOCKERY_VERSION}
+MOCKERY=$(RUNCONTAINER)/src -e XDG_CACHE_HOME=/tmp ${MOCKERY_IMAGENAME}:${MOCKERY_VERSION}
 MOCKERY_IMAGE_BUILD_CMD=${DOCKERBUILD} -f ${TOOLSPATH}/mockery/Dockerfile --build-arg GOLANG=${GOBUILDIMAGE} --build-arg MOCKERY_VERSION=${MOCKERY_VERSION} -t ${MOCKERY_IMAGENAME}:$(MOCKERY_VERSION) .
 
 gen_mocks:
@@ -529,10 +529,30 @@ misspell:
 	@find . -type d \( -path ./tests \) -prune -o -name '*.go' -print | xargs misspell -error
 
 # golangci-lint binary installation or refer to https://golangci-lint.run/usage/install/#local-installation
-# curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.9.0
+# curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/main/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.14.0
+GOLANGCI_LINT_VERSION := v2.14.0
 GOPATH_BIN := $(firstword $(subst :, ,$(shell go env GOPATH)))/bin
 GOLANGCI_LINT := $(GOPATH_BIN)/golangci-lint
-lint:
+
+check_golangci_lint:
+	@if ! command -v $(GOLANGCI_LINT) >/dev/null 2>&1 && [ ! -x "$(GOLANGCI_LINT)" ]; then \
+		echo "Error: $(GOLANGCI_LINT) is not installed or not executable." >&2; \
+		echo "Please install it with:" >&2; \
+		echo "  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/main/install.sh | sh -s -- -b $(GOPATH_BIN) $(GOLANGCI_LINT_VERSION)" >&2; \
+		exit 1; \
+	fi
+	@current_version=$$($(GOLANGCI_LINT) --version 2>/dev/null); \
+	expected_version="$(patsubst v%,%,$(GOLANGCI_LINT_VERSION))"; \
+	if ! echo "$$current_version" | grep -qE "( |v)$${expected_version}( |$$)"; then \
+		echo "Error: $(GOLANGCI_LINT) version mismatch." >&2; \
+		echo "Expected: $(GOLANGCI_LINT_VERSION)" >&2; \
+		echo "Current:  $$current_version" >&2; \
+		echo "Please update or reinstall it with:" >&2; \
+		echo "  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/main/install.sh | sh -s -- -b $(GOPATH_BIN) $(GOLANGCI_LINT_VERSION)" >&2; \
+		exit 1; \
+	fi
+
+lint: check_golangci_lint
 	@echo checking lint
 	@echo $(GOLANGCI_LINT)
 	@cd ./src/; $(GOLANGCI_LINT) cache clean; $(GOLANGCI_LINT) -v run ./... --timeout=10m;

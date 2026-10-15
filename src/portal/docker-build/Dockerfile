@@ -1,4 +1,4 @@
-FROM dhi.io/node:26.5.0-debian13-dev@sha256:728bf5fbed66fdcbe3474b5fb343a1480ee093dfd4da6dd5afaf5337ac66150c AS builder
+FROM dhi.io/node:26.11.1-debian13-dev@sha256:45c70bf430695765dc3227298e548c6c393e3a53b92aaf1a7f8389c22902bce0 AS builder
 
 WORKDIR /build_dir
 
@@ -19,7 +19,7 @@ RUN python3 -c 'import sys, yaml, json; y=yaml.safe_load(sys.stdin.read()); prin
 RUN cd app-swagger-ui && npm ci
 RUN cd app-swagger-ui && npm run build
 
-FROM dhi.io/nginx:1.31.3-debian13-dev@sha256:c0f34463d05737646ba965de939e228e6af7a90b4d84ceba3d5634e70740df45
+FROM dhi.io/nginx:1.31.6-debian13-dev@sha256:8f8a690387d75205568103d234f2b6a348f6ee8183708de0e501cc3f8a5d5df0
 
 USER 0
 RUN apt-get update && apt-get install -y --no-install-recommends curl \

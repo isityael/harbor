@@ -7,6 +7,7 @@
         "declaration": false,
         "strict": false,
         "experimentalDecorators": true,
+        "preserveConstEnums": true,
         "moduleResolution": "bundler",
         "importHelpers": true,
         "target": "ES2022",

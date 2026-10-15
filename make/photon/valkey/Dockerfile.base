@@ -1,4 +1,4 @@
-FROM dhi.io/valkey:9.1.0-debian13-dev@sha256:f199131cf2f022eeba9731572ab0fe1413a10609cb5e24d9ea5c9dec1615deb3
+FROM dhi.io/valkey:9.1.2-debian13-dev@sha256:652943b82f57ff9a9e435063e3700dd1c4fc0787c9f32621c741a3d71c1ff81b
 
 USER 0
 RUN apt-get update && apt-get install -y --no-install-recommends passwd \
