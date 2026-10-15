@@ -28,6 +28,30 @@
     "github.com/opencontainers/go-digest",
     "github.com/robfig/cron/v3"
   ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Track registry distribution dependency overrides shared by release images and PR builds",
+      "managerFilePatterns": [
+        "/^build\\/docker\\/prepare-distribution\\.sh$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=go depName=(?<depName>[^\\s]+)\\n[A-Z0-9_]+=(?<currentValue>v[^\\s]+)"
+      ],
+      "datasourceTemplate": "go"
+    },
+    {
+      "customType": "regex",
+      "description": "Track inline Go module overrides in the Trivy adapter image",
+      "managerFilePatterns": [
+        "/^build\\/docker\\/Dockerfile\\.trivy-adapter$/"
+      ],
+      "matchStrings": [
+        "(?<depName>[A-Za-z0-9.-]+\\.[A-Za-z]+/[A-Za-z0-9._/-]+)@(?<currentValue>v[0-9][^\\s\\\\]*)"
+      ],
+      "datasourceTemplate": "go"
+    }
+  ],
   "packageRules": [
     {
       "description": "Disable digest pinning and updates for all Docker images",

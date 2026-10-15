@@ -1,0 +1,51 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://git.m0sh1.cc/isityael/harbor/distribution-vex/ac7c4cedc2f4d45347630beceaaa1639bb9c771a",
+  "author": "isityael/harbor maintainers",
+  "timestamp": "2026-10-15T11:28:21Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2017-11468",
+        "@id": "https://github.com/advisories/GHSA-h62f-wm92-2cmw"
+      },
+      "products": [
+        {
+          "@id": "pkg:golang/github.com/docker/distribution@v0.0.0-20260921091602-ac7c4cedc2f4%2Bdirty"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "The fork contains upstream fix 91c507a39abfce14b5c8541cf284330e22208c0f: manifest PUT is bounded to 4 MiB and blobStore.Get uses getContent/readAllLimited with a 4 MiB limit for stored manifest GET. Source: https://github.com/goharbor/distribution/tree/ac7c4cedc2f4d45347630beceaaa1639bb9c771a. Go assigns this modified fork a v0 pseudo-version, which incorrectly compares below the fixed v2 release. .ci/test-distribution-vex.py verifies the exact source tag, commit and security-file fingerprints; runtime regression tests exercise the fixed boundaries."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-2253",
+        "@id": "https://github.com/distribution/distribution/security/advisories/GHSA-hqxw-f8mx-cpmw"
+      },
+      "products": [
+        {
+          "@id": "pkg:golang/github.com/docker/distribution@v0.0.0-20260921091602-ac7c4cedc2f4%2Bdirty"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "The fork contains upstream v2 fix 521ea3d973cb0c7089ebbcdd4ccadc34be941f54: catalog GetCatalog validates n against Catalog.MaxEntries before allocating, including its default path. Source: https://github.com/goharbor/distribution/tree/ac7c4cedc2f4d45347630beceaaa1639bb9c771a. Go assigns this modified fork a v0 pseudo-version, which incorrectly compares below the fixed v2 release. .ci/test-distribution-vex.py verifies the exact source tag, commit and security-file fingerprints; runtime regression tests exercise the fixed boundaries."
+    },
+    {
+      "vulnerability": {
+        "name": "GHSA-qq97-vm5h-rrhg",
+        "@id": "https://github.com/distribution/distribution/security/advisories/GHSA-qq97-vm5h-rrhg"
+      },
+      "products": [
+        {
+          "@id": "pkg:golang/github.com/docker/distribution@v0.0.0-20260921091602-ac7c4cedc2f4%2Bdirty"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "The fork contains v2 fix 10ade61de947ac08c6d39d417c88bb5dd3cd2c89 (the v2 counterpart of main b59a6f827947f9e0e67df0cfb571046de4733586): validateManifest rejects index fields and validateIndex rejects manifest config/layers before unmarshal, including documents without mediaType. Source: https://github.com/goharbor/distribution/tree/ac7c4cedc2f4d45347630beceaaa1639bb9c771a. Go assigns this modified fork a v0 pseudo-version, which incorrectly compares below the fixed v2 release. .ci/test-distribution-vex.py verifies the exact source tag, commit and security-file fingerprints; runtime regression tests exercise the fixed boundaries."
+    }
+  ]
+}

@@ -333,14 +333,21 @@ steps:
       TRIVY_PASSWORD:
         from_secret: github_token
     commands:
+      - apk add --no-cache python3 git
+      - python3 .ci/test-distribution-vex.py --fetch-source
       - |
         # Scan every image before failing so one release run reports all
         # CRITICAL findings, not just the first image that has one.
         failed=""
         for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
           ref="ghcr.io/isityael/$${image}:candidate-${CI_COMMIT_TAG}"
-          trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed "$${ref}" || failed="$${failed} $${image}"
-          trivy image --scanners vuln --skip-version-check --exit-code 0 --severity HIGH --ignore-unfixed "$${ref}"
+          set --
+          case "$${image}" in
+            registry-photon|harbor-registryctl)
+              set -- --vex build/docker/distribution.openvex.json ;;
+          esac
+          trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed "$@" "$${ref}" || failed="$${failed} $${image}"
+          trivy image --scanners vuln --skip-version-check --exit-code 0 --severity HIGH --ignore-unfixed "$@" "$${ref}"
         done
         if [ -n "$${failed}" ]; then
           echo "CRITICAL vulnerabilities in:$${failed}" >&2
