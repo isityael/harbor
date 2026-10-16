@@ -34,7 +34,7 @@ steps:
 
   # Validate clean Linux npm resolution before release-only image builds.
   - name: portal-lockfiles
-    image: dhi.io/node:26.11.1-debian13-dev@sha256:45c70bf430695765dc3227298e548c6c393e3a53b92aaf1a7f8389c22902bce0
+    image: dhi.io/node:26.12.0-debian13-dev@sha256:0f2693c8869e64ce84115fc6ae53b5d440049979cc9ffe053cc4678077e20980
     commands:
       - npm install --global --force npm@12.2.0
       - cd src/portal
