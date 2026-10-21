@@ -1,5 +1,5 @@
 # DHI Debian-based API test image
-FROM dhi.io/debian-base:trixie-debian13-dev@sha256:c6fc0de84b65bc20346cee5f071fd976ccf383431515db2a4d9721ca936feb9f
+FROM dhi.io/debian-base:trixie-debian13-dev@sha256:9b025768946856e44f9775005eb199f2e1820484ea27bb5c8bcbb187b80464dc
 ENV LANG=C.UTF-8
 ENV HELM_EXPERIMENTAL_OCI=1
 ENV COSIGN_PASSWORD=Harbor12345
