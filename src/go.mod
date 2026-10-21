@@ -9,8 +9,8 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.47.3
 	github.com/aws/aws-sdk-go-v2/config v1.33.9
 	github.com/aws/aws-sdk-go-v2/credentials v1.20.9
-	github.com/aws/aws-sdk-go-v2/service/ecr v1.66.4
-	github.com/aws/smithy-go v1.28.5
+	github.com/aws/aws-sdk-go-v2/service/ecr v1.66.5
+	github.com/aws/smithy-go v1.28.6
 	github.com/beego/beego/v2 v2.3.10
 	github.com/beego/i18n v0.0.0-20161101132742-e9308947f407
 	github.com/bmatcuk/doublestar/v4 v4.10.3
@@ -24,12 +24,9 @@ require (
 	github.com/go-asn1-ber/asn1-ber v1.5.8
 	github.com/go-ldap/ldap/v3 v3.4.15
 	github.com/go-openapi/errors v0.22.9
-	github.com/go-openapi/loads v0.25.3
 	github.com/go-openapi/runtime v0.33.3
-	github.com/go-openapi/spec v1.0.1
 	github.com/go-openapi/strfmt v0.27.3
 	github.com/go-openapi/swag v0.29.2
-	github.com/go-openapi/validate v1.0.0
 	github.com/gocarina/gocsv v0.0.0-20261012193826-401c25af6907
 	github.com/goccy/go-yaml v1.19.2
 	github.com/gocraft/work v0.5.1
@@ -56,7 +53,7 @@ require (
 	github.com/stretchr/testify v1.12.1
 	github.com/tencentcloud/tencentcloud-sdk-go v3.0.233+incompatible
 	github.com/vmihailenco/msgpack/v5 v5.4.1
-	github.com/volcengine/volcengine-go-sdk v1.2.56
+	github.com/volcengine/volcengine-go-sdk v1.2.58
 	go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux v0.72.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.72.0
 	go.opentelemetry.io/otel v1.47.0
@@ -93,6 +90,7 @@ require (
 	github.com/Azure/go-ntlmssp v0.1.1 // indirect
 	github.com/BurntSushi/toml v1.6.0 // indirect
 	github.com/Unknwon/goconfig v1.0.0 // indirect
+	github.com/apache/arrow/go/v15 v15.0.2 // indirect
 	github.com/aws/aws-sdk-go v1.55.8 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.20.3 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.6 // indirect
@@ -129,7 +127,9 @@ require (
 	github.com/go-openapi/analysis v1.0.1 // indirect
 	github.com/go-openapi/jsonpointer v1.0.2 // indirect
 	github.com/go-openapi/jsonreference v1.0.3 // indirect
+	github.com/go-openapi/loads v0.25.3 // indirect
 	github.com/go-openapi/runtime/server-middleware v0.33.3 // indirect
+	github.com/go-openapi/spec v1.0.1 // indirect
 	github.com/go-openapi/swag/cmdutils v0.29.2 // indirect
 	github.com/go-openapi/swag/conv v0.29.2 // indirect
 	github.com/go-openapi/swag/fileutils v0.29.2 // indirect
@@ -141,6 +141,7 @@ require (
 	github.com/go-openapi/swag/stringutils v0.29.2 // indirect
 	github.com/go-openapi/swag/typeutils v0.29.2 // indirect
 	github.com/go-openapi/swag/yamlutils v0.29.2 // indirect
+	github.com/go-openapi/validate v1.0.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/goccy/go-json v0.11.2 // indirect
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
@@ -224,6 +225,7 @@ require (
 	gopkg.in/ini.v1 v1.67.3 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	gotest.tools/v3 v3.5.2 // indirect
 	honnef.co/go/tools v0.8.2 // indirect
 	k8s.io/apiextensions-apiserver v0.37.1 // indirect
 	k8s.io/klog/v2 v2.140.0 // indirect
