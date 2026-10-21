@@ -1,4 +1,4 @@
-FROM dhi.io/golang:1.27.2-debian13-dev@sha256:58f9e2927dd152c3759c9123c97f48d9376c5d1a704b7246b70a31f041c78515 AS tool_builder
+FROM dhi.io/golang:1.27.2-debian13-dev@sha256:5533f138209a9db91d04cff39d65e36f1bcee76778f5a04127444ef11950dd78 AS tool_builder
 ENV TZ=Asia/Shanghai \
     DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8
