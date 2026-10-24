@@ -27,14 +27,14 @@ steps:
   # harbor-db's image pins are only built at release time, so without this a
   # PR that moves the PostgreSQL upgrade stage to the wrong major merged green.
   - name: repo-contracts
-    image: dhi.io/golang:1.27.2-debian13-dev@sha256:5533f138209a9db91d04cff39d65e36f1bcee76778f5a04127444ef11950dd78
+    image: dhi.io/golang:1.27.3-debian13-dev@sha256:648c1e59a6bb06911d925436caf05f5a1d21d026802553b9ceb9b8bc8031c9de
     commands:
       - bash .ci/test-db-image-pins.sh
       - bash .ci/test-auto-release.sh
 
   # Validate clean Linux npm resolution before release-only image builds.
   - name: portal-lockfiles
-    image: dhi.io/node:26.12.0-debian13-dev@sha256:01f82fc5043e12fa11af2b5c5d51ae454e09b7fdb8be86f09e241e727f121092
+    image: dhi.io/node:26.12.1-debian13-dev@sha256:5dcc4a0985fabe4d3c0bdf3a5821157a662960670b9a2b1376434f31b7fff6da
     commands:
       - npm install --global --force npm@12.2.0
       - cd src/portal
@@ -43,7 +43,7 @@ steps:
       - npm ci --dry-run --ignore-scripts --no-audit --no-fund
 
   - name: renovate-go-artifacts
-    image: dhi.io/golang:1.27.2-debian13-dev@sha256:5533f138209a9db91d04cff39d65e36f1bcee76778f5a04127444ef11950dd78
+    image: dhi.io/golang:1.27.3-debian13-dev@sha256:648c1e59a6bb06911d925436caf05f5a1d21d026802553b9ceb9b8bc8031c9de
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
@@ -53,7 +53,7 @@ steps:
       - bash .ci/test-renovate-go-artifacts.sh
 
   - name: distribution-build
-    image: dhi.io/golang:1.27.2-debian13-dev@sha256:5533f138209a9db91d04cff39d65e36f1bcee76778f5a04127444ef11950dd78
+    image: dhi.io/golang:1.27.3-debian13-dev@sha256:648c1e59a6bb06911d925436caf05f5a1d21d026802553b9ceb9b8bc8031c9de
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
@@ -74,7 +74,7 @@ steps:
       - python3 .ci/test-distribution-build.py
 
   - name: generate-swagger
-    image: dhi.io/golang:1.27.2-debian13-dev@sha256:5533f138209a9db91d04cff39d65e36f1bcee76778f5a04127444ef11950dd78
+    image: dhi.io/golang:1.27.3-debian13-dev@sha256:648c1e59a6bb06911d925436caf05f5a1d21d026802553b9ceb9b8bc8031c9de
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
@@ -99,7 +99,7 @@ steps:
         --target src/server/v2.0
 
   - name: build-check
-    image: dhi.io/golang:1.27.2-debian13-dev@sha256:5533f138209a9db91d04cff39d65e36f1bcee76778f5a04127444ef11950dd78
+    image: dhi.io/golang:1.27.3-debian13-dev@sha256:648c1e59a6bb06911d925436caf05f5a1d21d026802553b9ceb9b8bc8031c9de
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
