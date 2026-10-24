@@ -356,7 +356,7 @@ steps:
 
   - name: promote-ghcr
     depends_on: [trivy-scan]
-    image: "dhi.io/crane:0.21.9-debian13-dev@sha256:7aa540b53be3d0dc6c2d7ac526ad34a4f423e195045d1a0b527fc77dce9c96aa"
+    image: "dhi.io/crane:0.22.1-debian13-dev@sha256:82b1dc28811889cba5bcab21f599349347944a11faee62dcd5cfc43b16d28838"
     environment:
       REGISTRY_USERNAME:
         from_secret: github_username
