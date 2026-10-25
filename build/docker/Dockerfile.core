@@ -1,6 +1,6 @@
 # Multi-stage Dockerfile for harbor-core built from isityael/harbor.
 ARG GO_IMAGE=dhi.io/golang:1.27.3-alpine3.24-dev@sha256:2ceb813d69b9c82501323484e0c0ae612efde281f5dffce2a3d83a79a9c87304
-ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24@sha256:72525b95de76cbb53077d1afc12bf541846754477c4ce842cd3d9374a7af55bc
+ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24@sha256:7b06d747fcb428a0699679955e903b13322c92c79d94ce94c108634f13a714f1
 
 FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS builder
 ARG GITCOMMIT=unknown
