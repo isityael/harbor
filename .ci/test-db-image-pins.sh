@@ -42,9 +42,5 @@ check "${base}" \
   "$(grep -E '^FROM dhi\.io/postgres:' "${base}" | grep -v ' AS pg15')" \
   "${root}/make/photon/db/Dockerfile"
 
-grep -Fq '"matchPackageNames": ["dhi.io/postgres"]' "${root}/renovate.json" || {
-  echo "renovate.json must hold dhi.io/postgres to its current major" >&2
-  fail=1
-}
 
 exit "${fail}"

@@ -294,6 +294,12 @@
       "description": "Kubernetes 0.37 uses structured-merge-diff/v6; newer kube-openapi requires v7. Lift this cap with the Kubernetes API migration.",
       "matchPackageNames": ["k8s.io/kube-openapi"],
       "allowedVersions": "<=v0.0.0-20260821135717-be32def86098"
+    },
+    {
+      "description": "The gopkg.in v1 module path cannot accept v2 tags; newer majors require an import migration.",
+      "matchDatasources": ["go"],
+      "matchPackageNames": ["gopkg.in/square/go-jose.v1"],
+      "allowedVersions": "<2.0.0"
     }
   ],
   "ignorePaths": [
