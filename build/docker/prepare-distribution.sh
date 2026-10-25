@@ -19,7 +19,7 @@ X_SYS_VERSION=v0.49.0
 # renovate: datasource=go depName=golang.org/x/text
 X_TEXT_VERSION=v0.43.0
 # renovate: datasource=go depName=google.golang.org/api
-GOOGLE_API_VERSION=v0.304.0
+GOOGLE_API_VERSION=v0.308.0
 # renovate: datasource=go depName=google.golang.org/grpc
 GRPC_VERSION=v1.84.0
 # renovate: datasource=go depName=gopkg.in/square/go-jose.v1
