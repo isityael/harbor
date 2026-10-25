@@ -41,12 +41,12 @@ e = some(where (p.eft == allow)) && !some(where (p.eft == deny))
 
 # Matchers
 [matchers]
-m = g(r.sub, p.sub) && keyMatch2(r.obj, p.obj) && (r.act == p.act || p.act == '*')
+m = g(r.sub, p.sub) && harborKeyMatch2(r.obj, p.obj) && (r.act == p.act || p.act == '*')
 `
 
 func makeEnforcer(rbacUser types.RBACUser) (*casbin.Enforcer, error) {
-	m := model.Model{}
-	if err := m.LoadModelFromText(modelText); err != nil {
+	m, err := model.NewModelFromString(modelText)
+	if err != nil {
 		return nil, err
 	}
 
@@ -54,6 +54,7 @@ func makeEnforcer(rbacUser types.RBACUser) (*casbin.Enforcer, error) {
 	if err != nil {
 		return nil, err
 	}
-	e.AddFunction("keyMatch2", keyMatch2Func)
+	// not "keyMatch2": casbin v3 pre-registers that name and AddFunction never replaces it
+	e.AddFunction("harborKeyMatch2", keyMatch2Func)
 	return e, nil
 }

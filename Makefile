@@ -137,7 +137,7 @@ TRIVYADAPTERVERSION=v0.39.1
 NODEBUILDIMAGE=dhi.io/node:26.11.1-debian13-dev@sha256:45c70bf430695765dc3227298e548c6c393e3a53b92aaf1a7f8389c22902bce0
 
 # version of registry for pulling the source code
-REGISTRY_SRC_TAG=v2.8.3-harbor.2
+REGISTRY_SRC_TAG=v2.8.3-harbor.3-rc.1
 # source of upstream distribution code
 DISTRIBUTION_SRC=https://github.com/goharbor/distribution.git
 

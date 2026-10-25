@@ -110,104 +110,60 @@
                                     {{ 'REPLICATION.STOPJOB' | translate }}
                                 </button>
                             }
-                        </div>
-                    </clr-dg-action-bar>
-                    <clr-dg-column [clrDgSortBy]="'id'">{{
-                        'REPLICATION.ID' | translate
-                    }}</clr-dg-column>
-                    <clr-dg-column [clrDgField]="'status'">{{
-                        'REPLICATION.STATUS' | translate
-                    }}</clr-dg-column>
-                    <clr-dg-column [clrDgField]="'trigger'">{{
-                        'REPLICATION.REPLICATION_TRIGGER' | translate
-                    }}</clr-dg-column>
-                    <clr-dg-column [clrDgSortBy]="creationTimeComparator">{{
-                        'REPLICATION.CREATION_TIME' | translate
-                    }}</clr-dg-column>
-                    <clr-dg-column>{{
-                        'REPLICATION.DURATION' | translate
-                    }}</clr-dg-column>
-                    <clr-dg-column>{{
-                        'REPLICATION.SUCCESS_RATE' | translate
-                    }}</clr-dg-column>
-                    <clr-dg-column>{{
-                        'REPLICATION.TOTAL' | translate
-                    }}</clr-dg-column>
-                    <clr-dg-placeholder>{{
-                        'REPLICATION.JOB_PLACEHOLDER' | translate
-                    }}</clr-dg-placeholder>
-                    @for (j of jobs; track j) {
-                        <clr-dg-row [clrDgItem]="j">
-                            <clr-dg-cell>
-                                <a
-                                    href="javascript:void(0)"
-                                    (click)="goToLink(j.id)"
-                                    >{{ j.id }}</a
-                                >
-                            </clr-dg-cell>
-                            <clr-dg-cell>
-                                {{ getStatusStr(j.status, j.status_text) }}
-                                <clr-tooltip>
-                                    @if (j.status_text) {
-                                        <clr-icon
-                                            clrTooltipTrigger
-                                            shape="info-circle"
-                                            size="20"></clr-icon>
-                                    }
-                                    <clr-tooltip-content
-                                        [clrPosition]="'left'"
-                                        clrSize="md"
-                                        *clrIfOpen>
-                                        <span>{{ j.status_text }}</span>
-                                    </clr-tooltip-content>
-                                </clr-tooltip>
-                            </clr-dg-cell>
-                            <clr-dg-cell>{{ j.trigger }}</clr-dg-cell>
-                            <clr-dg-cell>{{
-                                j.start_time | harborDatetime: 'short'
-                            }}</clr-dg-cell>
-                            <clr-dg-cell>{{ getDuration(j) }}</clr-dg-cell>
-                            <clr-dg-cell>
-                                {{
-                                    (j.status === 'InProgress' ||
-                                    j.status === 'Failed'
-                                        ? j.total > 0
-                                            ? j.succeed / j.total
-                                            : 0
-                                        : j.total > 0
-                                          ? j.succeed / j.total
-                                          : 1
-                                    ) | percent
-                                }}
-                            </clr-dg-cell>
-                            <clr-dg-cell>{{ j.total }}</clr-dg-cell>
-                        </clr-dg-row>
-                    }
-                    <clr-dg-footer>
-                        <clr-dg-pagination
-                            #pagination
-                            [(clrDgPage)]="currentPage"
-                            [clrDgPageSize]="pageSize"
-                            [clrDgTotalItems]="totalCount">
-                            <clr-dg-page-size
-                                [clrPageSizeOptions]="clrPageSizeOptions"
-                                >{{
-                                    'PAGINATION.PAGE_SIZE' | translate
-                                }}</clr-dg-page-size
-                            >
-                            @if (showPaginationIndex) {
-                                <span
-                                    >{{ pagination.firstItem + 1 }} -
-                                    {{ pagination.lastItem + 1 }}
-                                    {{ 'REPLICATION.OF' | translate }}</span
-                                >
-                            }
-                            {{ totalCount }}
-                            {{ 'REPLICATION.ITEMS' | translate }}
-                        </clr-dg-pagination>
-                    </clr-dg-footer>
-                </clr-datagrid>
-            </div>
+                            <clr-tooltip-content
+                                [clrPosition]="'left'"
+                                clrSize="lg"
+                                *clrIfOpen>
+                                <span class="status-message-tooltip">{{
+                                    j.status_text
+                                }}</span>
+                            </clr-tooltip-content>
+                        </clr-tooltip>
+                    </clr-dg-cell>
+                    <clr-dg-cell>{{ j.trigger }}</clr-dg-cell>
+                    <clr-dg-cell>{{
+                        j.start_time | harborDatetime : 'short'
+                    }}</clr-dg-cell>
+                    <clr-dg-cell>{{ getDuration(j) }}</clr-dg-cell>
+                    <clr-dg-cell>
+                        {{
+                            (j.status === 'InProgress' || j.status === 'Failed'
+                                ? j.total > 0
+                                    ? j.succeed / j.total
+                                    : 0
+                                : j.total > 0
+                                ? j.succeed / j.total
+                                : 1
+                            ) | percent
+                        }}
+                    </clr-dg-cell>
+                    <clr-dg-cell>{{ j.total }}</clr-dg-cell>
+                </clr-dg-row>
+                }
+                <clr-dg-footer>
+                    <clr-dg-pagination
+                        #pagination
+                        [(clrDgPage)]="currentPage"
+                        [clrDgPageSize]="pageSize"
+                        [clrDgTotalItems]="totalCount">
+                        <clr-dg-page-size
+                            [clrPageSizeOptions]="clrPageSizeOptions"
+                            >{{
+                                'PAGINATION.PAGE_SIZE' | translate
+                            }}</clr-dg-page-size
+                        >
+                        @if (showPaginationIndex) {
+                        <span
+                            >{{ pagination.firstItem + 1 }} -
+                            {{ pagination.lastItem + 1 }}
+                            {{ 'REPLICATION.OF' | translate }}</span
+                        >
+                        }
+                        {{ totalCount }} {{ 'REPLICATION.ITEMS' | translate }}
+                    </clr-dg-pagination>
+                </clr-dg-footer>
+            </clr-datagrid>
+        </div>
         }
     </div>
     @if (isSystemAdmin) {
