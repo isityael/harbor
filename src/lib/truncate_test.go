@@ -78,4 +78,3 @@ func TestTruncateUTF8(t *testing.T) {
 	assert.Equal("", TruncateUTF8("hello", 0))
 	assert.Equal("", TruncateUTF8("hello", -1))
 }
-

@@ -224,4 +224,3 @@ func (h *hookHandlerTestSuite) TestHandleInvalidPayload() {
 func TestHookHandlerTestSuite(t *testing.T) {
 	suite.Run(t, &hookHandlerTestSuite{})
 }
-

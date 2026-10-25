@@ -338,4 +338,3 @@ func TestExtractLastLinesFromLog(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, "same error", extractLastLinesFromLog(sameJobID, 3, errors.New("same error")))
 }
-

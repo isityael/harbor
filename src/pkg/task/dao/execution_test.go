@@ -743,4 +743,3 @@ func TestMergeStatusMessages(t *testing.T) {
 		t.Errorf("expected truncated string <= 4096 ending with ..., got length %d", len(gotLong))
 	}
 }
-

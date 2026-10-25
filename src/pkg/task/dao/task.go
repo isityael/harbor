@@ -185,7 +185,7 @@ func (t *taskDAO) UpdateStatus(
 	// status revision is the unix timestamp of job starting time, it's changing means a retrying of the job
 	startTime := time.Unix(statusRevision, 0)
 	// update run count and start time when status revision changes, and clear previous status_message
-	sql := `update task set run_count = run_count + 1, start_time = ?, status_message = '' 
+	sql := `update task set run_count = run_count + 1, start_time = ?, status_message = ''
 				where id = ? and status_revision < ?`
 	if _, err = ormer.Raw(sql, startTime, id, statusRevision).Exec(); err != nil {
 		return err
