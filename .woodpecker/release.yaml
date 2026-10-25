@@ -1,5 +1,5 @@
 # Harbor components — build, push, scan, and sign GHCR images.
-# Triggered by isityael v2.16.0 yael tag (v2.16.0-yael.1).
+# Triggered by fork release tags; VERSION defines the accepted release series.
 #
 # Images pushed to ghcr.io/isityael only:
 #   nginx-photon, harbor-portal, harbor-core, harbor-jobservice,
@@ -12,7 +12,7 @@
 #   notation_key, notation_cert     — notation signing
 when:
   - event: tag
-    ref: "refs/tags/v2.16.0-yael.*"
+    ref: "refs/tags/v*-yael.*"
 
 clone:
   git:
@@ -37,9 +37,15 @@ steps:
     commands:
       - test -n "$CI_COMMIT_TAG"
       - |
+        series="$$(sed -n 's/^\(v[0-9][0-9.]*-yael\)\.[0-9][0-9]*$/\1/p' VERSION)"
+        test -n "$${series}"
         case "$CI_COMMIT_TAG" in
-          v2.16.0-yael.*) ;;
-          *) echo "Refusing to release tag outside the v2.16.0-yael series: $CI_COMMIT_TAG"; exit 1 ;;
+          "$${series}".*) ;;
+          *) echo "Release tag does not match VERSION series $${series}: $CI_COMMIT_TAG"; exit 1 ;;
+        esac
+        revision="$${CI_COMMIT_TAG##*.}"
+        case "$${revision}" in
+          ''|*[!0-9]*) echo "Release revision must be numeric: $CI_COMMIT_TAG"; exit 1 ;;
         esac
 
   - name: build-nginx
