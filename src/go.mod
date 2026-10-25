@@ -25,7 +25,7 @@ require (
 	github.com/go-ldap/ldap/v3 v3.4.15
 	github.com/go-openapi/errors v0.22.9
 	github.com/go-openapi/runtime v0.33.3
-	github.com/go-openapi/strfmt v0.27.3
+	github.com/go-openapi/strfmt v0.27.4
 	github.com/go-openapi/swag v0.29.2
 	github.com/gocarina/gocsv v0.0.0-20261012193826-401c25af6907
 	github.com/goccy/go-yaml v1.19.2
