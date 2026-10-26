@@ -53,20 +53,20 @@ steps:
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
-      registry: ghcr.io
-      repo: ghcr.io/isityael/nginx-photon
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/nginx-photon
       dockerfile: build/docker/Dockerfile.nginx
       context: .
       tags: ["candidate-${CI_COMMIT_TAG}"]
-      cache_from: 'type=registry\,ref=ghcr.io/isityael/nginx-photon:buildcache'
-      cache_to: 'type=registry,ref=ghcr.io/isityael/nginx-photon:buildcache,mode=max,ignore-error=true'
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/nginx-photon:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/nginx-photon:buildcache,mode=max,ignore-error=true'
       platforms: linux/amd64
       logins:
-        - registry: ghcr.io
+        - registry: git.m0sh1.cc
           username:
-            from_secret: github_username
+            from_secret: forgejo_public_package_username
           password:
-            from_secret: github_token
+            from_secret: forgejo_public_package_token
         - registry: dhi.io
           username:
             from_secret: dhi_username
@@ -80,20 +80,20 @@ steps:
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
-      registry: ghcr.io
-      repo: ghcr.io/isityael/harbor-portal
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-portal
       dockerfile: build/docker/Dockerfile.portal
       context: .
       tags: ["candidate-${CI_COMMIT_TAG}"]
-      cache_from: 'type=registry\,ref=ghcr.io/isityael/harbor-portal:buildcache'
-      cache_to: 'type=registry,ref=ghcr.io/isityael/harbor-portal:buildcache,mode=max,ignore-error=true'
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-portal:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-portal:buildcache,mode=max,ignore-error=true'
       platforms: linux/amd64
       logins:
-        - registry: ghcr.io
+        - registry: git.m0sh1.cc
           username:
-            from_secret: github_username
+            from_secret: forgejo_public_package_username
           password:
-            from_secret: github_token
+            from_secret: forgejo_public_package_token
         - registry: dhi.io
           username:
             from_secret: dhi_username
@@ -107,20 +107,20 @@ steps:
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
-      registry: ghcr.io
-      repo: ghcr.io/isityael/harbor-core
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-core
       dockerfile: build/docker/Dockerfile.core
       context: .
       tags: ["candidate-${CI_COMMIT_TAG}"]
-      cache_from: 'type=registry\,ref=ghcr.io/isityael/harbor-core:buildcache'
-      cache_to: 'type=registry,ref=ghcr.io/isityael/harbor-core:buildcache,mode=max,ignore-error=true'
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-core:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-core:buildcache,mode=max,ignore-error=true'
       platforms: linux/amd64
       logins:
-        - registry: ghcr.io
+        - registry: git.m0sh1.cc
           username:
-            from_secret: github_username
+            from_secret: forgejo_public_package_username
           password:
-            from_secret: github_token
+            from_secret: forgejo_public_package_token
         - registry: dhi.io
           username:
             from_secret: dhi_username
@@ -137,20 +137,20 @@ steps:
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
-      registry: ghcr.io
-      repo: ghcr.io/isityael/harbor-jobservice
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-jobservice
       dockerfile: build/docker/Dockerfile.jobservice
       context: .
       tags: ["candidate-${CI_COMMIT_TAG}"]
-      cache_from: 'type=registry\,ref=ghcr.io/isityael/harbor-jobservice:buildcache'
-      cache_to: 'type=registry,ref=ghcr.io/isityael/harbor-jobservice:buildcache,mode=max,ignore-error=true'
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-jobservice:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-jobservice:buildcache,mode=max,ignore-error=true'
       platforms: linux/amd64
       logins:
-        - registry: ghcr.io
+        - registry: git.m0sh1.cc
           username:
-            from_secret: github_username
+            from_secret: forgejo_public_package_username
           password:
-            from_secret: github_token
+            from_secret: forgejo_public_package_token
         - registry: dhi.io
           username:
             from_secret: dhi_username
@@ -167,20 +167,20 @@ steps:
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
-      registry: ghcr.io
-      repo: ghcr.io/isityael/registry-photon
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/registry-photon
       dockerfile: build/docker/Dockerfile.registry
       context: .
       tags: ["candidate-${CI_COMMIT_TAG}"]
-      cache_from: 'type=registry\,ref=ghcr.io/isityael/registry-photon:buildcache'
-      cache_to: 'type=registry,ref=ghcr.io/isityael/registry-photon:buildcache,mode=max,ignore-error=true'
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/registry-photon:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/registry-photon:buildcache,mode=max,ignore-error=true'
       platforms: linux/amd64
       logins:
-        - registry: ghcr.io
+        - registry: git.m0sh1.cc
           username:
-            from_secret: github_username
+            from_secret: forgejo_public_package_username
           password:
-            from_secret: github_token
+            from_secret: forgejo_public_package_token
         - registry: dhi.io
           username:
             from_secret: dhi_username
@@ -194,20 +194,20 @@ steps:
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
-      registry: ghcr.io
-      repo: ghcr.io/isityael/harbor-registryctl
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-registryctl
       dockerfile: build/docker/Dockerfile.registryctl
       context: .
       tags: ["candidate-${CI_COMMIT_TAG}"]
-      cache_from: 'type=registry\,ref=ghcr.io/isityael/harbor-registryctl:buildcache'
-      cache_to: 'type=registry,ref=ghcr.io/isityael/harbor-registryctl:buildcache,mode=max,ignore-error=true'
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-registryctl:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-registryctl:buildcache,mode=max,ignore-error=true'
       platforms: linux/amd64
       logins:
-        - registry: ghcr.io
+        - registry: git.m0sh1.cc
           username:
-            from_secret: github_username
+            from_secret: forgejo_public_package_username
           password:
-            from_secret: github_token
+            from_secret: forgejo_public_package_token
         - registry: dhi.io
           username:
             from_secret: dhi_username
@@ -224,20 +224,20 @@ steps:
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
-      registry: ghcr.io
-      repo: ghcr.io/isityael/harbor-db
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-db
       dockerfile: build/docker/Dockerfile.db
       context: .
       tags: ["candidate-${CI_COMMIT_TAG}"]
-      cache_from: 'type=registry\,ref=ghcr.io/isityael/harbor-db:buildcache'
-      cache_to: 'type=registry,ref=ghcr.io/isityael/harbor-db:buildcache,mode=max,ignore-error=true'
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-db:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-db:buildcache,mode=max,ignore-error=true'
       platforms: linux/amd64
       logins:
-        - registry: ghcr.io
+        - registry: git.m0sh1.cc
           username:
-            from_secret: github_username
+            from_secret: forgejo_public_package_username
           password:
-            from_secret: github_token
+            from_secret: forgejo_public_package_token
         - registry: dhi.io
           username:
             from_secret: dhi_username
@@ -251,20 +251,20 @@ steps:
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
-      registry: ghcr.io
-      repo: ghcr.io/isityael/harbor-trivy-adapter
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-trivy-adapter
       dockerfile: build/docker/Dockerfile.trivy-adapter
       context: .
       tags: ["candidate-${CI_COMMIT_TAG}"]
-      cache_from: 'type=registry\,ref=ghcr.io/isityael/harbor-trivy-adapter:buildcache'
-      cache_to: 'type=registry,ref=ghcr.io/isityael/harbor-trivy-adapter:buildcache,mode=max,ignore-error=true'
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-trivy-adapter:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-trivy-adapter:buildcache,mode=max,ignore-error=true'
       platforms: linux/amd64
       logins:
-        - registry: ghcr.io
+        - registry: git.m0sh1.cc
           username:
-            from_secret: github_username
+            from_secret: forgejo_public_package_username
           password:
-            from_secret: github_token
+            from_secret: forgejo_public_package_token
         - registry: dhi.io
           username:
             from_secret: dhi_username
@@ -278,20 +278,20 @@ steps:
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
-      registry: ghcr.io
-      repo: ghcr.io/isityael/harbor-exporter
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-exporter
       dockerfile: build/docker/Dockerfile.exporter
       context: .
       tags: ["candidate-${CI_COMMIT_TAG}"]
-      cache_from: 'type=registry\,ref=ghcr.io/isityael/harbor-exporter:buildcache'
-      cache_to: 'type=registry,ref=ghcr.io/isityael/harbor-exporter:buildcache,mode=max,ignore-error=true'
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-exporter:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-exporter:buildcache,mode=max,ignore-error=true'
       platforms: linux/amd64
       logins:
-        - registry: ghcr.io
+        - registry: git.m0sh1.cc
           username:
-            from_secret: github_username
+            from_secret: forgejo_public_package_username
           password:
-            from_secret: github_token
+            from_secret: forgejo_public_package_token
         - registry: dhi.io
           username:
             from_secret: dhi_username
@@ -308,20 +308,20 @@ steps:
     image: woodpeckerci/plugin-docker-buildx:6.1.2@sha256:d26b69cbe748b8a219c707e7889d5ffb3f9214bc3c480c30fe857ff85954267c
     privileged: true
     settings:
-      registry: ghcr.io
-      repo: ghcr.io/isityael/valkey-photon
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/valkey-photon
       dockerfile: build/docker/Dockerfile.valkey
       context: .
       tags: ["candidate-${CI_COMMIT_TAG}"]
-      cache_from: 'type=registry\,ref=ghcr.io/isityael/valkey-photon:buildcache'
-      cache_to: 'type=registry,ref=ghcr.io/isityael/valkey-photon:buildcache,mode=max,ignore-error=true'
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/valkey-photon:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/valkey-photon:buildcache,mode=max,ignore-error=true'
       platforms: linux/amd64
       logins:
-        - registry: ghcr.io
+        - registry: git.m0sh1.cc
           username:
-            from_secret: github_username
+            from_secret: forgejo_public_package_username
           password:
-            from_secret: github_token
+            from_secret: forgejo_public_package_token
         - registry: dhi.io
           username:
             from_secret: dhi_username
@@ -335,9 +335,9 @@ steps:
     image: "aquasec/trivy:0.76.1@sha256:790fd66d1697395d8693d1acaa1ea702406a20f109b6fc7bac8db623eca6c06c"
     environment:
       TRIVY_USERNAME:
-        from_secret: github_username
+        from_secret: forgejo_public_package_username
       TRIVY_PASSWORD:
-        from_secret: github_token
+        from_secret: forgejo_public_package_token
     commands:
       - apk add --no-cache python3 git
       - python3 .ci/test-distribution-vex.py --fetch-source
@@ -346,7 +346,7 @@ steps:
         # CRITICAL findings, not just the first image that has one.
         failed=""
         for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
-          ref="ghcr.io/isityael/$${image}:candidate-${CI_COMMIT_TAG}"
+          ref="git.m0sh1.cc/isityael/$${image}:candidate-${CI_COMMIT_TAG}"
           set --
           case "$${image}" in
             registry-photon|harbor-registryctl)
@@ -360,25 +360,25 @@ steps:
           exit 1
         fi
 
-  - name: promote-ghcr
+  - name: promote-forgejo
     depends_on: [trivy-scan]
     image: "dhi.io/crane:0.22.1-debian13-dev@sha256:82b1dc28811889cba5bcab21f599349347944a11faee62dcd5cfc43b16d28838"
     environment:
       REGISTRY_USERNAME:
-        from_secret: github_username
+        from_secret: forgejo_public_package_username
       REGISTRY_PASSWORD:
-        from_secret: github_token
+        from_secret: forgejo_public_package_token
     commands:
-      - crane auth login ghcr.io -u "$${REGISTRY_USERNAME}" -p "$${REGISTRY_PASSWORD}"
+      - crane auth login git.m0sh1.cc -u "$${REGISTRY_USERNAME}" -p "$${REGISTRY_PASSWORD}"
       - |
         for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
-          candidate="ghcr.io/isityael/$${image}:candidate-${CI_COMMIT_TAG}"
-          crane cp "$${candidate}" "ghcr.io/isityael/$${image}:${CI_COMMIT_TAG}"
-          crane cp "$${candidate}" "ghcr.io/isityael/$${image}:latest"
+          candidate="git.m0sh1.cc/isityael/$${image}:candidate-${CI_COMMIT_TAG}"
+          crane cp "$${candidate}" "git.m0sh1.cc/isityael/$${image}:${CI_COMMIT_TAG}"
+          crane cp "$${candidate}" "git.m0sh1.cc/isityael/$${image}:latest"
         done
 
   - name: cosign-sign
-    depends_on: [promote-ghcr]
+    depends_on: [promote-forgejo]
     image: "dhi.io/cosign:3.1.3-debian13-dev"
     environment:
       COSIGN_EXPERIMENTAL: "1"
@@ -387,15 +387,15 @@ steps:
       COSIGN_PASSWORD:
         from_secret: cosign_password
       REGISTRY_USERNAME:
-        from_secret: github_username
+        from_secret: forgejo_public_package_username
       REGISTRY_PASSWORD:
-        from_secret: github_token
+        from_secret: forgejo_public_package_token
     commands:
       - echo "$COSIGN_KEY" > /tmp/cosign.key
-      - cosign login ghcr.io -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
+      - cosign login git.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
       - |
         for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
-          cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 "ghcr.io/isityael/$${image}:${CI_COMMIT_TAG}"
+          cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 "git.m0sh1.cc/isityael/$${image}:${CI_COMMIT_TAG}"
         done
       - rm -f /tmp/cosign.key
 
@@ -408,9 +408,9 @@ steps:
       NOTATION_CERT:
         from_secret: notation_cert
       REGISTRY_USERNAME:
-        from_secret: github_username
+        from_secret: forgejo_public_package_username
       REGISTRY_PASSWORD:
-        from_secret: github_token
+        from_secret: forgejo_public_package_token
     commands:
       - mkdir -p /tmp/notation $HOME/.config/notation $HOME/.docker
       - echo "$NOTATION_KEY" > /tmp/notation/harbor.key
@@ -419,9 +419,9 @@ steps:
         cat > $HOME/.config/notation/signingkeys.json <<EOF
         {"default":"harbor","keys":[{"name":"harbor","keyPath":"/tmp/notation/harbor.key","certPath":"/tmp/notation/harbor.crt"}]}
         EOF
-      - printf '{"auths":{"ghcr.io":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
+      - printf '{"auths":{"git.m0sh1.cc":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
       - |
         for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
-          notation sign --force-referrers-tag=false --key harbor "ghcr.io/isityael/$${image}:${CI_COMMIT_TAG}"
+          notation sign --force-referrers-tag=false --key harbor "git.m0sh1.cc/isityael/$${image}:${CI_COMMIT_TAG}"
         done
       - rm -rf /tmp/notation $HOME/.docker/config.json
