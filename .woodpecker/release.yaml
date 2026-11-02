@@ -1,7 +1,7 @@
 # Harbor components — build, push, scan, and sign GHCR images.
 # Triggered by fork release tags; VERSION defines the accepted release series.
 #
-# Images pushed to ghcr.io/isityael only:
+# Images pushed to git.m0sh1.cc/isityael only:
 #   nginx-photon, harbor-portal, harbor-core, harbor-jobservice,
 #   registry-photon, harbor-registryctl, harbor-db,
 #   harbor-trivy-adapter, harbor-exporter, valkey-photon
