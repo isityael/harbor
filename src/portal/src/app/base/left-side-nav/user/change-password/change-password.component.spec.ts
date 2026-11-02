@@ -13,7 +13,8 @@
 // limitations under the License.
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ClarityModule } from '@clr/angular';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { UserService } from '../user.service';
 import { SharedTestingModule } from '../../../../shared/shared.module';

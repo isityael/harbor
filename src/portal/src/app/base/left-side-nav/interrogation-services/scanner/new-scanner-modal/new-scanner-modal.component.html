@@ -3,13 +3,14 @@
     [clrModalStaticBackdrop]="true"
     [clrModalClosable]="false">
     @if (!isEdit) {
-    <h3 class="modal-title">
-        {{ 'SCANNER.ADD_SCANNER' | translate }}
-    </h3>
-    } @if (isEdit) {
-    <h3 class="modal-title">
-        {{ 'SCANNER.EDIT_SCANNER' | translate }}
-    </h3>
+        <h3 class="modal-title">
+            {{ 'SCANNER.ADD_SCANNER' | translate }}
+        </h3>
+    }
+    @if (isEdit) {
+        <h3 class="modal-title">
+            {{ 'SCANNER.EDIT_SCANNER' | translate }}
+        </h3>
     }
     <div class="modal-body body-format">
         <inline-alert class="modal-title"></inline-alert>
@@ -33,25 +34,26 @@
             {{ 'BUTTON.CANCEL' | translate }}
         </button>
         @if (!isEdit) {
-        <button
-            id="button-add"
-            type="button"
-            [clrLoading]="saveBtnState"
-            class="btn btn-primary"
-            [disabled]="!valid"
-            (click)="create()">
-            {{ 'BUTTON.ADD' | translate }}
-        </button>
-        } @if (isEdit) {
-        <button
-            id="button-save"
-            type="button"
-            [clrLoading]="saveBtnState"
-            class="btn btn-primary"
-            [disabled]="!validForSaving"
-            (click)="save()">
-            {{ 'BUTTON.SAVE' | translate }}
-        </button>
+            <button
+                id="button-add"
+                type="button"
+                [clrLoading]="saveBtnState"
+                class="btn btn-primary"
+                [disabled]="!valid"
+                (click)="create()">
+                {{ 'BUTTON.ADD' | translate }}
+            </button>
+        }
+        @if (isEdit) {
+            <button
+                id="button-save"
+                type="button"
+                [clrLoading]="saveBtnState"
+                class="btn btn-primary"
+                [disabled]="!validForSaving"
+                (click)="save()">
+                {{ 'BUTTON.SAVE' | translate }}
+            </button>
         }
     </div>
 </clr-modal>

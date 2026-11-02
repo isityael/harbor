@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RepositoryService } from 'ng-swagger-gen/services/repository.service';
@@ -35,6 +40,7 @@ import {
     selector: 'artifact-info',
     templateUrl: './artifact-info.component.html',
     styleUrls: ['./artifact-info.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ArtifactInfoComponent implements OnInit {

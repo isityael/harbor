@@ -19,6 +19,7 @@ import {
     ViewChild,
     SimpleChanges,
     OnChanges,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { Configuration } from '../../config/config';
 import { State, QuotaHardLimitInterface } from '../../../../shared/services';
@@ -62,6 +63,7 @@ const QuotaType = 'project';
     selector: 'project-quotas',
     templateUrl: './project-quotas.component.html',
     styleUrls: ['./project-quotas.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ProjectQuotasComponent implements OnChanges {

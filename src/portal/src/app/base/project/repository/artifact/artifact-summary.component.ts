@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    OnInit,
+    Output,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Artifact } from '../../../../../../ng-swagger-gen/models/artifact';
 import { Label } from '../../../../../../ng-swagger-gen/models/label';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,6 +35,7 @@ import {
     templateUrl: './artifact-summary.component.html',
     styleUrls: ['./artifact-summary.component.scss'],
     providers: [],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ArtifactSummaryComponent implements OnInit {

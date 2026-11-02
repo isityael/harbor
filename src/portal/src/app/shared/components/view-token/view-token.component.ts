@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Output,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { RobotService } from '../../../../../ng-swagger-gen/services/robot.service';
 import { ClrLoadingState } from '@clr/angular';
 import { Robot } from '../../../../../ng-swagger-gen/models/robot';
@@ -34,6 +40,7 @@ import { CopyInputComponent } from '../push-image/copy-input.component';
     selector: 'view-token',
     templateUrl: './view-token.component.html',
     styleUrls: ['./view-token.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ViewTokenComponent {

@@ -15,9 +15,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
     TranslateNoOpLoader,
     TranslateLoader,
-    TranslateModule,
     TranslateService,
 } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { DependenciesComponent } from './dependencies.component';
 import { AdditionsService } from '../additions.service';
 import { of } from 'rxjs';

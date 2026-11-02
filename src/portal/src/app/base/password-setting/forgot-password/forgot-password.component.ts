@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PasswordSettingService } from '../password-setting.service';
 import { InlineAlertComponent } from '../../../shared/components/inline-alert/inline-alert.component';
@@ -24,6 +24,7 @@ import { InlineAlertComponent } from '../../../shared/components/inline-alert/in
         '../password-setting.component.scss',
         '../../../common.scss',
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ForgotPasswordComponent {

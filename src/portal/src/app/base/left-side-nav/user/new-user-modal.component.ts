@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
+import {
+    Component,
+    ViewChild,
+    Output,
+    EventEmitter,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { NewUserFormComponent } from '../../../shared/components/new-user-form/new-user-form.component';
 import { User } from './user';
 import { SessionService } from '../../../shared/services/session.service';
@@ -23,6 +29,7 @@ import { InlineAlertComponent } from '../../../shared/components/inline-alert/in
     selector: 'new-user-modal',
     templateUrl: 'new-user-modal.component.html',
     styleUrls: ['../../../common.scss', './new-user-madal.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class NewUserModalComponent {

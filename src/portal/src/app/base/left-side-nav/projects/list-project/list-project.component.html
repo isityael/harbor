@@ -6,14 +6,14 @@
     (clrDgSelectedChange)="selectionChanged()">
     <clr-dg-action-bar>
         @if (projectCreationRestriction) {
-        <button
-            type="button"
-            class="btn btn-secondary"
-            (click)="addNewProject()">
-            <clr-icon shape="plus" size="16"></clr-icon>&nbsp;{{
-                'PROJECT.NEW_PROJECT' | translate
-            }}
-        </button>
+            <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="addNewProject()">
+                <clr-icon shape="plus" size="16"></clr-icon>&nbsp;{{
+                    'PROJECT.NEW_PROJECT' | translate
+                }}
+            </button>
         }
         <clr-dropdown
             [clrCloseMenuOnItemClick]="true"
@@ -58,34 +58,34 @@
         'PROJECT.CREATION_TIME' | translate
     }}</clr-dg-column>
     @for (p of projects; track p) {
-    <clr-dg-row [clrDgItem]="p">
-        <clr-dg-cell>
-            <a
-                href="javascript:void(0)"
-                [routerLink]="getLink(p.project_id)"
-                (click)="clickLink(p.project_id)"
-                >{{ p.name }}</a
-            >
-        </clr-dg-cell>
-        <clr-dg-cell>{{
-            (p.metadata.public === 'true'
-                ? 'PROJECT.PUBLIC'
-                : 'PROJECT.PRIVATE'
-            ) | translate
-        }}</clr-dg-cell>
-        <clr-dg-cell>{{
-            roleInfo[p.current_user_role_id]
-                ? (roleInfo[p.current_user_role_id] | translate)
-                : '-'
-        }}</clr-dg-cell>
-        <clr-dg-cell>{{
-            projectTypeMap[p.registry_id ? 1 : 0] | translate
-        }}</clr-dg-cell>
-        <clr-dg-cell>{{ p.repo_count }}</clr-dg-cell>
-        <clr-dg-cell>{{
-            p.creation_time | harborDatetime : 'short'
-        }}</clr-dg-cell>
-    </clr-dg-row>
+        <clr-dg-row [clrDgItem]="p">
+            <clr-dg-cell>
+                <a
+                    href="javascript:void(0)"
+                    [routerLink]="getLink(p.project_id)"
+                    (click)="clickLink(p.project_id)"
+                    >{{ p.name }}</a
+                >
+            </clr-dg-cell>
+            <clr-dg-cell>{{
+                (p.metadata.public === 'true'
+                    ? 'PROJECT.PUBLIC'
+                    : 'PROJECT.PRIVATE'
+                ) | translate
+            }}</clr-dg-cell>
+            <clr-dg-cell>{{
+                roleInfo[p.current_user_role_id]
+                    ? (roleInfo[p.current_user_role_id] | translate)
+                    : '-'
+            }}</clr-dg-cell>
+            <clr-dg-cell>{{
+                projectTypeMap[p.registry_id ? 1 : 0] | translate
+            }}</clr-dg-cell>
+            <clr-dg-cell>{{ p.repo_count }}</clr-dg-cell>
+            <clr-dg-cell>{{
+                p.creation_time | harborDatetime: 'short'
+            }}</clr-dg-cell>
+        </clr-dg-row>
     }
     <clr-dg-footer>
         <clr-dg-pagination
@@ -97,10 +97,11 @@
                 'PAGINATION.PAGE_SIZE' | translate
             }}</clr-dg-page-size>
             @if (totalCount) {
-            <span
-                >{{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }}
-                {{ 'PROJECT.OF' | translate }}
-            </span>
+                <span
+                    >{{ pagination.firstItem + 1 }} -
+                    {{ pagination.lastItem + 1 }}
+                    {{ 'PROJECT.OF' | translate }}
+                </span>
             }
             {{ totalCount }} {{ 'PROJECT.ITEMS' | translate }}
         </clr-dg-pagination>

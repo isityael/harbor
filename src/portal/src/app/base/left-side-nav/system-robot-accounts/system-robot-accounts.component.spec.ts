@@ -20,6 +20,7 @@ import {
     HttpResponse,
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 import { of, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -30,7 +31,8 @@ import { ProjectService } from '../../../../../ng-swagger-gen/services/project.s
 import { MessageHandlerService } from '../../../shared/services/message-handler.service';
 import { OperationService } from '../../../shared/components/operation/operation.service';
 import { ConfirmationDialogService } from '../../global-confirmation-dialog/confirmation-dialog.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -163,7 +165,7 @@ describe('SystemRobotAccountsComponent', () => {
                 OperationService,
                 { provide: RobotService, useValue: fakedRobotService },
                 { provide: ProjectService, useValue: mockProjectService },
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         }).compileComponents();

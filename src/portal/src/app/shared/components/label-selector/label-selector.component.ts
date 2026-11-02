@@ -20,6 +20,7 @@ import {
     OnInit,
     Output,
     SimpleChanges,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { Label } from '../../../../../ng-swagger-gen/models/label';
 import { forkJoin, Observable, Subject, Subscription } from 'rxjs';
@@ -42,6 +43,7 @@ const PAGE_SIZE: number = 50;
     selector: 'app-label-selector',
     templateUrl: './label-selector.component.html',
     styleUrls: ['./label-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class LabelSelectorComponent implements OnInit, OnChanges, OnDestroy {
@@ -67,7 +69,10 @@ export class LabelSelectorComponent implements OnInit, OnChanges, OnDestroy {
     }>();
     private _searchSubject = new Subject<string>();
     private _subSearch: Subscription;
-    constructor(private labelService: LabelService, private router: Router) {
+    constructor(
+        private labelService: LabelService,
+        private router: Router
+    ) {
         if (!this._subSearch) {
             this._subSearch = this._searchSubject
                 .pipe(

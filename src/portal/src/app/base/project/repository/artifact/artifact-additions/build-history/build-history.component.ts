@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, OnInit } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { AdditionsService } from '../additions.service';
 import { ArtifactBuildHistory } from '../models';
 import { finalize } from 'rxjs/operators';
@@ -22,6 +27,7 @@ import { ErrorHandler } from '../../../../../../shared/units/error-handler';
     selector: 'hbr-artifact-build-history',
     templateUrl: './build-history.component.html',
     styleUrls: ['./build-history.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class BuildHistoryComponent implements OnInit {

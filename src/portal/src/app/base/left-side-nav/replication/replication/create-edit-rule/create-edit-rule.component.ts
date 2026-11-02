@@ -19,6 +19,7 @@ import {
     Input,
     EventEmitter,
     Output,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { Filter } from '../../../../../shared/services';
 import { forkJoin, Observable, Subject, Subscription } from 'rxjs';
@@ -65,6 +66,7 @@ export const KB_TO_MB: number = 1024;
     selector: 'hbr-create-edit-rule',
     templateUrl: './create-edit-rule.component.html',
     styleUrls: ['./create-edit-rule.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class CreateEditRuleComponent implements OnInit, OnDestroy {

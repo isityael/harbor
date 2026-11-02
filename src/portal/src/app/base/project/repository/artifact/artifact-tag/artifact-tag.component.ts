@@ -11,7 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { forkJoin, Observable, of, Subject, Subscription } from 'rxjs';
 import {
     catchError,
@@ -70,6 +77,7 @@ class InitTag {
     selector: 'artifact-tag',
     templateUrl: './artifact-tag.component.html',
     styleUrls: ['./artifact-tag.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ArtifactTagComponent implements OnInit, OnDestroy {

@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Worker } from 'ng-swagger-gen/models';
 import { JobserviceService } from 'ng-swagger-gen/services';
 import { finalize, Subscription } from 'rxjs';
@@ -40,6 +45,7 @@ import {
     selector: 'app-worker-card',
     templateUrl: './worker-card.component.html',
     styleUrls: ['./worker-card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class WorkerCardComponent implements OnInit, OnDestroy {

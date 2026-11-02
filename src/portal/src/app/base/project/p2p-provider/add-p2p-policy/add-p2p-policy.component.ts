@@ -422,54 +422,52 @@ export class AddP2pPolicyComponent implements OnInit, OnDestroy {
     }
 
     hasChange(): boolean {
-        // eslint-disable-next-line eqeqeq
         if (this.policy.provider_id != this.originPolicyForEdit.provider_id) {
             return true;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (this.policy.name != this.originPolicyForEdit.name) {
             return true;
         }
         if (
             (this.policy.description || this.originPolicyForEdit.description) &&
-            // eslint-disable-next-line eqeqeq
             this.policy.description != this.originPolicyForEdit.description
         ) {
             return true;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (this.originReposForEdit != this.repos) {
             return true;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (this.originTagsForEdit != this.tags) {
             return true;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (this.originOnlySignedImagesForEdit != this.onlySignedImages) {
             return true;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (this.originLabelsForEdit != this.labels) {
             return true;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (this.originSeverityForEdit != this.severity) {
             return true;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (this.originTriggerTypeForEdit != this.triggerType) {
             return true;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (this.originScopeForEdit != this.scope) {
             return true;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (this.originClusterIDsForEdit != this.clusterIDs) {
             return true;
         }
-        // eslint-disable-next-line eqeqeq
+
         return this.originCronForEdit != this.cron;
     }
     isSystemAdmin(): boolean {

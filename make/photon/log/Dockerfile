@@ -10,7 +10,7 @@ COPY ./make/photon/log/rsyslog_docker.conf /etc/rsyslog.d/
 # remove the original "logrotate" in directory "/etc/cron.daily/"
 # and copy the customized one to directory "/etc/cron.hourly/" 
 # to run logrotate hourly
-RUN rm /etc/cron.daily/logrotate
+RUN rm -f /etc/cron.daily/logrotate
 COPY ./make/photon/log/logrotate /etc/cron.hourly/
 
 COPY ./make/photon/log/start.sh /usr/local/bin/

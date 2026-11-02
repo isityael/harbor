@@ -20,13 +20,14 @@ import {
     OnInit,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { PreheatService } from '../../../../../../ng-swagger-gen/services/preheat.service';
 import { Instance } from '../../../../../../ng-swagger-gen/models/instance';
 import { AuthMode, FrontInstance } from '../distribution-interface';
-import { clone } from '../../../../shared/units/utils';
+import { clone, equalEndpoint } from '../../../../shared/units/utils';
 import { ClrLoadingState } from '@clr/angular';
 import { Metadata } from '../../../../../../ng-swagger-gen/models/metadata';
 import {
@@ -52,6 +53,7 @@ const DEFAULT_PROVIDER: string = 'dragonfly';
     selector: 'dist-setup-modal',
     templateUrl: './distribution-setup-modal.component.html',
     styleUrls: ['./distribution-setup-modal.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class DistributionSetupModalComponent implements OnInit, OnDestroy {
@@ -145,7 +147,10 @@ export class DistributionSetupModalComponent implements OnInit, OnDestroy {
                         if (
                             this.editingMode &&
                             this.originModelForEdit &&
-                            this.originModelForEdit.endpoint === endpoint
+                            equalEndpoint(
+                                this.originModelForEdit.endpoint,
+                                endpoint
+                            )
                         ) {
                             return false;
                         }
@@ -442,14 +447,19 @@ export class DistributionSetupModalComponent implements OnInit, OnDestroy {
             ) {
                 return true;
             }
-            if (this.model.endpoint !== this.originModelForEdit.endpoint) {
+            if (
+                !equalEndpoint(
+                    this.model.endpoint,
+                    this.originModelForEdit.endpoint
+                )
+            ) {
                 return true;
             }
-            // eslint-disable-next-line eqeqeq
+
             if (this.model.enabled != this.originModelForEdit.enabled) {
                 return true;
             }
-            // eslint-disable-next-line eqeqeq
+
             if (this.model.insecure != this.originModelForEdit.insecure) {
                 return true;
             }

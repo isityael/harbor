@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ErrorHandler } from '../../../../../../shared/units/error-handler';
 import { forkJoin, Subscription, timer } from 'rxjs';
 import {
@@ -48,6 +53,7 @@ import {
     selector: 'gc-history',
     templateUrl: './gc-history.component.html',
     styleUrls: ['./gc-history.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class GcHistoryComponent implements OnInit, OnDestroy {

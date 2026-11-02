@@ -40,11 +40,14 @@
                             class="spinner spinner-inline spinner-pos"
                             [hidden]="!inNameChecking"></span>
                     </div>
-                    @if ( (ruleForm.controls.name.touched &&
-                    ruleForm.controls.name.invalid) || !isRuleNameValid ) {
-                    <clr-control-error>{{
-                        ruleNameTooltip | translate
-                    }}</clr-control-error>
+                    @if (
+                        (ruleForm.controls.name.touched &&
+                            ruleForm.controls.name.invalid) ||
+                        !isRuleNameValid
+                    ) {
+                        <clr-control-error>{{
+                            ruleNameTooltip | translate
+                        }}</clr-control-error>
                     }
                 </div>
             </div>
@@ -123,41 +126,44 @@
             </clr-radio-container>
             <!--source registry-->
             @if (!isPushMode) {
-            <div class="clr-form-control">
-                <label class="required clr-control-label">{{
-                    'REPLICATION.SOURCE_REGISTRY' | translate
-                }}</label>
-                <div class="clr-control-container">
-                    <div class="clr-select-wrapper">
-                        <select
-                            class="clr-select width-input"
-                            id="src_registry_id"
-                            (change)="sourceChange($event)"
-                            formControlName="src_registry"
-                            [compareWith]="equals">
-                            <option class="display-none"></option>
-                            @for (source of sourceList; track source) {
-                            <option [ngValue]="source">
-                                {{ source.name }}-{{ source.url }}
-                            </option>
+                <div class="clr-form-control">
+                    <label class="required clr-control-label">{{
+                        'REPLICATION.SOURCE_REGISTRY' | translate
+                    }}</label>
+                    <div class="clr-control-container">
+                        <div class="clr-select-wrapper">
+                            <select
+                                class="clr-select width-input"
+                                id="src_registry_id"
+                                (change)="sourceChange($event)"
+                                formControlName="src_registry"
+                                [compareWith]="equals">
+                                <option class="display-none"></option>
+                                @for (source of sourceList; track source) {
+                                    <option [ngValue]="source">
+                                        {{ source.name }}-{{ source.url }}
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <div class="space-between">
+                            @if (noEndpointInfo.length !== 0) {
+                                <span class="alert-label">{{
+                                    noEndpointInfo | translate
+                                }}</span>
                             }
-                        </select>
-                    </div>
-                    <div class="space-between">
-                        @if (noEndpointInfo.length !== 0) {
-                        <span class="alert-label">{{
-                            noEndpointInfo | translate
-                        }}</span>
-                        } @if (noEndpointInfo.length !== 0) {
-                        <span
-                            class="alert-label go-link"
-                            (click)="goRegistry()"
-                            >{{ 'REPLICATION.ENDPOINTS' | translate }}</span
-                        >
-                        }
+                            @if (noEndpointInfo.length !== 0) {
+                                <span
+                                    class="alert-label go-link"
+                                    (click)="goRegistry()"
+                                    >{{
+                                        'REPLICATION.ENDPOINTS' | translate
+                                    }}</span
+                                >
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
             }
             <!--images/Filter-->
             <div class="clr-form-control">
@@ -168,250 +174,314 @@
                     class="spinner spinner-inline spinner-position"
                     [hidden]="onGoing === false"></span>
                 <div formArrayName="filters" class="clr-control-container">
-                    @for (filter of filters.controls; track filter; let i =
-                    $index) {
-                    <div class="filterSelect">
-                        <div [formGroupName]="i" class="flex">
-                            <label class="sub-label"
-                                >{{
-                                    'REPLICATION.' +
-                                        supportedFilters[i]?.type.toUpperCase()
-                                        | translate
-                                }}:</label
-                            >
-                            @if (supportedFilters[i]?.style === 'input') {
-                            <div class="flex">
-                                @if (supportedFilters[i]?.type === 'tag') {
-                                <div class="clr-select-wrapper mr-1">
-                                    <select
-                                        class="clr-select width-match-exclude"
-                                        formControlName="decoration">
-                                        <option value="matches">
-                                            {{
-                                                'TAG_RETENTION.MAT' | translate
-                                            }}
-                                        </option>
-                                        <option value="excludes">
-                                            {{
-                                                'TAG_RETENTION.EXC' | translate
-                                            }}
-                                        </option>
-                                    </select>
-                                </div>
+                    @for (
+                        filter of filters.controls;
+                        track filter;
+                        let i = $index
+                    ) {
+                        <div class="filterSelect">
+                            <div [formGroupName]="i" class="flex">
+                                <label class="sub-label"
+                                    >{{
+                                        'REPLICATION.' +
+                                            supportedFilters[
+                                                i
+                                            ]?.type.toUpperCase() | translate
+                                    }}:</label
+                                >
+                                @if (supportedFilters[i]?.style === 'input') {
+                                    <div class="flex">
+                                        @if (
+                                            supportedFilters[i]?.type === 'tag'
+                                        ) {
+                                            <div
+                                                class="clr-select-wrapper mr-1">
+                                                <select
+                                                    class="clr-select width-match-exclude"
+                                                    formControlName="decoration">
+                                                    <option value="matches">
+                                                        {{
+                                                            'TAG_RETENTION.MAT'
+                                                                | translate
+                                                        }}
+                                                    </option>
+                                                    <option value="excludes">
+                                                        {{
+                                                            'TAG_RETENTION.EXC'
+                                                                | translate
+                                                        }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        }
+                                        <div class="clr-input-wrapper">
+                                            <input
+                                                class="clr-input"
+                                                autocomplete="off"
+                                                [ngClass]="{
+                                                    'width-name-resource':
+                                                        supportedFilters[i]
+                                                            ?.type !== 'tag',
+                                                    'width-tag-label':
+                                                        supportedFilters[i]
+                                                            ?.type === 'tag',
+                                                }"
+                                                (input)="trimText($event)"
+                                                type="text"
+                                                #filterValue
+                                                size="14"
+                                                formControlName="value"
+                                                id="{{
+                                                    'filter_' +
+                                                        supportedFilters[i]
+                                                            ?.type
+                                                }}" />
+                                        </div>
+                                    </div>
                                 }
-                                <div class="clr-input-wrapper">
-                                    <input
-                                        class="clr-input"
-                                        autocomplete="off"
-                                        [ngClass]="{
-                                            'width-name-resource':
-                                                supportedFilters[i]?.type !==
-                                                'tag',
-                                            'width-tag-label':
-                                                supportedFilters[i]?.type ===
-                                                'tag'
-                                        }"
-                                        (input)="trimText($event)"
-                                        type="text"
-                                        #filterValue
-                                        size="14"
-                                        formControlName="value"
-                                        id="{{
-                                            'filter_' +
+                                @if (
+                                    supportedFilters[i]?.style === 'radio' &&
+                                    supportedFilters[i]?.values.length > 1
+                                ) {
+                                    <div
+                                        class="select resource-box clr-select-wrapper">
+                                        <select
+                                            class="clr-select width-name-resource"
+                                            formControlName="value"
+                                            #selectedValue
+                                            id="{{
+                                                'select_' +
+                                                    supportedFilters[i]?.type
+                                            }}"
+                                            name="{{
                                                 supportedFilters[i]?.type
-                                        }}" />
-                                </div>
-                            </div>
-                            } @if ( supportedFilters[i]?.style === 'radio' &&
-                            supportedFilters[i]?.values.length > 1 ) {
-                            <div class="select resource-box clr-select-wrapper">
-                                <select
-                                    class="clr-select width-name-resource"
-                                    formControlName="value"
-                                    #selectedValue
-                                    id="{{
-                                        'select_' + supportedFilters[i]?.type
-                                    }}"
-                                    name="{{ supportedFilters[i]?.type }}">
-                                    <option value="">
-                                        {{ 'REPLICATION.ALL' | translate }}
-                                    </option>
-                                    @for ( value of supportedFilters[i] ?.values
-                                    ; track value) {
-                                    <option value="{{ value }}">
-                                        {{ value }}
-                                    </option>
-                                    }
-                                </select>
-                            </div>
-                            } @if ( supportedFilters[i]?.type === 'label' &&
-                            supportedFilters[i]?.style === 'list' ) {
-                            <div class="select flex">
-                                <div class="clr-select-wrapper mr-1">
-                                    <select
-                                        class="clr-select width-match-exclude"
-                                        formControlName="decoration">
-                                        <option value="matches">
-                                            {{
-                                                'TAG_RETENTION.MAT' | translate
-                                            }}
-                                        </option>
-                                        <option value="excludes">
-                                            {{
-                                                'TAG_RETENTION.EXC' | translate
-                                            }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div
-                                    class="clr-input-wrapper position-relative width-tag-label">
-                                    <input
-                                        class="clr-input width-tag-label label-input"
-                                        autocomplete="off"
-                                        type="text"
-                                        id="labelFilter"
-                                        [(ngModel)]="stringForLabelFilter"
-                                        [ngModelOptions]="{
-                                            standalone: true
-                                        }" />
-                                    <clr-dropdown>
-                                        <clr-icon
-                                            class="down"
-                                            clrDropdownTrigger
-                                            shape="caret"
-                                            direction="down"
-                                            size="16">
-                                        </clr-icon>
-                                        <clr-dropdown-menu
-                                            [ngStyle]="{ 'max-height.px': 230 }"
-                                            class="right-align"
-                                            clrPosition="bottom-left"
-                                            *clrIfOpen>
-                                            @for ( value of
-                                            supportedFilterLabels ; track value)
-                                            {
-                                            <button
-                                                type="button"
-                                                class="dropdown-item flex"
-                                                (click)="
-                                                    stickLabel(value.name)
-                                                ">
-                                                <clr-icon
-                                                    shape="check"
-                                                    [style.visibility]="
-                                                        isSelect(value.name)
-                                                            ? 'visible'
-                                                            : 'hidden'
-                                                    "></clr-icon>
-                                                <hbr-label-piece
-                                                    [label]="value"
-                                                    [labelWidth]="
-                                                        130
-                                                    "></hbr-label-piece>
-                                            </button>
-                                            } @if (
-                                            !supportedFilterLabels?.length ) {
-                                            <button
-                                                type="button"
-                                                class="dropdown-item space-between no-labels"
-                                                (click)="goToLabels()">
-                                                <span class="alert-label">{{
-                                                    'REPLICATION.NO_LABEL_INFO'
+                                            }}">
+                                            <option value="">
+                                                {{
+                                                    'REPLICATION.ALL'
                                                         | translate
-                                                }}</span>
-                                                <span
-                                                    class="alert-label go-link"
-                                                    >{{
-                                                        'CONFIG.LABEL'
-                                                            | translate
-                                                    }}</span
-                                                >
-                                            </button>
+                                                }}
+                                            </option>
+                                            @for (
+                                                value of supportedFilters[i]
+                                                    ?.values;
+                                                track value
+                                            ) {
+                                                <option value="{{ value }}">
+                                                    {{ value }}
+                                                </option>
                                             }
-                                        </clr-dropdown-menu>
-                                    </clr-dropdown>
-                                </div>
+                                        </select>
+                                    </div>
+                                }
+                                @if (
+                                    supportedFilters[i]?.type === 'label' &&
+                                    supportedFilters[i]?.style === 'list'
+                                ) {
+                                    <div class="select flex">
+                                        <div class="clr-select-wrapper mr-1">
+                                            <select
+                                                class="clr-select width-match-exclude"
+                                                formControlName="decoration">
+                                                <option value="matches">
+                                                    {{
+                                                        'TAG_RETENTION.MAT'
+                                                            | translate
+                                                    }}
+                                                </option>
+                                                <option value="excludes">
+                                                    {{
+                                                        'TAG_RETENTION.EXC'
+                                                            | translate
+                                                    }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div
+                                            class="clr-input-wrapper position-relative width-tag-label">
+                                            <input
+                                                class="clr-input width-tag-label label-input"
+                                                autocomplete="off"
+                                                type="text"
+                                                id="labelFilter"
+                                                [(ngModel)]="
+                                                    stringForLabelFilter
+                                                "
+                                                [ngModelOptions]="{
+                                                    standalone: true,
+                                                }" />
+                                            <clr-dropdown>
+                                                <clr-icon
+                                                    class="down"
+                                                    clrDropdownTrigger
+                                                    shape="caret"
+                                                    direction="down"
+                                                    size="16">
+                                                </clr-icon>
+                                                <clr-dropdown-menu
+                                                    [ngStyle]="{
+                                                        'max-height.px': 230,
+                                                    }"
+                                                    class="right-align"
+                                                    clrPosition="bottom-left"
+                                                    *clrIfOpen>
+                                                    @for (
+                                                        value of supportedFilterLabels;
+                                                        track value
+                                                    ) {
+                                                        <button
+                                                            type="button"
+                                                            class="dropdown-item flex"
+                                                            (click)="
+                                                                stickLabel(
+                                                                    value.name
+                                                                )
+                                                            ">
+                                                            <clr-icon
+                                                                shape="check"
+                                                                [style.visibility]="
+                                                                    isSelect(
+                                                                        value.name
+                                                                    )
+                                                                        ? 'visible'
+                                                                        : 'hidden'
+                                                                "></clr-icon>
+                                                            <hbr-label-piece
+                                                                [label]="value"
+                                                                [labelWidth]="
+                                                                    130
+                                                                "></hbr-label-piece>
+                                                        </button>
+                                                    }
+                                                    @if (
+                                                        !supportedFilterLabels?.length
+                                                    ) {
+                                                        <button
+                                                            type="button"
+                                                            class="dropdown-item space-between no-labels"
+                                                            (click)="
+                                                                goToLabels()
+                                                            ">
+                                                            <span
+                                                                class="alert-label"
+                                                                >{{
+                                                                    'REPLICATION.NO_LABEL_INFO'
+                                                                        | translate
+                                                                }}</span
+                                                            >
+                                                            <span
+                                                                class="alert-label go-link"
+                                                                >{{
+                                                                    'CONFIG.LABEL'
+                                                                        | translate
+                                                                }}</span
+                                                            >
+                                                        </button>
+                                                    }
+                                                </clr-dropdown-menu>
+                                            </clr-dropdown>
+                                        </div>
+                                    </div>
+                                }
+                                @if (
+                                    supportedFilters[i]?.style === 'radio' &&
+                                    supportedFilters[i]?.values.length <= 1
+                                ) {
+                                    <div class="resource-box">
+                                        <span>{{
+                                            supportedFilters[i]?.values
+                                        }}</span>
+                                    </div>
+                                }
+                                <clr-tooltip>
+                                    <clr-icon
+                                        clrTooltipTrigger
+                                        shape="info-circle"
+                                        size="24"></clr-icon>
+                                    <clr-tooltip-content
+                                        clrPosition="top-left"
+                                        clrSize="md"
+                                        *clrIfOpen>
+                                        @if (
+                                            supportedFilters[i]?.type === 'name'
+                                        ) {
+                                            <span class="tooltip-content">{{
+                                                'TOOLTIP.NAME_FILTER'
+                                                    | translate
+                                            }}</span>
+                                        }
+                                        @if (
+                                            supportedFilters[i]?.type === 'tag'
+                                        ) {
+                                            <span class="tooltip-content">{{
+                                                'TOOLTIP.TAG_FILTER' | translate
+                                            }}</span>
+                                        }
+                                        @if (
+                                            supportedFilters[i]?.type ===
+                                            'label'
+                                        ) {
+                                            <span class="tooltip-content">{{
+                                                'TOOLTIP.LABEL_FILTER'
+                                                    | translate
+                                            }}</span>
+                                        }
+                                        @if (
+                                            supportedFilters[i]?.type ===
+                                            'resource'
+                                        ) {
+                                            <span class="tooltip-content">{{
+                                                'TOOLTIP.RESOURCE_FILTER'
+                                                    | translate
+                                            }}</span>
+                                        }
+                                    </clr-tooltip-content>
+                                </clr-tooltip>
                             </div>
-                            } @if ( supportedFilters[i]?.style === 'radio' &&
-                            supportedFilters[i]?.values.length <= 1 ) {
-                            <div class="resource-box">
-                                <span>{{ supportedFilters[i]?.values }}</span>
-                            </div>
-                            }
-                            <clr-tooltip>
-                                <clr-icon
-                                    clrTooltipTrigger
-                                    shape="info-circle"
-                                    size="24"></clr-icon>
-                                <clr-tooltip-content
-                                    clrPosition="top-left"
-                                    clrSize="md"
-                                    *clrIfOpen>
-                                    @if ( supportedFilters[i]?.type === 'name' )
-                                    {
-                                    <span class="tooltip-content">{{
-                                        'TOOLTIP.NAME_FILTER' | translate
-                                    }}</span>
-                                    } @if ( supportedFilters[i]?.type === 'tag'
-                                    ) {
-                                    <span class="tooltip-content">{{
-                                        'TOOLTIP.TAG_FILTER' | translate
-                                    }}</span>
-                                    } @if ( supportedFilters[i]?.type ===
-                                    'label' ) {
-                                    <span class="tooltip-content">{{
-                                        'TOOLTIP.LABEL_FILTER' | translate
-                                    }}</span>
-                                    } @if ( supportedFilters[i]?.type ===
-                                    'resource' ) {
-                                    <span class="tooltip-content">{{
-                                        'TOOLTIP.RESOURCE_FILTER' | translate
-                                    }}</span>
-                                    }
-                                </clr-tooltip-content>
-                            </clr-tooltip>
                         </div>
-                    </div>
                     }
                 </div>
             </div>
             <!--destination registry-->
             @if (isPushMode) {
-            <div class="clr-form-control">
-                <label class="clr-control-label required">{{
-                    'REPLICATION.DEST_REGISTRY' | translate
-                }}</label>
-                <div class="form-select clr-control-container">
-                    <div class="clr-select-wrapper">
-                        <select
-                            class="clr-select width-input"
-                            id="dest_registry"
-                            (change)="targetChange($event)"
-                            formControlName="dest_registry"
-                            [compareWith]="equals">
-                            <option class="display-none"></option>
-                            @for (target of targetList; track target) {
-                            <option [ngValue]="target">
-                                {{ target.name }}-{{ target.url }}
-                            </option>
+                <div class="clr-form-control">
+                    <label class="clr-control-label required">{{
+                        'REPLICATION.DEST_REGISTRY' | translate
+                    }}</label>
+                    <div class="form-select clr-control-container">
+                        <div class="clr-select-wrapper">
+                            <select
+                                class="clr-select width-input"
+                                id="dest_registry"
+                                (change)="targetChange($event)"
+                                formControlName="dest_registry"
+                                [compareWith]="equals">
+                                <option class="display-none"></option>
+                                @for (target of targetList; track target) {
+                                    <option [ngValue]="target">
+                                        {{ target.name }}-{{ target.url }}
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <div class="space-between">
+                            @if (noEndpointInfo.length !== 0) {
+                                <label class="alert-label">{{
+                                    noEndpointInfo | translate
+                                }}</label>
                             }
-                        </select>
-                    </div>
-                    <div class="space-between">
-                        @if (noEndpointInfo.length !== 0) {
-                        <label class="alert-label">{{
-                            noEndpointInfo | translate
-                        }}</label>
-                        } @if (noEndpointInfo.length !== 0) {
-                        <span
-                            class="alert-label go-link"
-                            (click)="goRegistry()"
-                            >{{ 'REPLICATION.ENDPOINTS' | translate }}</span
-                        >
-                        }
+                            @if (noEndpointInfo.length !== 0) {
+                                <span
+                                    class="alert-label go-link"
+                                    (click)="goRegistry()"
+                                    >{{
+                                        'REPLICATION.ENDPOINTS' | translate
+                                    }}</span
+                                >
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
             }
             <!--destination namespaces -->
             <div class="clr-form-control">
@@ -452,12 +522,14 @@
                             </clr-tooltip-content>
                         </clr-tooltip>
                     </div>
-                    @if ( (ruleForm.controls.dest_namespace.dirty ||
-                    ruleForm.controls.dest_namespace.touched) &&
-                    ruleForm.controls.dest_namespace.invalid ) {
-                    <clr-control-error class="margin-left-90px">
-                        {{ 'REPLICATION.NAMESPACE_TOOLTIP' | translate }}
-                    </clr-control-error>
+                    @if (
+                        (ruleForm.controls.dest_namespace.dirty ||
+                            ruleForm.controls.dest_namespace.touched) &&
+                        ruleForm.controls.dest_namespace.invalid
+                    ) {
+                        <clr-control-error class="margin-left-90px">
+                            {{ 'REPLICATION.NAMESPACE_TOOLTIP' | translate }}
+                        </clr-control-error>
                     }
                 </div>
             </div>
@@ -484,11 +556,13 @@
                                 id="dest_namespace_replace_count"
                                 formControlName="dest_namespace_replace_count"
                                 class="clr-select width-name-resource">
-                                @for (item of flattenLevelMap | keyvalue; track
-                                item) {
-                                <option [value]="item.key">
-                                    {{ item.value | translate }}
-                                </option>
+                                @for (
+                                    item of flattenLevelMap | keyvalue;
+                                    track item
+                                ) {
+                                    <option [value]="item.key">
+                                        {{ item.value | translate }}
+                                    </option>
                                 }
                             </select>
                         </div>
@@ -557,14 +631,17 @@
                                 id="ruleTrigger"
                                 formControlName="type"
                                 class="clr-select width-input">
-                                @for (trigger of supportedTriggers; track
-                                trigger) {
-                                <option [value]="trigger">
-                                    {{
-                                        'REPLICATION.' + trigger.toUpperCase()
-                                            | translate
-                                    }}
-                                </option>
+                                @for (
+                                    trigger of supportedTriggers;
+                                    track trigger
+                                ) {
+                                    <option [value]="trigger">
+                                        {{
+                                            'REPLICATION.' +
+                                                trigger.toUpperCase()
+                                                | translate
+                                        }}
+                                    </option>
                                 }
                             </select>
                         </div>
@@ -610,12 +687,12 @@
                                         </clr-tooltip>
                                     </div>
                                     @if (cronInputShouldShowError()) {
-                                    <clr-control-error>
-                                        {{
-                                            'REPLICATION.CRON_ERROR_TIP'
-                                                | translate
-                                        }}
-                                    </clr-control-error>
+                                        <clr-control-error>
+                                            {{
+                                                'REPLICATION.CRON_ERROR_TIP'
+                                                    | translate
+                                            }}
+                                        </clr-control-error>
                                     }
                                 </div>
                             </div>
@@ -698,9 +775,9 @@
                             name="speed_unit"
                             [(ngModel)]="selectedUnit">
                             @for (unit of speedUnits; track unit) {
-                            <option [value]="unit.UNIT">
-                                {{ unit.UNIT }}
-                            </option>
+                                <option [value]="unit.UNIT">
+                                    {{ unit.UNIT }}
+                                </option>
                             }
                         </select>
                         <clr-tooltip class="ml-10px">
@@ -720,12 +797,14 @@
                             </clr-tooltip-content>
                         </clr-tooltip>
                     </div>
-                    @if ( ruleForm.controls.speed.invalid &&
-                    (ruleForm.controls.speed.dirty ||
-                    ruleForm.controls.speed.touched) ) {
-                    <clr-control-error class="tooltip-content">
-                        {{ 'REPLICATION.BANDWIDTH_ERROR_TIP' | translate }}
-                    </clr-control-error>
+                    @if (
+                        ruleForm.controls.speed.invalid &&
+                        (ruleForm.controls.speed.dirty ||
+                            ruleForm.controls.speed.touched)
+                    ) {
+                        <clr-control-error class="tooltip-content">
+                            {{ 'REPLICATION.BANDWIDTH_ERROR_TIP' | translate }}
+                        </clr-control-error>
                     }
                 </div>
             </div>

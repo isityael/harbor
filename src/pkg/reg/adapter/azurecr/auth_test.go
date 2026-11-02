@@ -17,10 +17,11 @@ package azurecr
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"testing"
 
+	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/h2non/gock.v1"
 
 	"github.com/goharbor/harbor/src/pkg/reg/model"
 )
@@ -33,26 +34,32 @@ var (
 )
 
 func TestAuth(t *testing.T) {
-	// mock server
-	defer gock.Off()
 	// mock v2 API
-	gock.New(mockURL).
-		Get("/v2/").
-		Reply(401).
-		SetHeader("Www-Authenticate", `Bearer realm="https://test.azurecr.io/oauth2/token",service="test.azurecr.io"`)
+	httpmock.RegisterResponder(http.MethodGet, mockURL+"/v2/",
+		func(req *http.Request) (*http.Response, error) {
+			resp := httpmock.NewStringResponse(http.StatusUnauthorized, "")
+			resp.Header.Set("Www-Authenticate", `Bearer realm="https://test.azurecr.io/oauth2/token",service="test.azurecr.io"`)
+			return resp, nil
+		})
 	// mock token API
-	gock.New(mockURL).
-		Get("/oauth2/token").
-		MatchParam("service", "test.azurecr.io").
-		MatchParam("scope", `repository:library/busybox:metadata_read`).
-		BasicAuth(mockUsername, mockPassword).
-		Reply(200).
-		JSON(fmt.Sprintf(`{"access_token": "%s"}`, mockToken))
+	httpmock.RegisterResponderWithQuery(http.MethodGet, mockURL+"/oauth2/token",
+		url.Values{
+			"service": []string{"test.azurecr.io"},
+			"scope":   []string{"repository:library/busybox:metadata_read"},
+		},
+		func(req *http.Request) (*http.Response, error) {
+			username, password, ok := req.BasicAuth()
+			assert.True(t, ok)
+			assert.Equal(t, mockUsername, username)
+			assert.Equal(t, mockPassword, password)
+			return httpmock.NewStringResponse(http.StatusOK, fmt.Sprintf(`{"access_token": "%s"}`, mockToken)), nil
+		})
 
 	a := newAuthorizer(&model.Registry{URL: mockURL, Credential: &model.Credential{AccessKey: mockUsername, AccessSecret: mockPassword}})
 	ct := &http.Client{}
 	a.client = ct
-	gock.InterceptClient(ct)
+	httpmock.ActivateNonDefault(ct)
+	t.Cleanup(httpmock.DeactivateAndReset)
 
 	// test authorize
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", mockURL, "/v2/library/busybox/tags/list"), nil)

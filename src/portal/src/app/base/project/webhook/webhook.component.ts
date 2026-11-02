@@ -13,7 +13,13 @@
 // limitations under the License.
 import { finalize } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { AddWebhookComponent } from './add-webhook/add-webhook.component';
 import { AddWebhookFormComponent } from './add-webhook-form/add-webhook-form.component';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -58,6 +64,7 @@ const URL_TO_DISPLAY: RegExp = /^\/harbor\/projects\/(\d+)\/webhook$/;
 @Component({
     templateUrl: './webhook.component.html',
     styleUrls: ['./webhook.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class WebhookComponent implements OnInit, OnDestroy {

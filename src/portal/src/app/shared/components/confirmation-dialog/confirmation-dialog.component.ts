@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Output,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import {
     ConfirmationState,
@@ -26,6 +31,7 @@ import { BatchInfo } from '../../../base/global-confirmation-dialog/confirmation
     selector: 'confirmation-dialog',
     templateUrl: './confirmation-dialog.component.html',
     styleUrls: ['./confirmation-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ConfirmationDialogComponent {

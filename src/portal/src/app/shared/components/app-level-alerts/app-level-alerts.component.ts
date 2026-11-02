@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { SessionService } from '../../services/session.service';
 import { DEFAULT_PAGE_SIZE, delUrlParam } from '../../units/utils';
 import { forkJoin, Observable, Subscription } from 'rxjs';
@@ -34,6 +39,7 @@ const YES: string = 'yes';
     selector: 'app-app-level-alerts',
     templateUrl: './app-level-alerts.component.html',
     styleUrls: ['./app-level-alerts.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class AppLevelAlertsComponent implements OnInit, OnDestroy {
@@ -61,12 +67,10 @@ export class AppLevelAlertsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        if (
-            !(
-                localStorage &&
-                localStorage.getItem(HAS_SHOWED_SCANNER_INFO) === YES
-            )
-        ) {
+        if (!(
+            localStorage &&
+            localStorage.getItem(HAS_SHOWED_SCANNER_INFO) === YES
+        )) {
             if (this.session.getCurrentUser()?.has_admin_role) {
                 this.getDefaultScanner();
             }

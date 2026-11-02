@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"gopkg.in/h2non/gock.v1"
 
 	"github.com/goharbor/harbor/src/pkg/reg/model"
 )
@@ -17,8 +17,9 @@ const (
 	testPassword = ""
 )
 
-func mockRequest() *gock.Request {
-	return gock.New("https://hub.docker.com")
+func registerDockerHubResponder(method, path string, status int, body string) {
+	httpmock.RegisterResponder(method, "https://hub.docker.com"+path,
+		httpmock.NewStringResponder(status, body))
 }
 
 func getMockAdapter(t *testing.T) *adapter {
@@ -35,7 +36,8 @@ func getMockAdapter(t *testing.T) *adapter {
 		t.Fatalf("Failed to call newAdapter(), reason=[%v]", err)
 	}
 	a := ad.(*adapter)
-	gock.InterceptClient(a.client.client)
+	httpmock.ActivateNonDefault(a.client.client)
+	t.Cleanup(httpmock.DeactivateAndReset)
 	return a
 }
 
@@ -57,11 +59,7 @@ func TestListCandidateNamespaces(t *testing.T) {
 }
 
 func TestListNamespaces(t *testing.T) {
-	defer gock.Off()
-	gock.Observe(gock.DumpRequest)
-
-	mockRequest().Get("/v2/repositories/namespaces").
-		Reply(http.StatusOK).BodyString("{}")
+	registerDockerHubResponder(http.MethodGet, "/v2/repositories/namespaces", http.StatusOK, "{}")
 
 	a := getMockAdapter(t)
 
@@ -73,11 +71,7 @@ func TestListNamespaces(t *testing.T) {
 }
 
 func TestFetchArtifacts(t *testing.T) {
-	defer gock.Off()
-	gock.Observe(gock.DumpRequest)
-
-	mockRequest().Get("/v2/repositories/goharbor/").
-		Reply(http.StatusOK).BodyString("{}")
+	registerDockerHubResponder(http.MethodGet, "/v2/repositories/goharbor/", http.StatusOK, "{}")
 
 	a := getMockAdapter(t)
 	_, err := a.FetchArtifacts([]*model.Filter{

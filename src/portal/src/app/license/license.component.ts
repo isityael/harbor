@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { throwError as observableThrowError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -21,6 +21,7 @@ import { Title } from '@angular/platform-browser';
     viewProviders: [Title],
     templateUrl: './license.component.html',
     styleUrls: ['./license.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class LicenseComponent implements OnInit {

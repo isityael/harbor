@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionUser } from '../../../shared/entities/session-user';
 import { MessageHandlerService } from '../../../shared/services/message-handler.service';
@@ -65,6 +65,7 @@ export class SearchOption {
     selector: 'project-audit-legacy-log',
     templateUrl: './audit-legacy-log.component.html',
     styleUrls: ['./audit-legacy-log.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ProjectAuditLegacyLogComponent implements OnInit {

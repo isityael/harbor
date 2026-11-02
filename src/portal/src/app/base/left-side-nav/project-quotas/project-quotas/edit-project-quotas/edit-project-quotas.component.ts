@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Output,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { NgForm, Validators } from '@angular/forms';
 import { InlineAlertComponent } from '../../../../../shared/components/inline-alert/inline-alert.component';
 import {
@@ -37,6 +43,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
     selector: 'edit-project-quotas',
     templateUrl: './edit-project-quotas.component.html',
     styleUrls: ['./edit-project-quotas.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class EditProjectQuotasComponent {

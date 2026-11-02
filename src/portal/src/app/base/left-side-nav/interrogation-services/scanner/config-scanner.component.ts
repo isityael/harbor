@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import {
+    Component,
+    ViewChild,
+    OnInit,
+    OnDestroy,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Scanner } from './scanner';
 import { NewScannerModalComponent } from './new-scanner-modal/new-scanner-modal.component';
 import { finalize } from 'rxjs/operators';
@@ -43,6 +49,7 @@ import { ScannerRegistrationReq } from '../../../../../../ng-swagger-gen/models/
         './config-scanner.component.scss',
         '../../config/config.component.scss',
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ConfigurationScannerComponent implements OnInit, OnDestroy {
@@ -196,7 +203,7 @@ export class ConfigurationScannerComponent implements OnInit, OnDestroy {
 
     supportCapability(scanner: Scanner, capabilityType: string): boolean {
         return scanner && scanner.capabilities && capabilityType
-            ? scanner?.capabilities?.[`support_${capabilityType}`] ?? false
+            ? (scanner?.capabilities?.[`support_${capabilityType}`] ?? false)
             : false;
     }
 

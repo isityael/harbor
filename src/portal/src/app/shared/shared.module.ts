@@ -15,10 +15,10 @@ import { NgModule, provideCheckNoChangesConfig } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
     TranslateLoader,
-    TranslateModule,
     TranslateNoOpLoader,
     TranslateStore,
 } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DateValidatorDirective } from './directives/date-validator.directive';
 import { PortValidatorDirective } from './directives/port.directive';
@@ -100,6 +100,7 @@ import { PreferenceSettingsComponent } from '../base/preference-settings/prefere
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 // register necessary components
@@ -283,7 +284,7 @@ export class SharedModule {}
             provide: UserPermissionService,
             useClass: UserPermissionDefaultService,
         },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting(),
         // Disable Angular 21's strict ExpressionChangedAfterItHasBeenCheckedError
         // dev-mode check in tests. The transient flips originate from

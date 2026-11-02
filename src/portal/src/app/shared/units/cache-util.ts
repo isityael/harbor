@@ -25,10 +25,8 @@ function hashCode(str: string): string {
     for (let i = 0; i < str.length; i++) {
         chr = str.charCodeAt(i);
 
-        /* eslint-disable no-bitwise */
         hash = (hash << 5) - hash + chr;
         hash |= 0;
-        /* eslint-enable no-bitwise */
     }
 
     return hash.toString(36);

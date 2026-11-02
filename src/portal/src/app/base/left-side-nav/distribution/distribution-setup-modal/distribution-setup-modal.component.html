@@ -20,9 +20,9 @@
                     required>
                     <option class="display-none" value=""></option>
                     @for (provider of providers; track provider) {
-                    <option value="{{ provider.id }}">
-                        {{ provider.name }}
-                    </option>
+                        <option value="{{ provider.id }}">
+                            {{ provider.name }}
+                        </option>
                     }
                 </select>
                 <clr-control-error>
@@ -59,17 +59,30 @@
                             class="spinner spinner-inline"
                             [hidden]="!checkNameOnGoing"></span>
                     </div>
-                    @if ( ((nameNg.dirty || nameNg.touched) && nameNg.invalid)
-                    || isNameExisting ) {
-                    <clr-control-error>
-                        @if ( !( (nameNg.dirty || nameNg.touched) &&
-                        nameNg.invalid ) && isNameExisting ) {
-                        <span>{{ 'SCANNER.NAME_EXISTS' | translate }}</span>
-                        } @if ( (nameNg.dirty || nameNg.touched) &&
-                        nameNg.invalid ) {
-                        <span>{{ 'TOOLTIP.ITEM_REQUIRED' | translate }}</span>
-                        }
-                    </clr-control-error>
+                    @if (
+                        ((nameNg.dirty || nameNg.touched) && nameNg.invalid) ||
+                        isNameExisting
+                    ) {
+                        <clr-control-error>
+                            @if (
+                                !(
+                                    (nameNg.dirty || nameNg.touched) &&
+                                    nameNg.invalid
+                                ) && isNameExisting
+                            ) {
+                                <span>{{
+                                    'SCANNER.NAME_EXISTS' | translate
+                                }}</span>
+                            }
+                            @if (
+                                (nameNg.dirty || nameNg.touched) &&
+                                nameNg.invalid
+                            ) {
+                                <span>{{
+                                    'TOOLTIP.ITEM_REQUIRED' | translate
+                                }}</span>
+                            }
+                        </clr-control-error>
                     }
                 </div>
             </div>
@@ -118,17 +131,31 @@
                             class="spinner spinner-inline"
                             [hidden]="!checkEndpointOngoing"></span>
                     </div>
-                    @if ( ((endpointNg.dirty || endpointNg.touched) &&
-                    endpointNg.invalid) || isEndpointExisting ) {
-                    <clr-control-error>
-                        @if ( !( (endpointNg.dirty || endpointNg.touched) &&
-                        endpointNg.invalid ) && isEndpointExisting ) {
-                        <span>{{ 'SCANNER.ENDPOINT_EXISTS' | translate }}</span>
-                        } @if ( (endpointNg.dirty || endpointNg.touched) &&
-                        endpointNg.invalid ) {
-                        <span>{{ 'TOOLTIP.ENDPOINT_FORMAT' | translate }}</span>
-                        }
-                    </clr-control-error>
+                    @if (
+                        ((endpointNg.dirty || endpointNg.touched) &&
+                            endpointNg.invalid) ||
+                        isEndpointExisting
+                    ) {
+                        <clr-control-error>
+                            @if (
+                                !(
+                                    (endpointNg.dirty || endpointNg.touched) &&
+                                    endpointNg.invalid
+                                ) && isEndpointExisting
+                            ) {
+                                <span>{{
+                                    'SCANNER.ENDPOINT_EXISTS' | translate
+                                }}</span>
+                            }
+                            @if (
+                                (endpointNg.dirty || endpointNg.touched) &&
+                                endpointNg.invalid
+                            ) {
+                                <span>{{
+                                    'TOOLTIP.ENDPOINT_FORMAT' | translate
+                                }}</span>
+                            }
+                        </clr-control-error>
                     }
                 </div>
             </div>
@@ -174,84 +201,87 @@
             </clr-radio-container>
             <!-- auth data -->
             @if (model.auth_mode === 'BASIC') {
-            <span>
-                <clr-input-container>
-                    <label
-                        class="clr-control-label"
-                        [class.required]="isBasicCredentialRequired()"
-                        for="auth_data_username"
-                        >{{ 'DISTRIBUTION.USERNAME' | translate }}</label
-                    >
-                    <input
-                        class="width-280"
-                        clrInput
-                        [required]="isBasicCredentialRequired()"
-                        type="text"
-                        id="auth_data_username"
-                        [(ngModel)]="authData['username']"
-                        placeholder="{{
-                            'DISTRIBUTION.SETUP.USERNAME_PLACEHOLDER'
-                                | translate
-                        }}"
-                        name="auth_data_username"
-                        autocomplete="off" />
-                    <clr-control-error>
-                        {{ 'TOOLTIP.ITEM_REQUIRED' | translate }}
-                    </clr-control-error>
-                </clr-input-container>
-                <clr-input-container>
-                    <label
-                        class="clr-control-label"
-                        [class.required]="isBasicCredentialRequired()"
-                        for="auth_data_password"
-                        >{{ 'DISTRIBUTION.PASSWORD' | translate }}</label
-                    >
-                    <input
-                        class="width-280"
-                        clrInput
-                        [required]="isBasicCredentialRequired()"
-                        type="password"
-                        id="auth_data_password"
-                        [(ngModel)]="authData['password']"
-                        placeholder="{{
-                            'DISTRIBUTION.SETUP.PASSWORD_PLACEHOLDER'
-                                | translate
-                        }}"
-                        name="auth_data_password"
-                        autocomplete="off" />
-                    <clr-control-error>
-                        {{ 'TOOLTIP.ITEM_REQUIRED' | translate }}
-                    </clr-control-error>
-                </clr-input-container>
-            </span>
-            } @if (model.auth_mode === 'OAUTH') {
-            <span>
-                <clr-input-container>
-                    <label
-                        class="clr-control-label"
-                        [class.required]="isOAuthTokenRequired()"
-                        for="auth_data_token"
-                        >{{ 'DISTRIBUTION.TOKEN' | translate }}</label
-                    >
-                    <input
-                        class="width-280"
-                        clrInput
-                        [required]="isOAuthTokenRequired()"
-                        type="password"
-                        id="auth_data_token"
-                        [(ngModel)]="authData['token']"
-                        placeholder="{{
-                            'DISTRIBUTION.SETUP.TOKEN_PLACEHOLDER' | translate
-                        }}"
-                        name="auth_data_token"
-                        autocomplete="off" />
-                    <clr-control-error>
-                        {{ 'TOOLTIP.ITEM_REQUIRED' | translate }}
-                    </clr-control-error>
-                </clr-input-container>
-            </span>
-            } @if (model.auth_mode === 'NONE') {
-            <span></span>
+                <span>
+                    <clr-input-container>
+                        <label
+                            class="clr-control-label"
+                            [class.required]="isBasicCredentialRequired()"
+                            for="auth_data_username"
+                            >{{ 'DISTRIBUTION.USERNAME' | translate }}</label
+                        >
+                        <input
+                            class="width-280"
+                            clrInput
+                            [required]="isBasicCredentialRequired()"
+                            type="text"
+                            id="auth_data_username"
+                            [(ngModel)]="authData['username']"
+                            placeholder="{{
+                                'DISTRIBUTION.SETUP.USERNAME_PLACEHOLDER'
+                                    | translate
+                            }}"
+                            name="auth_data_username"
+                            autocomplete="off" />
+                        <clr-control-error>
+                            {{ 'TOOLTIP.ITEM_REQUIRED' | translate }}
+                        </clr-control-error>
+                    </clr-input-container>
+                    <clr-input-container>
+                        <label
+                            class="clr-control-label"
+                            [class.required]="isBasicCredentialRequired()"
+                            for="auth_data_password"
+                            >{{ 'DISTRIBUTION.PASSWORD' | translate }}</label
+                        >
+                        <input
+                            class="width-280"
+                            clrInput
+                            [required]="isBasicCredentialRequired()"
+                            type="password"
+                            id="auth_data_password"
+                            [(ngModel)]="authData['password']"
+                            placeholder="{{
+                                'DISTRIBUTION.SETUP.PASSWORD_PLACEHOLDER'
+                                    | translate
+                            }}"
+                            name="auth_data_password"
+                            autocomplete="off" />
+                        <clr-control-error>
+                            {{ 'TOOLTIP.ITEM_REQUIRED' | translate }}
+                        </clr-control-error>
+                    </clr-input-container>
+                </span>
+            }
+            @if (model.auth_mode === 'OAUTH') {
+                <span>
+                    <clr-input-container>
+                        <label
+                            class="clr-control-label"
+                            [class.required]="isOAuthTokenRequired()"
+                            for="auth_data_token"
+                            >{{ 'DISTRIBUTION.TOKEN' | translate }}</label
+                        >
+                        <input
+                            class="width-280"
+                            clrInput
+                            [required]="isOAuthTokenRequired()"
+                            type="password"
+                            id="auth_data_token"
+                            [(ngModel)]="authData['token']"
+                            placeholder="{{
+                                'DISTRIBUTION.SETUP.TOKEN_PLACEHOLDER'
+                                    | translate
+                            }}"
+                            name="auth_data_token"
+                            autocomplete="off" />
+                        <clr-control-error>
+                            {{ 'TOOLTIP.ITEM_REQUIRED' | translate }}
+                        </clr-control-error>
+                    </clr-input-container>
+                </span>
+            }
+            @if (model.auth_mode === 'NONE') {
+                <span></span>
             }
 
             <!-- 5. enabled -->

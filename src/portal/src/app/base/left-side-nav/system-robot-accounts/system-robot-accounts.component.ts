@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { NewRobotComponent } from './new-robot/new-robot.component';
 import { ViewTokenComponent } from '../../../shared/components/view-token/view-token.component';
 import { RobotService } from '../../../../../ng-swagger-gen/services/robot.service';
@@ -72,6 +78,7 @@ import { Permissions } from '../../../../../ng-swagger-gen/models/permissions';
     selector: 'system-robot-accounts',
     templateUrl: './system-robot-accounts.component.html',
     styleUrls: ['./system-robot-accounts.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class SystemRobotAccountsComponent implements OnInit, OnDestroy {

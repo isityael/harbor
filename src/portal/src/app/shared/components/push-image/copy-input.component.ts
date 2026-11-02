@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+    Component,
+    Input,
+    Output,
+    EventEmitter,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ClipboardService } from '../third-party/ngx-clipboard';
 
 export const enum CopyStatus {
@@ -24,6 +30,7 @@ export const enum CopyStatus {
     selector: 'hbr-copy-input',
     templateUrl: './copy-input.coponent.html',
     styleUrls: ['./push-image.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class CopyInputComponent {

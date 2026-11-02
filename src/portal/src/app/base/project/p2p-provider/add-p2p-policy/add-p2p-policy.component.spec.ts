@@ -18,7 +18,7 @@ import {
     flush,
     TestBed,
 } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import {
     CUSTOM_ELEMENTS_SCHEMA,
     NO_ERRORS_SCHEMA,
@@ -45,6 +45,7 @@ import { InlineAlertComponent } from '../../../../shared/components/inline-alert
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 describe('AddP2pPolicyComponent', () => {
     let component: AddP2pPolicyComponent;
@@ -124,7 +125,7 @@ describe('AddP2pPolicyComponent', () => {
                 { provide: SessionService, useValue: mockedSessionService },
                 { provide: AppConfigService, useValue: mockedAppConfigService },
                 { provide: ProjectService, useValue: mockedProjectService },
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
                 provideCheckNoChangesConfig({ exhaustive: false }),
             ],

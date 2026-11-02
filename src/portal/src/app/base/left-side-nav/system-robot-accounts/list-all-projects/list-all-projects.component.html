@@ -9,7 +9,9 @@
             [mode]="PermissionSelectPanelModes.DROPDOWN"
             [(permissionsModel)]="initialAccess"
             (permissionsModelChange)="resetAccess(initialAccess)"
-            [candidatePermissions]="robotMetadata?.project">
+            [candidatePermissions]="
+                $safeNavigationMigration(robotMetadata?.project)
+            ">
             <button class="btn btn-secondary btn-sm m-0">
                 {{ 'SYSTEM_ROBOT.RESET_PERMISSION' | translate }}
                 <clr-icon size="12" shape="caret" direction="down"></clr-icon>
@@ -19,9 +21,12 @@
             (click)="selectAllOrUnselectAll()"
             class="btn btn-secondary btn-sm m-0 ml-1">
             @if (showSelectAll) {
-            <span>{{ 'SYSTEM_ROBOT.SELECT_ALL_PROJECT' | translate }}</span>
-            } @if (!showSelectAll) {
-            <span>{{ 'SYSTEM_ROBOT.UNSELECT_ALL_PROJECT' | translate }}</span>
+                <span>{{ 'SYSTEM_ROBOT.SELECT_ALL_PROJECT' | translate }}</span>
+            }
+            @if (!showSelectAll) {
+                <span>{{
+                    'SYSTEM_ROBOT.UNSELECT_ALL_PROJECT' | translate
+                }}</span>
             }
         </button>
     </clr-dg-action-bar>
@@ -43,14 +48,16 @@
             }}</a>
         </clr-dg-cell>
         <clr-dg-cell>{{
-            p.creation_time | harborDatetime : 'short'
+            p.creation_time | harborDatetime: 'short'
         }}</clr-dg-cell>
         <clr-dg-cell>
             <robot-permissions-panel
                 [usedInDatagrid]="true"
                 [mode]="PermissionSelectPanelModes.DROPDOWN"
                 [(permissionsModel)]="selectedProjectPermissionMap[p.name]"
-                [candidatePermissions]="robotMetadata?.project">
+                [candidatePermissions]="
+                    $safeNavigationMigration(robotMetadata?.project)
+                ">
                 <button class="btn btn-link btn-sm m-0 p-0">
                     {{ selectedProjectPermissionMap[p.name]?.length || 0 }}
                     {{ 'SYSTEM_ROBOT.PERMISSIONS' | translate }}

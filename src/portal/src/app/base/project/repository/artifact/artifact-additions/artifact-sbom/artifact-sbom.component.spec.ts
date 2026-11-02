@@ -16,11 +16,8 @@ import { ArtifactSbomComponent } from './artifact-sbom.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ClarityModule } from '@clr/angular';
 import { of } from 'rxjs';
-import {
-    TranslateNoOpLoader,
-    TranslateLoader,
-    TranslateModule,
-} from '@ngx-translate/core';
+import { TranslateNoOpLoader, TranslateLoader } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserPermissionService } from '../../../../../../shared/services';
 import { ErrorHandler } from '../../../../../../shared/units/error-handler';

@@ -21,6 +21,7 @@ import {
     Output,
     Renderer2,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { ArtifactFilterEvent, multipleFilter } from '../../../../artifact';
 import { Label } from '../../../../../../../../../../ng-swagger-gen/models/label';
@@ -31,6 +32,7 @@ import { debounceTime } from 'rxjs/operators';
     selector: 'app-artifact-filter',
     templateUrl: './artifact-filter.component.html',
     styleUrls: ['./artifact-filter.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ArtifactFilterComponent implements OnInit, OnDestroy {
@@ -55,13 +57,11 @@ export class ArtifactFilterComponent implements OnInit, OnDestroy {
     constructor(private renderer: Renderer2) {
         // click  outside, then close dropdown
         this.renderer.listen('window', 'click', (e: Event) => {
-            if (
-                !(
-                    (e.target as any).id === this.searchId ||
-                    (e.target as any).id === this.typeSelectId ||
-                    this.filterArea.nativeElement.contains(e.target)
-                )
-            ) {
+            if (!(
+                (e.target as any).id === this.searchId ||
+                (e.target as any).id === this.typeSelectId ||
+                this.filterArea.nativeElement.contains(e.target)
+            )) {
                 this.dropdownOpened = false;
             }
         });

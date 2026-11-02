@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ConfirmationDialogService } from '../../../global-confirmation-dialog/confirmation-dialog.service';
 import { JobserviceService } from '../../../../../../ng-swagger-gen/services/jobservice.service';
 import { MessageHandlerService } from '../../../../shared/services/message-handler.service';
@@ -44,6 +49,7 @@ import {
     selector: 'app-pending-job-card',
     templateUrl: './pending-job-card.component.html',
     styleUrls: ['./pending-job-card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class PendingCardComponent implements OnInit, OnDestroy {

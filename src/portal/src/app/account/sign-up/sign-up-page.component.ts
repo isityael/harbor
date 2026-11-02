@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { NewUserFormComponent } from '../../shared/components/new-user-form/new-user-form.component';
@@ -24,6 +29,7 @@ import { AlertType } from '../../shared/entities/shared.const';
     selector: 'sign-up-page',
     templateUrl: 'sign-up-page.component.html',
     styleUrls: ['../../common.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class SignUpPageComponent implements OnInit {

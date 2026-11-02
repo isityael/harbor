@@ -23,10 +23,10 @@
     }}</clr-dg-placeholder>
     <clr-dg-footer>
         @if (repositories?.length) {
-        <span
-            >{{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }}
-            {{ 'REPOSITORY.OF' | translate }}
-        </span>
+            <span
+                >{{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }}
+                {{ 'REPOSITORY.OF' | translate }}
+            </span>
         }
         {{ repositories?.length }} {{ 'REPOSITORY.ITEMS' | translate }}
         <clr-dg-pagination #pagination [clrDgPageSize]="5"></clr-dg-pagination>

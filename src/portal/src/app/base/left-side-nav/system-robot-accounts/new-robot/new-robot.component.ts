@@ -19,6 +19,7 @@ import {
     OnInit,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { ConfigurationService } from '../../../../services/config.service';
 import { Robot } from '../../../../../../ng-swagger-gen/models/robot';
@@ -68,6 +69,7 @@ const MINI_SECONDS_ONE_DAY: number = 60 * 24 * 60 * 1000;
     selector: 'new-robot',
     templateUrl: './new-robot.component.html',
     styleUrls: ['./new-robot.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class NewRobotComponent implements OnInit, OnDestroy {
@@ -319,11 +321,11 @@ export class NewRobotComponent implements OnInit, OnDestroy {
         if (!this.canAdd()) {
             return false;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (this.systemRobot.duration != this.originalRobotForEdit.duration) {
             return true;
         }
-        // eslint-disable-next-line eqeqeq
+
         if (
             this.systemRobot.description !=
             this.originalRobotForEdit.description

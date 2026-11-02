@@ -24,7 +24,7 @@ import { SharedTestingModule } from '../../../../shared/shared.module';
 import { ErrorHandler } from '../../../../shared/units/error-handler';
 import { MessageHandlerService } from '../../../../shared/services/message-handler.service';
 import { SessionService } from '../../../../shared/services/session.service';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 const mockSystemInfo: SystemInfo[] = [
     {
@@ -222,6 +222,7 @@ describe('ProjectPolicyConfigComponent', () => {
         [projectName]="'testing'"
         [projectId]="1">
     </hbr-project-policy-config>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 class TestHostComponent {

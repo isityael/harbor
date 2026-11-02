@@ -21,6 +21,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('ScanningResultService', () => {
@@ -33,7 +34,7 @@ describe('ScanningResultService', () => {
                     provide: ScanningResultService,
                     useClass: ScanningResultDefaultService,
                 },
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

@@ -19,7 +19,8 @@ import { MessageHandlerService } from '../../shared/services/message-handler.ser
 import { SearchTriggerService } from '../../shared/components/global-search/search-trigger.service';
 import { CUSTOM_ELEMENTS_SCHEMA, ChangeDetectorRef } from '@angular/core';
 import { ClarityModule } from '@clr/angular';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';

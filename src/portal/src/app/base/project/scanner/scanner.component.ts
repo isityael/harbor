@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClrLoadingState } from '@clr/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -37,6 +42,7 @@ import { Scanner } from '../../left-side-nav/interrogation-services/scanner/scan
     selector: 'scanner',
     templateUrl: './scanner.component.html',
     styleUrls: ['./scanner.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ScannerComponent implements OnInit {

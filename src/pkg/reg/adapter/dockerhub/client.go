@@ -24,6 +24,7 @@ import (
 	"time"
 
 	commonhttp "github.com/goharbor/harbor/src/common/http"
+	commonutils "github.com/goharbor/harbor/src/common/utils"
 	"github.com/goharbor/harbor/src/lib/config"
 	"github.com/goharbor/harbor/src/lib/log"
 	"github.com/goharbor/harbor/src/pkg/reg/model"
@@ -31,12 +32,13 @@ import (
 
 // Client is a client to interact with DockerHub
 type Client struct {
-	client      *http.Client
-	mu          sync.Mutex
-	token       string
-	tokenExpiry time.Time
-	host        string
-	credential  LoginCredential
+	client        *http.Client
+	mu            sync.Mutex
+	token         string
+	tokenExpiry   time.Time
+	host          string
+	credential    LoginCredential
+	hasCredential bool
 }
 
 // NewClient creates a new DockerHub client.
@@ -58,16 +60,14 @@ func NewClient(registry *model.Registry) (*Client, error) {
 		return client, nil
 	}
 
-	// Login to DockerHub to get access token. Tokens expire after 10 minutes;
-	// subsequent calls via Do() will refresh the token automatically.
+	// Store credentials for lazy token refresh on first API call.
+	// We no longer call hub.docker.com/v2/users/login/ eagerly because
+	// Cloudflare blocks Go's TLS fingerprint on that endpoint.
 	client.credential = LoginCredential{
 		Identifier: registry.Credential.AccessKey,
 		Secret:     registry.Credential.AccessSecret,
 	}
-	err := client.refreshToken()
-	if err != nil {
-		return nil, fmt.Errorf("login to dockerhub error: %v", err)
-	}
+	client.hasCredential = true
 
 	return client, nil
 }
@@ -85,6 +85,7 @@ func (c *Client) refreshToken() error {
 		return err
 	}
 	request.Header.Set("Content-Type", "application/json")
+	commonutils.SetUserAgentHeader(request)
 
 	resp, err := c.client.Do(request)
 	if err != nil {
@@ -116,7 +117,7 @@ func (c *Client) refreshToken() error {
 // ensureToken refreshes the bearer token when it has expired or is close to
 // expiring. It is a no-op for anonymous (unauthenticated) clients.
 func (c *Client) ensureToken() error {
-	if len(c.credential.Identifier) == 0 {
+	if !c.hasCredential {
 		return nil
 	}
 	c.mu.Lock()
@@ -143,7 +144,10 @@ func (c *Client) Do(method, path string, body io.Reader) (*http.Response, error)
 	if body != nil || method == http.MethodPost || method == http.MethodPut {
 		req.Header.Set("Content-Type", "application/json")
 	}
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
+	if c.token != "" {
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
+	}
+	commonutils.SetUserAgentHeader(req)
 
 	return c.client.Do(req)
 }

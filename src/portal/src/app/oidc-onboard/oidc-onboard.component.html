@@ -12,29 +12,31 @@
             </div>
             <div id="error-message">
                 @if (errorOpen) {
-                <div class="alert alert-danger" role="alert">
-                    <div class="alert-items">
-                        <div class="alert-item static">
-                            <div class="alert-icon-wrapper">
-                                <clr-icon
-                                    class="alert-icon"
-                                    size="24"
-                                    shape="exclamation-circle"></clr-icon>
+                    <div class="alert alert-danger" role="alert">
+                        <div class="alert-items">
+                            <div class="alert-item static">
+                                <div class="alert-icon-wrapper">
+                                    <clr-icon
+                                        class="alert-icon"
+                                        size="24"
+                                        shape="exclamation-circle"></clr-icon>
+                                </div>
+                                <span class="alert-text">{{
+                                    errorMessage
+                                }}</span>
                             </div>
-                            <span class="alert-text">{{ errorMessage }}</span>
                         </div>
+                        <button
+                            type="button"
+                            class="close"
+                            aria-label="Close"
+                            (click)="emptyErrorMessage()">
+                            <clr-icon
+                                aria-hidden="true"
+                                size="16"
+                                shape="close"></clr-icon>
+                        </button>
                     </div>
-                    <button
-                        type="button"
-                        class="close"
-                        aria-label="Close"
-                        (click)="emptyErrorMessage()">
-                        <clr-icon
-                            aria-hidden="true"
-                            size="16"
-                            shape="close"></clr-icon>
-                    </button>
-                </div>
                 }
             </div>
             <div class="modal-body">

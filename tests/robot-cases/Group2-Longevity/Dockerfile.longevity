@@ -1,2 +1,2 @@
-FROM busybox:1.26
+FROM dhi.io/busybox:1.38.0-alpine3.24
 RUN /bin/dd if=/dev/urandom of=file10mb bs=10485760 count=1

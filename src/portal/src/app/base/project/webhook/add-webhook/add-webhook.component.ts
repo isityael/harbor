@@ -17,6 +17,7 @@ import {
     Input,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { AddWebhookFormComponent } from '../add-webhook-form/add-webhook-form.component';
 import { WebhookPolicy } from '../../../../../../ng-swagger-gen/models/webhook-policy';
@@ -26,6 +27,7 @@ import { SupportedWebhookEventTypes } from '../../../../../../ng-swagger-gen/mod
     selector: 'add-webhook',
     templateUrl: './add-webhook.component.html',
     styleUrls: ['./add-webhook.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class AddWebhookComponent {

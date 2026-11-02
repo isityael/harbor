@@ -13,7 +13,7 @@
 // limitations under the License.
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RemainingTimeComponent } from './remaining-time.component';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { RobotTimeRemainColor } from '../../../base/left-side-nav/system-robot-accounts/system-robot-util';
 import { SharedTestingModule } from '../../shared.module';
 
@@ -76,6 +76,7 @@ describe('RemainingTimeComponent', () => {
     template: ` <app-remaining-time
         [deadline]="expires_at"
         [timeDiff]="deltaTime"></app-remaining-time>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 class TestHostComponent {

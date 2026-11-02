@@ -38,84 +38,131 @@
             'P2P_PROVIDER.JOB_PLACEHOLDER' | translate
         }}</clr-dg-placeholder>
         @for (execution of executions; track execution) {
-        <clr-dg-row [clrDgItem]="execution">
-            <clr-dg-cell>
-                <a href="javascript:void(0)" (click)="goToLink(execution.id)">{{
-                    execution.id
-                }}</a>
-            </clr-dg-cell>
-            <clr-dg-cell>
-                {{ execution.vendor_type }}
-            </clr-dg-cell>
-            <clr-dg-cell
-                >{{ execution.status }}
-                <clr-tooltip>
-                    @if (execution.status_message) {
-                    <clr-icon
-                        clrTooltipTrigger
-                        shape="info-circle"
-                        size="20"></clr-icon>
-                    }
-                    <clr-tooltip-content
-                        [clrPosition]="'left'"
-                        clrSize="md"
-                        *clrIfOpen>
-                        <span>{{ execution.status_message }}</span>
-                    </clr-tooltip-content>
-                </clr-tooltip></clr-dg-cell
-            >
-            <clr-dg-cell>
-                @if (execution?.extra_attrs?.event_type) {
-                <span class="label-flex">
-                    {{ eventTypeToText(execution?.extra_attrs?.event_type) }}
-                </span>
-                }
-            </clr-dg-cell>
-            <clr-dg-cell class="flex">
-                <clr-signpost>
-                    <a class="btn btn-link link-normal" clrSignpostTrigger>
-                        @if (useJsonFormat(execution?.vendor_type)) {
-                        <span>
+            <clr-dg-row [clrDgItem]="execution">
+                <clr-dg-cell>
+                    <a
+                        href="javascript:void(0)"
+                        (click)="goToLink(execution.id)"
+                        >{{ execution.id }}</a
+                    >
+                </clr-dg-cell>
+                <clr-dg-cell>
+                    {{ execution.vendor_type }}
+                </clr-dg-cell>
+                <clr-dg-cell
+                    >{{ execution.status }}
+                    <clr-tooltip>
+                        @if (execution.status_message) {
+                            <clr-icon
+                                clrTooltipTrigger
+                                shape="info-circle"
+                                size="20"></clr-icon>
+                        }
+                        <clr-tooltip-content
+                            [clrPosition]="'left'"
+                            clrSize="md"
+                            *clrIfOpen>
+                            <span>{{ execution.status_message }}</span>
+                        </clr-tooltip-content>
+                    </clr-tooltip></clr-dg-cell
+                >
+                <clr-dg-cell>
+                    @if (execution?.extra_attrs?.event_type) {
+                        <span class="label-flex">
                             {{
-                                toString(
-                                    toJson(execution?.extra_attrs?.payload)
+                                eventTypeToText(
+                                    $safeNavigationMigration(
+                                        execution?.extra_attrs?.event_type
+                                    )
                                 )
                             }}
                         </span>
-                        } @if (!useJsonFormat(execution?.vendor_type)) {
-                        <span>
-                            {{ execution?.extra_attrs?.payload }}
-                        </span>
-                        }
-                    </a>
-                    <clr-signpost-content
-                        class="pre"
-                        [clrPosition]="'top-middle'"
-                        *clrIfOpen>
-                        <hbr-copy-input
-                            [iconMode]="true"
-                            [defaultValue]="
-                                toString(execution?.extra_attrs?.payload)
-                            "></hbr-copy-input>
-                        @if (!useJsonFormat(execution?.vendor_type)) {
-                        <pre>{{ execution?.extra_attrs?.payload }}</pre>
-                        } @if (useJsonFormat(execution?.vendor_type)) {
-                        <pre
-                            [innerHTML]="
-                                toJson(execution?.extra_attrs?.payload) | json
-                            "
-                            class="abc"></pre>
-                        }
-                    </clr-signpost-content>
-                </clr-signpost>
-            </clr-dg-cell>
-            <clr-dg-cell>{{
-                execution.start_time | harborDatetime : 'short'
-            }}</clr-dg-cell>
-            <clr-dg-cell>{{
-                execution.end_time | harborDatetime : 'short'
-            }}</clr-dg-cell>
-        </clr-dg-row>
+                    }
+                </clr-dg-cell>
+                <clr-dg-cell class="flex">
+                    <clr-signpost>
+                        <a class="btn btn-link link-normal" clrSignpostTrigger>
+                            @if (
+                                useJsonFormat(
+                                    $safeNavigationMigration(
+                                        execution?.vendor_type
+                                    )
+                                )
+                            ) {
+                                <span>
+                                    {{
+                                        toString(
+                                            toJson(
+                                                $safeNavigationMigration(
+                                                    execution?.extra_attrs
+                                                        ?.payload
+                                                )
+                                            )
+                                        )
+                                    }}
+                                </span>
+                            }
+                            @if (
+                                !useJsonFormat(
+                                    $safeNavigationMigration(
+                                        execution?.vendor_type
+                                    )
+                                )
+                            ) {
+                                <span>
+                                    {{ execution?.extra_attrs?.payload }}
+                                </span>
+                            }
+                        </a>
+                        <clr-signpost-content
+                            class="pre"
+                            [clrPosition]="'top-middle'"
+                            *clrIfOpen>
+                            <hbr-copy-input
+                                [iconMode]="true"
+                                [defaultValue]="
+                                    toString(
+                                        $safeNavigationMigration(
+                                            execution?.extra_attrs?.payload
+                                        )
+                                    )
+                                "></hbr-copy-input>
+                            @if (
+                                !useJsonFormat(
+                                    $safeNavigationMigration(
+                                        execution?.vendor_type
+                                    )
+                                )
+                            ) {
+                                <pre>{{ execution?.extra_attrs?.payload }}</pre>
+                            }
+                            @if (
+                                useJsonFormat(
+                                    $safeNavigationMigration(
+                                        execution?.vendor_type
+                                    )
+                                )
+                            ) {
+                                <pre
+                                    [innerHTML]="
+                                        toJson(
+                                            $safeNavigationMigration(
+                                                execution?.extra_attrs?.payload
+                                            )
+                                        ) | json
+                                    "
+                                    class="abc"></pre>
+                            }
+                        </clr-signpost-content>
+                    </clr-signpost>
+                </clr-dg-cell>
+                <clr-dg-cell>{{
+                    execution.start_time | harborDatetime: 'short'
+                }}</clr-dg-cell>
+                <clr-dg-cell>{{
+                    execution.end_time | harborDatetime: 'short'
+                }}</clr-dg-cell>
+            </clr-dg-row>
         }
         <clr-dg-footer>
             <clr-dg-pagination
@@ -127,11 +174,11 @@
                     'PAGINATION.PAGE_SIZE' | translate
                 }}</clr-dg-page-size>
                 @if (total) {
-                <span
-                    >{{ pagination.firstItem + 1 }} -
-                    {{ pagination.lastItem + 1 }}
-                    {{ 'REPLICATION.OF' | translate }}</span
-                >
+                    <span
+                        >{{ pagination.firstItem + 1 }} -
+                        {{ pagination.lastItem + 1 }}
+                        {{ 'REPLICATION.OF' | translate }}</span
+                    >
                 }
                 {{ total }} {{ 'REPLICATION.ITEMS' | translate }}
             </clr-dg-pagination>

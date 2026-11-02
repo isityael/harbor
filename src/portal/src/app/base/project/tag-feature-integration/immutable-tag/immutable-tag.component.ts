@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ImmutableTagService } from './immutable-tag.service';
 import {
@@ -30,6 +35,7 @@ import { ProjectService } from '../../../../../../ng-swagger-gen/services/projec
     selector: 'app-immutable-tag',
     templateUrl: './immutable-tag.component.html',
     styleUrls: ['./immutable-tag.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ImmutableTagComponent implements OnInit {

@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import {
+    Component,
+    Output,
+    EventEmitter,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PlatformLocation, registerLocaleData } from '@angular/common';
@@ -51,6 +57,7 @@ import { signInStatusError } from '../../../account/sign-in/sign-in.component';
     selector: 'navigator',
     templateUrl: 'navigator.component.html',
     styleUrls: ['navigator.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class NavigatorComponent implements OnInit {
@@ -79,7 +86,7 @@ export class NavigatorComponent implements OnInit {
     ngOnInit(): void {
         // custom skin
         this.customStyle = this.skinableConfig.getSkinConfig();
-        this.selectedLang = this.translate.currentLang as SupportedLanguage;
+        this.selectedLang = this.translate.currentLang() as SupportedLanguage;
         if (this.selectedLang) {
             registerLocaleData(
                 LANGUAGES[this.selectedLang][1],

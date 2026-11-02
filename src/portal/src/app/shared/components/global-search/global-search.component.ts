@@ -25,7 +25,12 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { SearchTriggerService } from './search-trigger.service';
@@ -41,6 +46,7 @@ const SEARCH_KEY: string = 'globalSearch';
     selector: 'global-search',
     templateUrl: 'global-search.component.html',
     styleUrls: ['search.component.scss', 'global-search.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class GlobalSearchComponent implements OnInit, OnDestroy {

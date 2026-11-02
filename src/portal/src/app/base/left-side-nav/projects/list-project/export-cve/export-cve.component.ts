@@ -17,6 +17,7 @@ import {
     EventEmitter,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Label } from 'ng-swagger-gen/models/label';
@@ -39,6 +40,7 @@ const SUPPORTED_MIME_TYPE: string =
     selector: 'export-cve',
     templateUrl: './export-cve.component.html',
     styleUrls: ['./export-cve.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ExportCveComponent {

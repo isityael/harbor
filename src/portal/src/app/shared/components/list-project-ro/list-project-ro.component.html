@@ -19,7 +19,7 @@
         }}</clr-dg-cell>
         <clr-dg-cell>{{ p.repo_count }}</clr-dg-cell>
         <clr-dg-cell>{{
-            p.creation_time | harborDatetime : 'short'
+            p.creation_time | harborDatetime: 'short'
         }}</clr-dg-cell>
     </clr-dg-row>
     <clr-dg-placeholder>{{
@@ -27,10 +27,10 @@
     }}</clr-dg-placeholder>
     <clr-dg-footer>
         @if (projects?.length) {
-        <span
-            >{{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }}
-            {{ 'PROJECT.OF' | translate }}
-        </span>
+            <span
+                >{{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }}
+                {{ 'PROJECT.OF' | translate }}
+            </span>
         }
         {{ projects?.length }} {{ 'PROJECT.ITEMS' | translate }}
         <clr-dg-pagination #pagination [clrDgPageSize]="5"></clr-dg-pagination>

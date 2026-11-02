@@ -20,6 +20,7 @@ import {
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('TagRetentionService', () => {
@@ -30,7 +31,7 @@ describe('TagRetentionService', () => {
             imports: [],
             providers: [
                 AdditionsService,
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

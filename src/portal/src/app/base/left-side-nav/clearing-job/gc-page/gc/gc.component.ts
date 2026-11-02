@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import {
+    Component,
+    ViewChild,
+    OnInit,
+    OnDestroy,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ErrorHandler } from '../../../../../shared/units/error-handler';
 import { CronScheduleComponent } from '../../../../../shared/components/cron-schedule';
 import { OriginCron } from '../../../../../shared/services';
@@ -37,6 +43,7 @@ const ONE_MINUTE = 60000;
     selector: 'gc-config',
     templateUrl: './gc.component.html',
     styleUrls: ['./gc.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class GcComponent implements OnInit, OnDestroy {

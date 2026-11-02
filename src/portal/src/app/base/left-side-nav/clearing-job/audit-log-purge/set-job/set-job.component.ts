@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import {
+    Component,
+    ViewChild,
+    OnInit,
+    OnDestroy,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { ErrorHandler } from '../../../../../shared/units/error-handler';
 import { CronScheduleComponent } from '../../../../../shared/components/cron-schedule';
 import { OriginCron } from '../../../../../shared/services';
@@ -44,6 +50,7 @@ const MAX_RETENTION_DAYS: number = 10000;
     selector: 'app-set-job',
     templateUrl: './set-job.component.html',
     styleUrls: ['./set-job.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class SetJobComponent implements OnInit, OnDestroy {

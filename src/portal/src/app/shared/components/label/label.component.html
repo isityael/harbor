@@ -70,15 +70,15 @@
                     'LABEL.PLACEHOLDER' | translate
                 }}</clr-dg-placeholder>
                 @for (label of targets; track label) {
-                <clr-dg-row [clrDgItem]="label">
-                    <clr-dg-cell>
-                        <hbr-label-piece [label]="label"></hbr-label-piece>
-                    </clr-dg-cell>
-                    <clr-dg-cell>{{ label.description }}</clr-dg-cell>
-                    <clr-dg-cell>{{
-                        label.creation_time | harborDatetime : 'short'
-                    }}</clr-dg-cell>
-                </clr-dg-row>
+                    <clr-dg-row [clrDgItem]="label">
+                        <clr-dg-cell>
+                            <hbr-label-piece [label]="label"></hbr-label-piece>
+                        </clr-dg-cell>
+                        <clr-dg-cell>{{ label.description }}</clr-dg-cell>
+                        <clr-dg-cell>{{
+                            label.creation_time | harborDatetime: 'short'
+                        }}</clr-dg-cell>
+                    </clr-dg-row>
                 }
                 <clr-dg-footer>
                     <clr-dg-pagination
@@ -93,11 +93,11 @@
                             }}</clr-dg-page-size
                         >
                         @if (total) {
-                        <span
-                            >{{ pagination.firstItem + 1 }} -
-                            {{ pagination.lastItem + 1 }}
-                            {{ 'DESTINATION.OF' | translate }}</span
-                        >
+                            <span
+                                >{{ pagination.firstItem + 1 }} -
+                                {{ pagination.lastItem + 1 }}
+                                {{ 'DESTINATION.OF' | translate }}</span
+                            >
                         }
                         {{ total }} {{ 'DESTINATION.ITEMS' | translate }}
                     </clr-dg-pagination>

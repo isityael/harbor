@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, OnInit } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { ErrorHandler } from '../../../../../shared/units/error-handler';
@@ -26,6 +31,7 @@ import { ScannerAdapterMetadata } from '../../../../../../../ng-swagger-gen/mode
     selector: 'scanner-metadata',
     templateUrl: 'scanner-metadata.html',
     styleUrls: ['./scanner-metadata.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ScannerMetadataComponent implements OnInit {

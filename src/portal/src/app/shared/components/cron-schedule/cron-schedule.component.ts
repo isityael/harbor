@@ -20,6 +20,7 @@ import {
     SimpleChanges,
     SimpleChange,
     OnInit,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { OriginCron } from '../../services/interface';
 import { cronRegex } from '../../units/utils';
@@ -39,6 +40,7 @@ const PREFIX: string = '0 ';
     selector: 'cron-selection',
     templateUrl: './cron-schedule.component.html',
     styleUrls: ['./cron-schedule.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class CronScheduleComponent implements OnChanges, OnInit {

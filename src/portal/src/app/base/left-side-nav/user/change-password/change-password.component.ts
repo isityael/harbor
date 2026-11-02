@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
+import {
+    Component,
+    ViewChild,
+    ChangeDetectorRef,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MessageHandlerService } from '../../../../shared/services/message-handler.service';
 import { UserService } from '../user.service';
@@ -22,6 +27,7 @@ import { InlineAlertComponent } from '../../../../shared/components/inline-alert
     selector: 'change-password',
     templateUrl: 'change-password.component.html',
     styleUrls: ['./change-password.component.scss', '../../../../common.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ChangePasswordComponent {

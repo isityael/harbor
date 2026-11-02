@@ -1,0 +1,124 @@
+# Harbor Go components — build verification pipeline
+# Runs on push/PR to the progressed branch
+#
+# Verifies the 4 Go components and the release distribution binary compile.
+# Full go vet is not
+# possible without swagger-generated code (server/v2.0/{models,restapi})
+# which requires `make gen_apis` and isn't checked in.
+#
+# Go module/build caches and the swagger binary live on the shared
+# woodpecker-pipeline-cache volume. The Garage archive this replaced missed on
+# every PR (NoSuchKey), so each run downloaded all modules and compiled Harbor
+# cold: 26-35 min per pipeline.
+when:
+  - event: [push, pull_request]
+    branch: progressed
+
+clone:
+  git:
+    image: woodpeckerci/plugin-git
+    settings:
+      lfs: false
+      recursive: false
+      tags: false
+
+steps:
+  # Seconds-long repo contracts, first so a broken pin fails before the Go work.
+  # harbor-db's image pins are only built at release time, so without this a
+  # PR that moves the PostgreSQL upgrade stage to the wrong major merged green.
+  - name: db-upgrade-compatibility
+    image: dhi.io/golang:1.27.3-debian13-dev
+    commands:
+      - bash .ci/test-db-image-pins.sh
+
+  # Validate clean Linux npm resolution before release-only image builds.
+  - name: portal-lockfiles
+    image: dhi.io/node:26.12.1-debian13-dev
+    commands:
+      - npm install --global --force npm@12.2.0
+      - cd src/portal
+      - npm ci --dry-run --ignore-scripts --no-audit --no-fund
+      - cd app-swagger-ui
+      - npm ci --dry-run --ignore-scripts --no-audit --no-fund
+
+  - name: renovate-go-artifacts
+    image: dhi.io/golang:1.27.3-debian13-dev
+    volumes:
+      - woodpecker-pipeline-cache:/woodpecker/cache
+    environment:
+      GOMODCACHE: /woodpecker/cache/harbor/go-mod
+      GOCACHE: /woodpecker/cache/harbor/go-build
+    commands:
+      - bash .ci/test-renovate-go-artifacts.sh
+
+  - name: distribution-build
+    image: dhi.io/golang:1.27.3-debian13-dev
+    volumes:
+      - woodpecker-pipeline-cache:/woodpecker/cache
+    environment:
+      GOMODCACHE: /woodpecker/cache/harbor/go-mod
+      GOCACHE: /woodpecker/cache/harbor/distribution-go-build
+    backend_options:
+      kubernetes:
+        resources:
+          requests:
+            cpu: "1"
+            memory: 512Mi
+          limits:
+            cpu: "2"
+            memory: 4Gi
+    commands:
+      - apt-get update && apt-get install -y --no-install-recommends python3 make git
+      - python3 .ci/test-distribution-patches.py
+      - python3 .ci/test-distribution-build.py
+
+  - name: generate-swagger
+    image: dhi.io/golang:1.27.3-debian13-dev
+    volumes:
+      - woodpecker-pipeline-cache:/woodpecker/cache
+    environment:
+      GOMODCACHE: /woodpecker/cache/harbor/go-mod
+      GOCACHE: /woodpecker/cache/harbor/go-build
+    commands:
+      - export GOBIN=/woodpecker/cache/harbor/bin SWAGGER_BIN=/woodpecker/cache/harbor/bin/swagger-v0.36.6
+      - mkdir -p "$GOMODCACHE" "$GOCACHE" "$GOBIN"
+      - |
+        if [ ! -x "$SWAGGER_BIN" ]; then
+          go install github.com/go-swagger/go-swagger/cmd/swagger@v0.36.6
+          mv "$GOBIN/swagger" "$SWAGGER_BIN"
+        fi
+      - timeout 10m "$SWAGGER_BIN" generate server
+        --template-dir=tools/swagger/templates
+        --exclude-main
+        --additional-initialism=CVE
+        --additional-initialism=GC
+        --additional-initialism=OIDC
+        -f api/v2.0/swagger.yaml
+        -A harbor
+        --target src/server/v2.0
+
+  - name: build-check
+    image: dhi.io/golang:1.27.3-debian13-dev
+    volumes:
+      - woodpecker-pipeline-cache:/woodpecker/cache
+    environment:
+      GOMODCACHE: /woodpecker/cache/harbor/go-mod
+      GOCACHE: /woodpecker/cache/harbor/go-build
+    # Compiling core/jobservice/registryctl/exporter is CPU-bound; the 500m
+    # LimitRange default request packs it onto busy nodes.
+    backend_options:
+      kubernetes:
+        resources:
+          requests:
+            cpu: "1"
+            memory: 1Gi
+          limits:
+            cpu: "4"
+            memory: 6Gi
+    commands:
+      - mkdir -p "$GOMODCACHE" "$GOCACHE"
+      - cd src
+      - go mod verify
+      # One invocation builds all four in parallel and discards the binaries.
+      - CGO_ENABLED=0 go build -mod=mod ./core ./jobservice ./registryctl ./cmd/exporter
+      - echo "All 4 components compile successfully."

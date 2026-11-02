@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Project } from '../../../../../../ng-swagger-gen/models/project';
 import { Router } from '@angular/router';
 import { PermissionsKinds } from '../system-robot-util';
@@ -26,6 +26,7 @@ import { PAGE_SIZE_OPTIONS } from 'src/app/shared/entities/shared.const';
     selector: 'app-projects-modal',
     templateUrl: './projects-modal.component.html',
     styleUrls: ['./projects-modal.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ProjectsModalComponent {

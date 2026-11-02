@@ -39,7 +39,10 @@ export class AppConfigService {
 
     private _bannerMessageClosed: boolean = false;
 
-    constructor(private http: HttpClient, private cookie: CookieService) {}
+    constructor(
+        private http: HttpClient,
+        private cookie: CookieService
+    ) {}
 
     setBannerMessageClosed(v: boolean) {
         this._bannerMessageClosed = v;

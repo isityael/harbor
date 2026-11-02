@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConfigService } from './services/app-config.service';
@@ -40,6 +45,7 @@ import { SessionService } from './shared/services/session.service';
 @Component({
     selector: 'harbor-app',
     templateUrl: 'app.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class AppComponent implements OnInit, OnDestroy {
@@ -114,7 +120,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     initLanguage() {
         this.translate.addLangs(supportedLangs);
-        this.translate.setDefaultLang(DeFaultLang);
+        this.translate.setFallbackLang(DeFaultLang);
         let selectedLang: SupportedLanguage;
         const savedLang = localStorage.getItem(DEFAULT_LANG_LOCALSTORAGE_KEY);
         if (isSupportedLanguage(savedLang)) {

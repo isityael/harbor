@@ -28,18 +28,18 @@
                 </button>
                 <clr-dropdown-menu [clrPosition]="'bottom-left'" *clrIfOpen>
                     @for (f of filterOptions; track f) {
-                    <a
-                        href="javascript:void(0)"
-                        clrDropdownItem
-                        (click)="toggleFilterOption(f.key)">
-                        <clr-icon
-                            shape="check"
-                            [hidden]="!f.checked"></clr-icon>
-                        @if (!f.checked) {
-                        <span class="check-span"></span>
-                        }
-                        {{ f.description | translate }}
-                    </a>
+                        <a
+                            href="javascript:void(0)"
+                            clrDropdownItem
+                            (click)="toggleFilterOption(f.key)">
+                            <clr-icon
+                                shape="check"
+                                [hidden]="!f.checked"></clr-icon>
+                            @if (!f.checked) {
+                                <span class="check-span"></span>
+                            }
+                            {{ f.description | translate }}
+                        </a>
                     }
                 </clr-dropdown-menu>
             </clr-dropdown>
@@ -81,17 +81,17 @@
                 'AUDIT_LOG.NOT_FOUND' | translate
             }}</clr-dg-placeholder>
             @for (l of auditLogs; track l) {
-            <clr-dg-row>
-                <clr-dg-cell>{{
-                    l.op_time | harborDatetime : 'short'
-                }}</clr-dg-cell>
-                <clr-dg-cell>{{ l.username }}</clr-dg-cell>
-                <clr-dg-cell>{{ l.resource }}</clr-dg-cell>
-                <clr-dg-cell>{{ l.resource_type }}</clr-dg-cell>
-                <clr-dg-cell>{{ l.operation }}</clr-dg-cell>
-                <clr-dg-cell>{{ l.operation_description }}</clr-dg-cell>
-                <clr-dg-cell>{{ l.operation_result }}</clr-dg-cell>
-            </clr-dg-row>
+                <clr-dg-row>
+                    <clr-dg-cell>{{
+                        l.op_time | harborDatetime: 'short'
+                    }}</clr-dg-cell>
+                    <clr-dg-cell>{{ l.username }}</clr-dg-cell>
+                    <clr-dg-cell>{{ l.resource }}</clr-dg-cell>
+                    <clr-dg-cell>{{ l.resource_type }}</clr-dg-cell>
+                    <clr-dg-cell>{{ l.operation }}</clr-dg-cell>
+                    <clr-dg-cell>{{ l.operation_description }}</clr-dg-cell>
+                    <clr-dg-cell>{{ l.operation_result }}</clr-dg-cell>
+                </clr-dg-row>
             }
             <clr-dg-footer>
                 <clr-dg-pagination
@@ -106,11 +106,11 @@
                         }}</clr-dg-page-size
                     >
                     @if (showPaginationIndex) {
-                    <span
-                        >{{ pagination.firstItem + 1 }} -
-                        {{ pagination.lastItem + 1 }}
-                        {{ 'AUDIT_LOG.OF' | translate }}
-                    </span>
+                        <span
+                            >{{ pagination.firstItem + 1 }} -
+                            {{ pagination.lastItem + 1 }}
+                            {{ 'AUDIT_LOG.OF' | translate }}
+                        </span>
                     }
                     {{ totalRecordCount }} {{ 'AUDIT_LOG.ITEMS' | translate }}
                 </clr-dg-pagination>

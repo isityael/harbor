@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, ViewChild, AfterViewChecked } from '@angular/core';
+import {
+    Component,
+    ViewChild,
+    AfterViewChecked,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PasswordSettingService } from './password-setting.service';
 import { SessionService } from '../../shared/services/session.service';
@@ -23,6 +28,7 @@ import { InlineAlertComponent } from '../../shared/components/inline-alert/inlin
     selector: 'password-setting',
     templateUrl: 'password-setting.component.html',
     styleUrls: ['./password-setting.component.scss', '../../common.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class PasswordSettingComponent implements AfterViewChecked {

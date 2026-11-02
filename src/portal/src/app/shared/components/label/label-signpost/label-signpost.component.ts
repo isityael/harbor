@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { Label } from '../../../services';
 
@@ -20,6 +20,7 @@ import { Label } from '../../../services';
     selector: 'hbr-resource-label-signpost',
     templateUrl: './label-signpost.component.html',
     styleUrls: ['./label-signpost.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class LabelSignPostComponent {

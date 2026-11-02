@@ -16,13 +16,14 @@ package trace // nolint:revive
 
 import (
 	"context"
+	"encoding/base64"
+	"fmt"
+	"strings"
 	"time"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 
-	// nolint:staticcheck
-	"go.opentelemetry.io/otel/exporters/jaeger"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
@@ -39,20 +40,22 @@ func initExporter(ctx context.Context) (tracesdk.SpanExporter, error) {
 	var exp tracesdk.SpanExporter
 	cfg := GetGlobalConfig()
 	if len(cfg.Jaeger.Endpoint) != 0 {
-		// Jaeger collector exporter
-		log.Infof("init trace provider jaeger collector on %s with user %s", cfg.Jaeger.Endpoint, cfg.Jaeger.Username)
-		exp, err = jaeger.New(jaeger.WithCollectorEndpoint(
-			jaeger.WithEndpoint(cfg.Jaeger.Endpoint),
-			jaeger.WithUsername(cfg.Jaeger.Username),
-			jaeger.WithPassword(cfg.Jaeger.Password),
-		))
+		log.Infof("init trace provider jaeger collector through OTLP HTTP on %s with user %s", cfg.Jaeger.Endpoint, cfg.Jaeger.Username)
+		opts := []otlptracehttp.Option{
+			otlptracehttp.WithEndpointURL(cfg.Jaeger.Endpoint),
+		}
+		if cfg.Jaeger.Username != "" || cfg.Jaeger.Password != "" {
+			credentials := base64.StdEncoding.EncodeToString([]byte(cfg.Jaeger.Username + ":" + cfg.Jaeger.Password))
+			opts = append(opts, otlptracehttp.WithHeaders(map[string]string{
+				"Authorization": "Basic " + credentials,
+			}))
+		}
+		if strings.HasPrefix(cfg.Jaeger.Endpoint, "http://") {
+			opts = append(opts, otlptracehttp.WithInsecure())
+		}
+		exp, err = otlptracehttp.New(ctx, opts...)
 	} else if len(cfg.Jaeger.AgentHost) != 0 {
-		// Jaeger agent exporter
-		log.Infof("init trace provider jaeger agent on %s", cfg.Jaeger.AgentHost)
-		exp, err = jaeger.New(jaeger.WithAgentEndpoint(
-			jaeger.WithAgentHost(cfg.Jaeger.AgentHost),
-			jaeger.WithAgentPort(cfg.Jaeger.AgentPort),
-		))
+		err = fmt.Errorf("jaeger agent exporter is no longer supported; configure OTLP HTTP tracing instead")
 	} else if len(cfg.Otel.Endpoint) != 0 {
 		// Otel exporter
 		log.Infof("init trace provider otel on %s/%s", cfg.Otel.Endpoint, cfg.Otel.URLPath)

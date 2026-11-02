@@ -2,7 +2,7 @@ ARG harbor_base_image_version
 ARG harbor_base_namespace
 FROM ${harbor_base_namespace}/harbor-db-base:${harbor_base_image_version}
 
-ENV EXTERNAL_DB 0
+ENV EXTERNAL_DB=0
 
 RUN mkdir /harbor/
 COPY ./make/migrations /migrations

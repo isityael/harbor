@@ -62,43 +62,54 @@
                             'BUTTON.EDIT' | translate
                         }}</span>
                     </button>
-                    @if ( selectedRows && selectedRows.length === 1 &&
-                    selectedRows[0].disable ) {
-                    <button
-                        type="button"
-                        clrDropdownItem
-                        (click)="disableOrEnable()"
-                        [disabled]="
-                            !(
-                                selectedRows &&
-                                selectedRows.length === 1 &&
-                                selectedRows[0].disable
-                            )
-                        ">
-                        <clr-icon size="16" shape="success-standard"></clr-icon
-                        >&nbsp;
-                        <span id="distribution-enable">{{
-                            'WEBHOOK.ENABLED_BUTTON' | translate
-                        }}</span>
-                    </button>
-                    } @if ( !( selectedRows && selectedRows.length === 1 &&
-                    selectedRows[0].disable ) ) {
-                    <button
-                        type="button"
-                        clrDropdownItem
-                        (click)="disableOrEnable()"
-                        [disabled]="
-                            !(
-                                selectedRows &&
-                                selectedRows.length === 1 &&
-                                !selectedRows[0].disable
-                            )
-                        ">
-                        <clr-icon size="16" shape="ban"></clr-icon>&nbsp;
-                        <span id="distribution-disable">{{
-                            'WEBHOOK.DISABLED_BUTTON' | translate
-                        }}</span>
-                    </button>
+                    @if (
+                        selectedRows &&
+                        selectedRows.length === 1 &&
+                        selectedRows[0].disable
+                    ) {
+                        <button
+                            type="button"
+                            clrDropdownItem
+                            (click)="disableOrEnable()"
+                            [disabled]="
+                                !(
+                                    selectedRows &&
+                                    selectedRows.length === 1 &&
+                                    selectedRows[0].disable
+                                )
+                            ">
+                            <clr-icon
+                                size="16"
+                                shape="success-standard"></clr-icon
+                            >&nbsp;
+                            <span id="distribution-enable">{{
+                                'WEBHOOK.ENABLED_BUTTON' | translate
+                            }}</span>
+                        </button>
+                    }
+                    @if (
+                        !(
+                            selectedRows &&
+                            selectedRows.length === 1 &&
+                            selectedRows[0].disable
+                        )
+                    ) {
+                        <button
+                            type="button"
+                            clrDropdownItem
+                            (click)="disableOrEnable()"
+                            [disabled]="
+                                !(
+                                    selectedRows &&
+                                    selectedRows.length === 1 &&
+                                    !selectedRows[0].disable
+                                )
+                            ">
+                            <clr-icon size="16" shape="ban"></clr-icon>&nbsp;
+                            <span id="distribution-disable">{{
+                                'WEBHOOK.DISABLED_BUTTON' | translate
+                            }}</span>
+                        </button>
                     }
                     <div class="dropdown-divider"></div>
                     <button
@@ -147,92 +158,122 @@
                 'SYSTEM_ROBOT.NOT_FOUND' | translate
             }}</clr-dg-placeholder>
             @for (r of robots; track r) {
-            <clr-dg-row [clrDgItem]="r">
-                <clr-dg-cell>{{ r.name }}</clr-dg-cell>
-                <clr-dg-cell>
-                    @switch (r.disable) { @case (false) {
-                    <clr-icon
-                        shape="check-circle"
-                        size="20"
-                        class="color-green"></clr-icon>
-                    } @case (true) {
-                    <clr-icon
-                        shape="times-circle"
-                        size="16"
-                        class="color-red red-position"></clr-icon>
-                    } }
-                </clr-dg-cell>
-                <clr-dg-cell>
-                    @if (!getSystemAccess(r)?.length) {
-                    <span>
-                        {{ 'SCHEDULE.NONE' | translate }}
-                    </span>
-                    } @if (getSystemAccess(r)?.length) {
-                    <robot-permissions-panel
-                        [mode]="PermissionSelectPanelModes.MODAL"
-                        [permissionsModel]="getSystemAccess(r)"
-                        [candidatePermissions]="getSystemAccess(r)">
-                        <button class="btn btn-link btn-sm m-0 p-0" modal>
-                            {{ getSystemAccess(r)?.length }}
-                            {{ 'SYSTEM_ROBOT.PERMISSIONS' | translate }}
-                            <clr-icon
-                                class="icon"
-                                size="12"
-                                shape="caret"
-                                direction="down"></clr-icon>
-                        </button>
-                    </robot-permissions-panel>
-                    }
-                </clr-dg-cell>
-                <clr-dg-cell>
-                    @if (r.permissionScope?.coverAll) {
-                    <div class="all-projects">
-                        <span>{{
-                            'SYSTEM_ROBOT.ALL_PROJECTS' | translate
-                        }}</span>
-                        <robot-permissions-panel
-                            [mode]="PermissionSelectPanelModes.MODAL"
-                            [permissionsModel]="r.permissionScope?.access"
-                            [candidatePermissions]="r.permissionScope?.access">
-                            <button class="btn btn-link btn-sm m-0" modal>
-                                {{ r.permissionScope?.access?.length }}
-                                {{ 'SYSTEM_ROBOT.PERMISSIONS' | translate }}
+                <clr-dg-row [clrDgItem]="r">
+                    <clr-dg-cell>{{ r.name }}</clr-dg-cell>
+                    <clr-dg-cell>
+                        @switch (r.disable) {
+                            @case (false) {
                                 <clr-icon
-                                    class="icon"
-                                    size="12"
-                                    shape="caret"
-                                    direction="down"></clr-icon>
-                            </button>
-                        </robot-permissions-panel>
-                    </div>
-                    } @if ( !r.permissionScope || !r.permissionScope?.coverAll )
-                    {
-                    <span>
-                        @if (getProjects(r)?.length) {
-                        <a
-                            href="javascript:void(0)"
-                            (click)="openProjectModal(getProjects(r), r.name)">
-                            {{ getProjects(r)?.length }}
-                            {{ 'SYSTEM_ROBOT.COVERED_PROJECTS' | translate }}
-                        </a>
-                        } @if (!getProjects(r)?.length) {
-                        <span>
-                            {{ 'SCHEDULE.NONE' | translate }}
-                        </span>
+                                    shape="check-circle"
+                                    size="20"
+                                    class="color-green"></clr-icon>
+                            }
+                            @case (true) {
+                                <clr-icon
+                                    shape="times-circle"
+                                    size="16"
+                                    class="color-red red-position"></clr-icon>
+                            }
                         }
-                    </span>
-                    }
-                </clr-dg-cell>
-                <clr-dg-cell>{{
-                    r.creation_time | harborDatetime : 'short'
-                }}</clr-dg-cell>
-                <clr-dg-cell
-                    ><app-remaining-time
-                        [deadline]="r?.expires_at"
-                        [timeDiff]="deltaTime"></app-remaining-time
-                ></clr-dg-cell>
-                <clr-dg-cell>{{ r.description }}</clr-dg-cell>
-            </clr-dg-row>
+                    </clr-dg-cell>
+                    <clr-dg-cell>
+                        @if (!getSystemAccess(r)?.length) {
+                            <span>
+                                {{ 'SCHEDULE.NONE' | translate }}
+                            </span>
+                        }
+                        @if (getSystemAccess(r)?.length) {
+                            <robot-permissions-panel
+                                [mode]="PermissionSelectPanelModes.MODAL"
+                                [permissionsModel]="getSystemAccess(r)"
+                                [candidatePermissions]="getSystemAccess(r)">
+                                <button
+                                    class="btn btn-link btn-sm m-0 p-0"
+                                    modal>
+                                    {{ getSystemAccess(r)?.length }}
+                                    {{ 'SYSTEM_ROBOT.PERMISSIONS' | translate }}
+                                    <clr-icon
+                                        class="icon"
+                                        size="12"
+                                        shape="caret"
+                                        direction="down"></clr-icon>
+                                </button>
+                            </robot-permissions-panel>
+                        }
+                    </clr-dg-cell>
+                    <clr-dg-cell>
+                        @if (r.permissionScope?.coverAll) {
+                            <div class="all-projects">
+                                <span>{{
+                                    'SYSTEM_ROBOT.ALL_PROJECTS' | translate
+                                }}</span>
+                                <robot-permissions-panel
+                                    [mode]="PermissionSelectPanelModes.MODAL"
+                                    [permissionsModel]="
+                                        $safeNavigationMigration(
+                                            r.permissionScope?.access
+                                        )
+                                    "
+                                    [candidatePermissions]="
+                                        $safeNavigationMigration(
+                                            r.permissionScope?.access
+                                        )
+                                    ">
+                                    <button
+                                        class="btn btn-link btn-sm m-0"
+                                        modal>
+                                        {{ r.permissionScope?.access?.length }}
+                                        {{
+                                            'SYSTEM_ROBOT.PERMISSIONS'
+                                                | translate
+                                        }}
+                                        <clr-icon
+                                            class="icon"
+                                            size="12"
+                                            shape="caret"
+                                            direction="down"></clr-icon>
+                                    </button>
+                                </robot-permissions-panel>
+                            </div>
+                        }
+                        @if (
+                            !r.permissionScope || !r.permissionScope?.coverAll
+                        ) {
+                            <span>
+                                @if (getProjects(r)?.length) {
+                                    <a
+                                        href="javascript:void(0)"
+                                        (click)="
+                                            openProjectModal(
+                                                getProjects(r),
+                                                r.name
+                                            )
+                                        ">
+                                        {{ getProjects(r)?.length }}
+                                        {{
+                                            'SYSTEM_ROBOT.COVERED_PROJECTS'
+                                                | translate
+                                        }}
+                                    </a>
+                                }
+                                @if (!getProjects(r)?.length) {
+                                    <span>
+                                        {{ 'SCHEDULE.NONE' | translate }}
+                                    </span>
+                                }
+                            </span>
+                        }
+                    </clr-dg-cell>
+                    <clr-dg-cell>{{
+                        r.creation_time | harborDatetime: 'short'
+                    }}</clr-dg-cell>
+                    <clr-dg-cell
+                        ><app-remaining-time
+                            [deadline]="$safeNavigationMigration(r?.expires_at)"
+                            [timeDiff]="deltaTime"></app-remaining-time
+                    ></clr-dg-cell>
+                    <clr-dg-cell>{{ r.description }}</clr-dg-cell>
+                </clr-dg-row>
             }
             <clr-dg-footer>
                 <clr-dg-pagination
@@ -247,12 +288,12 @@
                         }}</clr-dg-page-size
                     >
                     @if (total) {
-                    <span
-                        >{{ pagination.firstItem + 1 }}
-                        -
-                        {{ pagination.lastItem + 1 }}
-                        {{ 'ROBOT_ACCOUNT.OF' | translate }}
-                    </span>
+                        <span
+                            >{{ pagination.firstItem + 1 }}
+                            -
+                            {{ pagination.lastItem + 1 }}
+                            {{ 'ROBOT_ACCOUNT.OF' | translate }}
+                        </span>
                     }
                     {{ total }} {{ 'ROBOT_ACCOUNT.ITEMS' | translate }}
                 </clr-dg-pagination>

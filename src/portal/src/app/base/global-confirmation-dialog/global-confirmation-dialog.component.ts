@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfirmationMessage } from './confirmation-message';
@@ -27,6 +27,7 @@ import { ConfirmationAcknowledgement } from './confirmation-state-message';
     selector: 'global-confirmation-dialog',
     templateUrl: 'global-confirmation-dialog.component.html',
     styleUrls: ['global-confirmation-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class GlobalConfirmationDialogComponent implements OnDestroy {

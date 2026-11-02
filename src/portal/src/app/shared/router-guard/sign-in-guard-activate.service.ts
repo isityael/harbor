@@ -25,7 +25,10 @@ import { CommonRoutes } from '../entities/shared.const';
     providedIn: 'root',
 })
 export class SignInGuard {
-    constructor(private authService: SessionService, private router: Router) {}
+    constructor(
+        private authService: SessionService,
+        private router: Router
+    ) {}
 
     canActivate(
         route: ActivatedRouteSnapshot,

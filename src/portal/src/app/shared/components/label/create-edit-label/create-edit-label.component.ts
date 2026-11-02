@@ -19,6 +19,7 @@ import {
     Input,
     OnInit,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { clone, compareValue } from '../../../units/utils';
 import { ErrorHandler } from '../../../units/error-handler';
@@ -33,6 +34,7 @@ import { LabelService } from '../../../../../../ng-swagger-gen/services/label.se
     selector: 'hbr-create-edit-label',
     templateUrl: './create-edit-label.component.html',
     styleUrls: ['./create-edit-label.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class CreateEditLabelComponent implements OnInit, OnDestroy {

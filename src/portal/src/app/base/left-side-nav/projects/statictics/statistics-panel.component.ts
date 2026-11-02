@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    OnDestroy,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SessionService } from '../../../../shared/services/session.service';
 import { MessageHandlerService } from '../../../../shared/services/message-handler.service';
@@ -24,6 +29,7 @@ import { getSizeNumber, getSizeUnit } from '../../../../shared/units/utils';
     selector: 'statistics-panel',
     templateUrl: 'statistics-panel.component.html',
     styleUrls: ['statistics-panel.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class StatisticsPanelComponent implements OnInit, OnDestroy {

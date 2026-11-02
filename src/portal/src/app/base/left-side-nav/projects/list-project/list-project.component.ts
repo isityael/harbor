@@ -18,6 +18,7 @@ import {
     OnDestroy,
     Output,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -66,6 +67,7 @@ const INTERVAL: number = 30000;
 @Component({
     selector: 'list-project',
     templateUrl: 'list-project.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ListProjectComponent implements OnDestroy {

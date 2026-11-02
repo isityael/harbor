@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    OnDestroy,
+    HostListener,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import {
     downloadCVEs,
     EventState,
@@ -46,6 +52,7 @@ const RETRY_TIMES: number = 50;
     templateUrl: './operation.component.html',
     styleUrls: ['./operation.component.css'],
     animations: [SlideInOutAnimation],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class OperationComponent implements OnInit, OnDestroy {

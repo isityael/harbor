@@ -11,13 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, Input, OnInit } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Artifact } from 'ng-swagger-gen/models/artifact';
 
 @Component({
     selector: 'artifact-label',
     templateUrl: './artifact-label.component.html',
     styleUrls: ['./artifact-label.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ArtifactLabelComponent implements OnInit {

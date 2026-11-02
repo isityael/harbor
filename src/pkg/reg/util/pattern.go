@@ -18,13 +18,16 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bmatcuk/doublestar"
+	"github.com/bmatcuk/doublestar/v4"
 )
 
 // Match returns whether the str matches the pattern
 func Match(pattern, str string) (bool, error) {
 	if len(pattern) == 0 {
 		return true, nil
+	}
+	if strings.HasSuffix(pattern, "/**") && str == strings.TrimSuffix(pattern, "/**") {
+		return false, nil
 	}
 	return doublestar.Match(pattern, str)
 }

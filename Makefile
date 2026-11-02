@@ -131,17 +131,13 @@ PREPARE_VERSION_NAME=versions
 
 #versions
 REGISTRYVERSION=v2.8.3-patch-redis
-TRIVYVERSION=v0.72.0
-TRIVYADAPTERVERSION=v0.38.0-rc1
+TRIVYVERSION=v0.76.0
+TRIVYADAPTERVERSION=v0.39.1
 
-# VALKEYVERSION and VALKEYSHA256 are only used for the arm64 source build.
-# On amd64 the Photon tdnf package version is used directly.
-VALKEYVERSION=9.0.3
-VALKEYSHA256=e220f4b0143292ee6ea6d705aa40d45a0c8a77759b3e94c201cb5c25dbdca42f
-NODEBUILDIMAGE=node:22.22.3
+NODEBUILDIMAGE=dhi.io/node:26.11.1-debian13-dev
 
 # version of registry for pulling the source code
-REGISTRY_SRC_TAG=v2.8.3-harbor.1
+REGISTRY_SRC_TAG=v2.8.3-harbor.3-rc.1
 # source of upstream distribution code
 DISTRIBUTION_SRC=https://github.com/goharbor/distribution.git
 
@@ -180,7 +176,7 @@ GOINSTALL=$(GOCMD) install
 GOTEST=$(GOCMD) test
 GODEP=$(GOTEST) -i
 GOFMT=gofmt -w
-GOBUILDIMAGE=golang:1.26.4
+GOBUILDIMAGE=dhi.io/golang:1.27.2-alpine3.24-dev
 GOBUILDPATHINCONTAINER=/harbor
 
 # go build
@@ -324,7 +320,7 @@ endef
 
 # lint swagger doc
 SPECTRAL_IMAGENAME=$(IMAGENAMESPACE)/spectral
-SPECTRAL_VERSION=v6.14.2
+SPECTRAL_VERSION=v6.17.0
 SPECTRAL_IMAGE_BUILD_CMD=${DOCKERBUILD} -f ${TOOLSPATH}/spectral/Dockerfile --build-arg NODE=${NODEBUILDIMAGE} --build-arg SPECTRAL_VERSION=${SPECTRAL_VERSION} -t ${SPECTRAL_IMAGENAME}:$(SPECTRAL_VERSION) .
 SPECTRAL=$(RUNCONTAINER) $(SPECTRAL_IMAGENAME):$(SPECTRAL_VERSION)
 
@@ -333,7 +329,7 @@ lint_apis:
 	$(SPECTRAL) lint ./api/v2.0/swagger.yaml
 
 SWAGGER_IMAGENAME=$(IMAGENAMESPACE)/swagger
-SWAGGER_VERSION=v0.33.1
+SWAGGER_VERSION=v0.36.6
 SWAGGER=$(RUNCONTAINER) ${SWAGGER_IMAGENAME}:${SWAGGER_VERSION}
 SWAGGER_GENERATE_SERVER=${SWAGGER} generate server --template-dir=$(TOOLSPATH)/swagger/templates --exclude-main --additional-initialism=CVE --additional-initialism=GC --additional-initialism=OIDC
 SWAGGER_IMAGE_BUILD_CMD=${DOCKERBUILD} -f ${TOOLSPATH}/swagger/Dockerfile --build-arg GOLANG=${GOBUILDIMAGE} --build-arg SWAGGER_VERSION=${SWAGGER_VERSION} -t ${SWAGGER_IMAGENAME}:$(SWAGGER_VERSION) .
@@ -364,8 +360,8 @@ gen_apis: check_docker
 
 
 MOCKERY_IMAGENAME=$(IMAGENAMESPACE)/mockery
-MOCKERY_VERSION=v2.53.3
-MOCKERY=$(RUNCONTAINER)/src ${MOCKERY_IMAGENAME}:${MOCKERY_VERSION}
+MOCKERY_VERSION=v2.53.7
+MOCKERY=$(RUNCONTAINER)/src -e XDG_CACHE_HOME=/tmp ${MOCKERY_IMAGENAME}:${MOCKERY_VERSION}
 MOCKERY_IMAGE_BUILD_CMD=${DOCKERBUILD} -f ${TOOLSPATH}/mockery/Dockerfile --build-arg GOLANG=${GOBUILDIMAGE} --build-arg MOCKERY_VERSION=${MOCKERY_VERSION} -t ${MOCKERY_IMAGENAME}:$(MOCKERY_VERSION) .
 
 gen_mocks:
@@ -533,10 +529,30 @@ misspell:
 	@find . -type d \( -path ./tests \) -prune -o -name '*.go' -print | xargs misspell -error
 
 # golangci-lint binary installation or refer to https://golangci-lint.run/usage/install/#local-installation
-# curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.9.0
+# curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/main/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.14.0
+GOLANGCI_LINT_VERSION := v2.14.0
 GOPATH_BIN := $(firstword $(subst :, ,$(shell go env GOPATH)))/bin
 GOLANGCI_LINT := $(GOPATH_BIN)/golangci-lint
-lint:
+
+check_golangci_lint:
+	@if ! command -v $(GOLANGCI_LINT) >/dev/null 2>&1 && [ ! -x "$(GOLANGCI_LINT)" ]; then \
+		echo "Error: $(GOLANGCI_LINT) is not installed or not executable." >&2; \
+		echo "Please install it with:" >&2; \
+		echo "  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/main/install.sh | sh -s -- -b $(GOPATH_BIN) $(GOLANGCI_LINT_VERSION)" >&2; \
+		exit 1; \
+	fi
+	@current_version=$$($(GOLANGCI_LINT) --version 2>/dev/null); \
+	expected_version="$(patsubst v%,%,$(GOLANGCI_LINT_VERSION))"; \
+	if ! echo "$$current_version" | grep -qE "( |v)$${expected_version}( |$$)"; then \
+		echo "Error: $(GOLANGCI_LINT) version mismatch." >&2; \
+		echo "Expected: $(GOLANGCI_LINT_VERSION)" >&2; \
+		echo "Current:  $$current_version" >&2; \
+		echo "Please update or reinstall it with:" >&2; \
+		echo "  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/main/install.sh | sh -s -- -b $(GOPATH_BIN) $(GOLANGCI_LINT_VERSION)" >&2; \
+		exit 1; \
+	fi
+
+lint: check_golangci_lint
 	@echo checking lint
 	@echo $(GOLANGCI_LINT)
 	@cd ./src/; $(GOLANGCI_LINT) cache clean; $(GOLANGCI_LINT) -v run ./... --timeout=10m;

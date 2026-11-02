@@ -17,6 +17,7 @@ import {
     EventEmitter,
     ViewChild,
     Input,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { Retention, Rule, RuleMetadate } from '../retention';
 import { TagRetentionService } from '../tag-retention.service';
@@ -30,6 +31,7 @@ const MAX = 2100000000;
     selector: 'add-rule',
     templateUrl: './add-rule.component.html',
     styleUrls: ['./add-rule.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class AddRuleComponent {

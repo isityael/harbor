@@ -17,6 +17,7 @@ import { SignInService } from './sign-in.service';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('SignInService', () => {
@@ -25,7 +26,7 @@ describe('SignInService', () => {
             imports: [],
             providers: [
                 SignInService,
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    OnDestroy,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 const defaultInterval = 1000;
@@ -21,6 +26,7 @@ const defaultLeftTime = 5;
     selector: 'page-not-found',
     templateUrl: 'not-found.component.html',
     styleUrls: ['not-found.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class PageNotFoundComponent implements OnInit, OnDestroy {

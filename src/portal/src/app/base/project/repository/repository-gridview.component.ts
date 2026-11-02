@@ -22,6 +22,7 @@ import {
     Output,
     SimpleChanges,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import {
@@ -89,6 +90,7 @@ import {
     selector: 'hbr-repository-gridview',
     templateUrl: './repository-gridview.component.html',
     styleUrls: ['./repository-gridview.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class RepositoryGridviewComponent

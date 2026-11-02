@@ -18,6 +18,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -52,6 +53,7 @@ const RETRY_TIMES: number = 3;
     selector: 'hbr-sbom-bar',
     templateUrl: './sbom-scan-component.html',
     styleUrls: ['./scanning.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ResultSbomComponent implements OnInit, OnDestroy {

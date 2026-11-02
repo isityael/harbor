@@ -14,7 +14,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { UserService } from '../../base/left-side-nav/user/user.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { MessageService } from '../../shared/components/global-message/message.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SignUpPageComponent } from './sign-up-page.component';

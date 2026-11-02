@@ -15,11 +15,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ListProjectROComponent } from './list-project-ro.component';
 import { SharedTestingModule } from '../../shared.module';
 import { Project } from '../../../../../ng-swagger-gen/models/project';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 // mock a TestHostComponent for ListProjectROComponent
 @Component({
     template: ` <list-project-ro [projects]="projects"> </list-project-ro>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 class TestHostComponent {

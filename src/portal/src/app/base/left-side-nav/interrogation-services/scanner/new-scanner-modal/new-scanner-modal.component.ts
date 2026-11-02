@@ -11,7 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Output,
+    ViewChild,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Scanner } from '../scanner';
 import { NewScannerFormComponent } from '../new-scanner-form/new-scanner-form.component';
 import { ClrLoadingState } from '@clr/angular';
@@ -21,12 +27,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { InlineAlertComponent } from '../../../../../shared/components/inline-alert/inline-alert.component';
 import { ScannerService } from '../../../../../../../ng-swagger-gen/services/scanner.service';
 import { ScannerRegistrationReq } from '../../../../../../../ng-swagger-gen/models/scanner-registration-req';
-import { clone } from '../../../../../shared/units/utils';
+import { clone, equalEndpoint } from '../../../../../shared/units/utils';
 
 @Component({
     selector: 'new-scanner-modal',
     templateUrl: 'new-scanner-modal.component.html',
     styleUrls: ['../../../../../common.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class NewScannerModalComponent {
@@ -213,8 +220,10 @@ export class NewScannerModalComponent {
             return true;
         }
         if (
-            this.originValue.url !==
-            this.newScannerFormComponent.newScannerForm.get('url').value
+            !equalEndpoint(
+                this.originValue.url,
+                this.newScannerFormComponent.newScannerForm.get('url').value
+            )
         ) {
             return true;
         }

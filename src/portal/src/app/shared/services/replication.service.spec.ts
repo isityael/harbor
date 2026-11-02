@@ -21,6 +21,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('ReplicationService', () => {
@@ -33,7 +34,7 @@ describe('ReplicationService', () => {
                     provide: ReplicationService,
                     useClass: ReplicationDefaultService,
                 },
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

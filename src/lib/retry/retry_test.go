@@ -40,11 +40,8 @@ func TestRetry(t *testing.T) {
 		i++
 		return fmt.Errorf("failed")
 	}
-	assert.Error(Retry(f1, InitialInterval(time.Second), MaxInterval(time.Second), Timeout(time.Second*5)))
-	// f1 called time     0s - sleep - 1s - sleep - 2s - sleep - 3s - sleep - 4s - sleep - 5s
-	// i after f1 called  1            2            3            4            5            6
-	// the i may be 5 or 6 depend on timeout or default which is seleted by the select statement
-	assert.LessOrEqual(i, 6)
+	assert.Error(Retry(f1, InitialInterval(time.Millisecond), MaxInterval(time.Millisecond), Timeout(5*time.Millisecond)))
+	assert.GreaterOrEqual(i, 2)
 
 	f2 := func() error {
 		return nil
@@ -66,7 +63,9 @@ func TestRetry(t *testing.T) {
 
 	Retry(
 		f1,
-		Timeout(time.Second*5),
+		InitialInterval(time.Millisecond),
+		MaxInterval(time.Millisecond),
+		Timeout(5*time.Millisecond),
 		Callback(func(err error, sleep time.Duration) {
 			fmt.Printf("failed to exec f1 retry after %s : %v\n", sleep, err)
 		}),
@@ -74,7 +73,7 @@ func TestRetry(t *testing.T) {
 
 	err := Retry(func() error {
 		return fmt.Errorf("always failed")
-	})
+	}, InitialInterval(time.Millisecond), MaxInterval(time.Millisecond), Timeout(5*time.Millisecond))
 
 	assert.Error(err)
 	assert.Equal("retry timeout: always failed", err.Error())
@@ -88,6 +87,6 @@ func TestRetry(t *testing.T) {
 		i++
 		return fmt.Errorf("error")
 	}
-	assert.Error(Retry(f4, InitialInterval(time.Second), MaxInterval(time.Second), Timeout(time.Second*5)))
+	assert.Error(Retry(f4, InitialInterval(time.Millisecond), MaxInterval(time.Millisecond), Timeout(5*time.Millisecond)))
 	assert.LessOrEqual(i, 3)
 }

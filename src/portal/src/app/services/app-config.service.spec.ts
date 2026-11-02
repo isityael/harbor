@@ -23,6 +23,7 @@ import { CURRENT_BASE_HREF } from '../shared/units/utils';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('AppConfigService', () => {
@@ -41,7 +42,7 @@ describe('AppConfigService', () => {
             providers: [
                 AppConfigService,
                 { provide: CookieService, useValue: fakeCookieService },
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

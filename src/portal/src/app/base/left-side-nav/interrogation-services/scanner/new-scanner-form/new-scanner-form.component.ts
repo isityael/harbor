@@ -17,6 +17,7 @@ import {
     ElementRef,
     OnDestroy,
     ViewChild,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import {
     UntypedFormBuilder,
@@ -33,11 +34,13 @@ import {
     switchMap,
 } from 'rxjs/operators';
 import { ScannerService } from '../../../../../../../ng-swagger-gen/services/scanner.service';
+import { equalEndpoint } from '../../../../../shared/units/utils';
 
 @Component({
     selector: 'new-scanner-form',
     templateUrl: 'new-scanner-form.component.html',
     styleUrls: ['new-scanner-form.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class NewScannerFormComponent implements AfterViewInit, OnDestroy {
@@ -140,7 +143,7 @@ export class NewScannerFormComponent implements AfterViewInit, OnDestroy {
                         if (
                             this.isEdit &&
                             this.originValue &&
-                            this.originValue.url === endpointUrl
+                            equalEndpoint(this.originValue.url, endpointUrl)
                         ) {
                             return false;
                         }
@@ -168,8 +171,10 @@ export class NewScannerFormComponent implements AfterViewInit, OnDestroy {
                         if (response && response.length > 0) {
                             response.forEach(s => {
                                 if (
-                                    s.url ===
-                                    this.newScannerForm.get('url').value
+                                    equalEndpoint(
+                                        s.url,
+                                        this.newScannerForm.get('url').value
+                                    )
                                 ) {
                                     this.isEndpointUrlExisting = true;
                                     return;
@@ -194,12 +199,10 @@ export class NewScannerFormComponent implements AfterViewInit, OnDestroy {
         }
     }
     get isNameValid(): boolean {
-        if (
-            !(
-                this.newScannerForm.get('name').dirty ||
-                this.newScannerForm.get('name').touched
-            )
-        ) {
+        if (!(
+            this.newScannerForm.get('name').dirty ||
+            this.newScannerForm.get('name').touched
+        )) {
             return true;
         }
         if (this.checkOnGoing) {
@@ -226,12 +229,10 @@ export class NewScannerFormComponent implements AfterViewInit, OnDestroy {
         return true;
     }
     get isEndpointValid(): boolean {
-        if (
-            !(
-                this.newScannerForm.get('url').dirty ||
-                this.newScannerForm.get('url').touched
-            )
-        ) {
+        if (!(
+            this.newScannerForm.get('url').dirty ||
+            this.newScannerForm.get('url').touched
+        )) {
             return true;
         }
         if (this.checkEndpointOnGoing) {

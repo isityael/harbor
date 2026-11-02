@@ -11,7 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    OnInit,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, finalize, switchMap } from 'rxjs/operators';
 import {
@@ -28,6 +33,7 @@ import { Project } from 'ng-swagger-gen/models/project';
     selector: 'hbr-image-name-input',
     templateUrl: './image-name-input.component.html',
     styleUrls: ['./image-name-input.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 })
 export class ImageNameInputComponent implements OnInit, OnDestroy {

@@ -23,6 +23,7 @@ import { CURRENT_BASE_HREF } from '../../units/utils';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('GlobalSearchService', () => {
@@ -35,7 +36,7 @@ describe('GlobalSearchService', () => {
             imports: [],
             providers: [
                 GlobalSearchService,
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         });

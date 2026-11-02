@@ -1,0 +1,427 @@
+# Harbor components — build, push, scan, and sign GHCR images.
+# Triggered by fork release tags; VERSION defines the accepted release series.
+#
+# Images pushed to ghcr.io/isityael only:
+#   nginx-photon, harbor-portal, harbor-core, harbor-jobservice,
+#   registry-photon, harbor-registryctl, harbor-db,
+#   harbor-trivy-adapter, harbor-exporter, valkey-photon
+#
+# Required secrets:
+#   github_username, github_token   — GHCR auth (GitHub PAT with packages:write)
+#   cosign_key, cosign_password     — cosign signing
+#   notation_key, notation_cert     — notation signing
+when:
+  - event: tag
+    ref: "refs/tags/v*-yael.*"
+
+clone:
+  git:
+    image: woodpeckerci/plugin-git
+    settings:
+      lfs: false
+      tags: false
+
+# Mount the pipeline PVC at its working directory. This avoids a non-root
+# permission-init container having to create /woodpecker/src on NFS.
+workspace:
+  base: /woodpecker
+  path: /
+
+# The ten images are independent. They build three at a time (the three
+# slowest first), because every pod of a workflow is pinned to one worker and
+# each buildx pod may use up to 4Gi. Serial builds took 22-36 min.
+steps:
+  - name: validate-version
+    depends_on: []
+    image: "dhi.io/busybox:1.37.0-debian13"
+    commands:
+      - test -n "$CI_COMMIT_TAG"
+      - |
+        series="$$(sed -n 's/^\(v[0-9][0-9.]*-yael\)\.[0-9][0-9]*$/\1/p' VERSION)"
+        test -n "$${series}"
+        case "$CI_COMMIT_TAG" in
+          "$${series}".*) ;;
+          *) echo "Release tag does not match VERSION series $${series}: $CI_COMMIT_TAG"; exit 1 ;;
+        esac
+        revision="$${CI_COMMIT_TAG##*.}"
+        case "$${revision}" in
+          ''|*[!0-9]*) echo "Release revision must be numeric: $CI_COMMIT_TAG"; exit 1 ;;
+        esac
+
+  - name: build-nginx
+    depends_on: [build-registryctl, build-exporter, build-registry]
+    image: woodpeckerci/plugin-docker-buildx:6.1.2
+    privileged: true
+    settings:
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/nginx-photon
+      dockerfile: build/docker/Dockerfile.nginx
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/nginx-photon:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/nginx-photon:buildcache,mode=max,ignore-error=true'
+      platforms: linux/amd64
+      logins:
+        - registry: git.m0sh1.cc
+          username:
+            from_secret: forgejo_public_package_username
+          password:
+            from_secret: forgejo_public_package_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-portal
+    depends_on: [validate-version]
+    image: woodpeckerci/plugin-docker-buildx:6.1.2
+    privileged: true
+    settings:
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-portal
+      dockerfile: build/docker/Dockerfile.portal
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-portal:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-portal:buildcache,mode=max,ignore-error=true'
+      platforms: linux/amd64
+      logins:
+        - registry: git.m0sh1.cc
+          username:
+            from_secret: forgejo_public_package_username
+          password:
+            from_secret: forgejo_public_package_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-core
+    depends_on: [validate-version]
+    image: woodpeckerci/plugin-docker-buildx:6.1.2
+    privileged: true
+    settings:
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-core
+      dockerfile: build/docker/Dockerfile.core
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-core:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-core:buildcache,mode=max,ignore-error=true'
+      platforms: linux/amd64
+      logins:
+        - registry: git.m0sh1.cc
+          username:
+            from_secret: forgejo_public_package_username
+          password:
+            from_secret: forgejo_public_package_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      build_args:
+        - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
+        - "RELEASE_VERSION=${CI_COMMIT_TAG}"
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-jobservice
+    depends_on: [validate-version]
+    image: woodpeckerci/plugin-docker-buildx:6.1.2
+    privileged: true
+    settings:
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-jobservice
+      dockerfile: build/docker/Dockerfile.jobservice
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-jobservice:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-jobservice:buildcache,mode=max,ignore-error=true'
+      platforms: linux/amd64
+      logins:
+        - registry: git.m0sh1.cc
+          username:
+            from_secret: forgejo_public_package_username
+          password:
+            from_secret: forgejo_public_package_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      build_args:
+        - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
+        - "RELEASE_VERSION=${CI_COMMIT_TAG}"
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-registry
+    depends_on: [build-portal, build-core, build-jobservice]
+    image: woodpeckerci/plugin-docker-buildx:6.1.2
+    privileged: true
+    settings:
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/registry-photon
+      dockerfile: build/docker/Dockerfile.registry
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/registry-photon:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/registry-photon:buildcache,mode=max,ignore-error=true'
+      platforms: linux/amd64
+      logins:
+        - registry: git.m0sh1.cc
+          username:
+            from_secret: forgejo_public_package_username
+          password:
+            from_secret: forgejo_public_package_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-registryctl
+    depends_on: [build-portal, build-core, build-jobservice]
+    image: woodpeckerci/plugin-docker-buildx:6.1.2
+    privileged: true
+    settings:
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-registryctl
+      dockerfile: build/docker/Dockerfile.registryctl
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-registryctl:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-registryctl:buildcache,mode=max,ignore-error=true'
+      platforms: linux/amd64
+      logins:
+        - registry: git.m0sh1.cc
+          username:
+            from_secret: forgejo_public_package_username
+          password:
+            from_secret: forgejo_public_package_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      build_args:
+        - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
+        - "RELEASE_VERSION=${CI_COMMIT_TAG}"
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-db
+    depends_on: [build-registryctl, build-exporter, build-registry]
+    image: woodpeckerci/plugin-docker-buildx:6.1.2
+    privileged: true
+    settings:
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-db
+      dockerfile: build/docker/Dockerfile.db
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-db:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-db:buildcache,mode=max,ignore-error=true'
+      platforms: linux/amd64
+      logins:
+        - registry: git.m0sh1.cc
+          username:
+            from_secret: forgejo_public_package_username
+          password:
+            from_secret: forgejo_public_package_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-trivy-adapter
+    depends_on: [build-registryctl, build-exporter, build-registry]
+    image: woodpeckerci/plugin-docker-buildx:6.1.2
+    privileged: true
+    settings:
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-trivy-adapter
+      dockerfile: build/docker/Dockerfile.trivy-adapter
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-trivy-adapter:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-trivy-adapter:buildcache,mode=max,ignore-error=true'
+      platforms: linux/amd64
+      logins:
+        - registry: git.m0sh1.cc
+          username:
+            from_secret: forgejo_public_package_username
+          password:
+            from_secret: forgejo_public_package_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-exporter
+    depends_on: [build-portal, build-core, build-jobservice]
+    image: woodpeckerci/plugin-docker-buildx:6.1.2
+    privileged: true
+    settings:
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/harbor-exporter
+      dockerfile: build/docker/Dockerfile.exporter
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/harbor-exporter:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/harbor-exporter:buildcache,mode=max,ignore-error=true'
+      platforms: linux/amd64
+      logins:
+        - registry: git.m0sh1.cc
+          username:
+            from_secret: forgejo_public_package_username
+          password:
+            from_secret: forgejo_public_package_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      build_args:
+        - "GITCOMMIT=${CI_COMMIT_SHA:0:8}"
+        - "RELEASE_VERSION=${CI_COMMIT_TAG}"
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: build-valkey
+    depends_on: [build-registryctl, build-exporter, build-registry]
+    image: woodpeckerci/plugin-docker-buildx:6.1.2
+    privileged: true
+    settings:
+      registry: git.m0sh1.cc
+      repo: git.m0sh1.cc/isityael/valkey-photon
+      dockerfile: build/docker/Dockerfile.valkey
+      context: .
+      tags: ["candidate-${CI_COMMIT_TAG}"]
+      cache_from: 'type=registry\,ref=git.m0sh1.cc/isityael/valkey-photon:buildcache'
+      cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/valkey-photon:buildcache,mode=max,ignore-error=true'
+      platforms: linux/amd64
+      logins:
+        - registry: git.m0sh1.cc
+          username:
+            from_secret: forgejo_public_package_username
+          password:
+            from_secret: forgejo_public_package_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: "mode=max"
+      buildkit_driveropt: "network=host"
+
+  - name: trivy-scan
+    depends_on: [build-portal, build-core, build-jobservice, build-registryctl, build-exporter, build-registry, build-trivy-adapter, build-db, build-valkey, build-nginx]
+    image: "aquasec/trivy:0.76.1"
+    environment:
+      TRIVY_USERNAME:
+        from_secret: forgejo_public_package_username
+      TRIVY_PASSWORD:
+        from_secret: forgejo_public_package_token
+    commands:
+      - apk add --no-cache python3 git
+      - python3 .ci/test-distribution-vex.py --fetch-source
+      - |
+        # Scan every image before failing so one release run reports all
+        # CRITICAL findings, not just the first image that has one.
+        failed=""
+        for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
+          ref="git.m0sh1.cc/isityael/$${image}:candidate-${CI_COMMIT_TAG}"
+          set --
+          case "$${image}" in
+            registry-photon|harbor-registryctl)
+              set -- --vex build/docker/distribution.openvex.json ;;
+          esac
+          trivy image --scanners vuln --skip-version-check --exit-code 1 --severity CRITICAL --ignore-unfixed "$@" "$${ref}" || failed="$${failed} $${image}"
+          trivy image --scanners vuln --skip-version-check --exit-code 0 --severity HIGH --ignore-unfixed "$@" "$${ref}"
+        done
+        if [ -n "$${failed}" ]; then
+          echo "CRITICAL vulnerabilities in:$${failed}" >&2
+          exit 1
+        fi
+
+  - name: promote-forgejo
+    depends_on: [trivy-scan]
+    image: "dhi.io/crane:0.22.1-debian13-dev"
+    environment:
+      REGISTRY_USERNAME:
+        from_secret: forgejo_public_package_username
+      REGISTRY_PASSWORD:
+        from_secret: forgejo_public_package_token
+    commands:
+      - crane auth login git.m0sh1.cc -u "$${REGISTRY_USERNAME}" -p "$${REGISTRY_PASSWORD}"
+      - |
+        for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
+          candidate="git.m0sh1.cc/isityael/$${image}:candidate-${CI_COMMIT_TAG}"
+          crane cp "$${candidate}" "git.m0sh1.cc/isityael/$${image}:${CI_COMMIT_TAG}"
+          crane cp "$${candidate}" "git.m0sh1.cc/isityael/$${image}:latest"
+        done
+
+  - name: cosign-sign
+    depends_on: [promote-forgejo]
+    image: "dhi.io/cosign:3.1.4-debian13-dev"
+    environment:
+      COSIGN_EXPERIMENTAL: "1"
+      COSIGN_KEY:
+        from_secret: cosign_key
+      COSIGN_PASSWORD:
+        from_secret: cosign_password
+      REGISTRY_USERNAME:
+        from_secret: forgejo_public_package_username
+      REGISTRY_PASSWORD:
+        from_secret: forgejo_public_package_token
+    commands:
+      - echo "$COSIGN_KEY" > /tmp/cosign.key
+      - cosign login git.m0sh1.cc -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
+      - |
+        for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
+          cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 "git.m0sh1.cc/isityael/$${image}:${CI_COMMIT_TAG}"
+        done
+      - rm -f /tmp/cosign.key
+
+  - name: notation-sign
+    depends_on: [cosign-sign]
+    image: "dhi.io/notation:1.3.2-debian13-dev"
+    environment:
+      NOTATION_KEY:
+        from_secret: notation_key
+      NOTATION_CERT:
+        from_secret: notation_cert
+      REGISTRY_USERNAME:
+        from_secret: forgejo_public_package_username
+      REGISTRY_PASSWORD:
+        from_secret: forgejo_public_package_token
+    commands:
+      - mkdir -p /tmp/notation $HOME/.config/notation $HOME/.docker
+      - echo "$NOTATION_KEY" > /tmp/notation/harbor.key
+      - echo "$NOTATION_CERT" > /tmp/notation/harbor.crt
+      - |
+        cat > $HOME/.config/notation/signingkeys.json <<EOF
+        {"default":"harbor","keys":[{"name":"harbor","keyPath":"/tmp/notation/harbor.key","certPath":"/tmp/notation/harbor.crt"}]}
+        EOF
+      - printf '{"auths":{"git.m0sh1.cc":{"auth":"%s"}}}' "$(printf '%s:%s' "$REGISTRY_USERNAME" "$REGISTRY_PASSWORD" | base64 -w0)" > $HOME/.docker/config.json
+      - |
+        for image in nginx-photon harbor-portal harbor-core harbor-jobservice registry-photon harbor-registryctl harbor-db harbor-trivy-adapter harbor-exporter valkey-photon; do
+          notation sign --force-referrers-tag=false --key harbor "git.m0sh1.cc/isityael/$${image}:${CI_COMMIT_TAG}"
+        done
+      - rm -rf /tmp/notation $HOME/.docker/config.json

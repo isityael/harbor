@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 import { NewUserFormComponent } from './new-user-form.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {
@@ -27,6 +28,7 @@ import { SessionService } from '../../services/session.service';
 import {
     provideHttpClient,
     withInterceptorsFromDi,
+    withXhr,
 } from '@angular/common/http';
 
 describe('NewUserFormComponent', () => {
@@ -50,7 +52,7 @@ describe('NewUserFormComponent', () => {
             providers: [
                 { provide: SessionService, useValue: mockSessionService },
                 TranslateService,
-                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClient(withXhr(), withInterceptorsFromDi()),
                 provideHttpClientTesting(),
             ],
         }).compileComponents();

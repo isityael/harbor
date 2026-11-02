@@ -18,9 +18,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
     TranslateNoOpLoader,
     TranslateLoader,
-    TranslateModule,
     TranslateService,
 } from '@ngx-translate/core';
+import { TranslateModule } from '@harbor/translate-module';
 
 describe('ArtifactLabelComponent', () => {
     let component: ArtifactLabelComponent;
