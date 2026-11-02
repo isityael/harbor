@@ -1,6 +1,6 @@
-FROM dhi.io/postgres:15.19-debian13-dev@sha256:40f64638effe0fc39ce9f41c77c9bdf5d72792478011e9615a5f8a416e0d215e AS pg15
+FROM dhi.io/postgres:15.19-debian13-dev AS pg15
 
-FROM dhi.io/postgres:18.6-debian13-dev@sha256:32136c48acd8ef29bed630402aa939ac677409a28353330365881dd9f7df722e
+FROM dhi.io/postgres:18.6-debian13-dev
 
 ENV PGDATA=/var/lib/postgresql/data
 
