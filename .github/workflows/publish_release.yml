@@ -7,6 +7,8 @@ on:
 
 jobs:
   release:
+    # Fork releases are published by Woodpecker to Forgejo.
+    if: github.repository == 'goharbor/harbor'
     runs-on: cncf-ubuntu-16-64-x86
     permissions:
       contents: write   # Required for creating GitHub releases and uploading assets
