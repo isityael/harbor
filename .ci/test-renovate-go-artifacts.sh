@@ -4,7 +4,7 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 config="${repo_root}/renovate.json"
 
-grep -Fq '"postUpdateOptions": ["gomodTidyE"]' "${config}" || {
+tr -d '[:space:]' < "${config}" | grep -Fq '"postUpdateOptions":["gomodTidyE"]' || {
   echo "Renovate must use error-tolerant Go module tidying for generated Harbor API packages." >&2
   exit 1
 }

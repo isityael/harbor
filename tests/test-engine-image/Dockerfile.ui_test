@@ -1,5 +1,5 @@
 #ubuntm based image
-FROM dhi.io/debian-base:trixie-debian13-dev@sha256:cc4e05ff415ee2d83918f2af45c737983209924ef7362c53f00cfcdaa1c94326
+FROM dhi.io/debian-base:trixie-debian13-dev
 ENV TZ=Asia/Shanghai \
     DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8

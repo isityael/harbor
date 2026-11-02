@@ -14,7 +14,9 @@
     "./common/...",
     "./cmd/exporter"
   ],
-  "postUpdateOptions": ["gomodTidyE"],
+  "postUpdateOptions": [
+    "gomodTidyE"
+  ],
   "labels": [
     "release-note/bump-version"
   ],
@@ -75,12 +77,16 @@
       "matchUpdateTypes": [
         "digest"
       ],
-      "enabled": true
+      "enabled": false
     },
     {
       "description": "harbor-db pairs an upgrade-source and a runtime PostgreSQL major with the entrypoint's \"15\" \"18\" arguments (.ci/test-db-image-pins.sh); a major move is a deliberate upgrade, never a Renovate bump",
-      "matchPackageNames": ["dhi.io/postgres"],
-      "matchUpdateTypes": ["major"],
+      "matchPackageNames": [
+        "dhi.io/postgres"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
     },
     {
@@ -270,10 +276,11 @@
       "matchUpdateTypes": [
         "digest"
       ],
-      "automerge": true
+      "automerge": true,
+      "enabled": false
     },
     {
-      "description": "Major Go module updates — separate PRs",
+      "description": "Major Go module updates \u2014 separate PRs",
       "matchManagers": [
         "gomod"
       ],
@@ -282,7 +289,7 @@
       ]
     },
     {
-      "description": "Major npm updates — separate PRs",
+      "description": "Major npm updates \u2014 separate PRs",
       "matchManagers": [
         "npm"
       ],
@@ -292,14 +299,38 @@
     },
     {
       "description": "Kubernetes 0.37 uses structured-merge-diff/v6; newer kube-openapi requires v7. Lift this cap with the Kubernetes API migration.",
-      "matchPackageNames": ["k8s.io/kube-openapi"],
+      "matchPackageNames": [
+        "k8s.io/kube-openapi"
+      ],
       "allowedVersions": "<=v0.0.0-20260821135717-be32def86098"
     },
     {
       "description": "The gopkg.in v1 module path cannot accept v2 tags; newer majors require an import migration.",
-      "matchDatasources": ["go"],
-      "matchPackageNames": ["gopkg.in/square/go-jose.v1"],
+      "matchDatasources": [
+        "go"
+      ],
+      "matchPackageNames": [
+        "gopkg.in/square/go-jose.v1"
+      ],
       "allowedVersions": "<2.0.0"
+    },
+    {
+      "description": "Use container version tags only.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "pinDigests": false
+    },
+    {
+      "description": "Do not create container digest pins or digest refreshes.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "digest",
+        "pinDigest"
+      ],
+      "enabled": false
     }
   ],
   "ignorePaths": [
@@ -307,5 +338,9 @@
     "make/photon/**",
     "src/pkg/chart/testdata/**",
     "tools/migrate_chart/**"
+  ],
+  "pinDigests": false,
+  "ignorePresets": [
+    "docker:pinDigests"
   ]
 }
