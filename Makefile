@@ -132,9 +132,9 @@ PREPARE_VERSION_NAME=versions
 #versions
 REGISTRYVERSION=v2.8.3-patch-redis
 TRIVYVERSION=v0.76.0
-TRIVYADAPTERVERSION=v0.39.1
+TRIVYADAPTERVERSION=v0.40.0-rc1
 
-NODEBUILDIMAGE=dhi.io/node:26.11.1-debian13-dev
+NODEBUILDIMAGE=dhi.io/node:26.13.0-debian13-dev
 
 # version of registry for pulling the source code
 REGISTRY_SRC_TAG=v2.8.3-harbor.3-rc.1
@@ -176,7 +176,7 @@ GOINSTALL=$(GOCMD) install
 GOTEST=$(GOCMD) test
 GODEP=$(GOTEST) -i
 GOFMT=gofmt -w
-GOBUILDIMAGE=dhi.io/golang:1.27.2-alpine3.24-dev
+GOBUILDIMAGE=golang:1.27.2
 GOBUILDPATHINCONTAINER=/harbor
 
 # go build
