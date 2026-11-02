@@ -1,4 +1,4 @@
-FROM dhi.io/python:3.14.8-debian13-dev
+FROM dhi.io/python:3.15.2-1-debian13-dev
 
 ARG pip_index_url=https://pypi.org/simple
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
