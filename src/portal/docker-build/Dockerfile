@@ -1,4 +1,4 @@
-FROM dhi.io/node:26.11.1-debian13-dev AS builder
+FROM dhi.io/node:26.13.0-0-debian13-dev AS builder
 
 WORKDIR /build_dir
 
@@ -19,7 +19,7 @@ RUN python3 -c 'import sys, yaml, json; y=yaml.safe_load(sys.stdin.read()); prin
 RUN cd app-swagger-ui && npm ci
 RUN cd app-swagger-ui && npm run build
 
-FROM dhi.io/nginx:1.31.6-debian13-dev
+FROM dhi.io/nginx:1.31.8-debian13-dev
 
 USER 0
 RUN apt-get update && apt-get install -y --no-install-recommends curl \

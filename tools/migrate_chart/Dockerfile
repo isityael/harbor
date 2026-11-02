@@ -1,4 +1,4 @@
-FROM dhi.io/python:3.14.8-debian13-dev
+FROM dhi.io/python:3.15.2-1-debian13-dev
 ARG TARGETARCH
 
 ENV HELM_EXPERIMENTAL_OCI=1
