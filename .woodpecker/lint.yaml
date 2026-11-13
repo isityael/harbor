@@ -16,7 +16,7 @@ when:
 
 clone:
   git:
-    image: woodpeckerci/plugin-git
+    image: woodpeckerci/plugin-git:2.11.0
     settings:
       lfs: false
       recursive: false
