@@ -9,19 +9,19 @@ DNS_VERSION=v1.1.73
 # renovate: datasource=go depName=github.com/prometheus/client_golang
 PROMETHEUS_VERSION=v1.25.0
 # renovate: datasource=go depName=golang.org/x/crypto
-X_CRYPTO_VERSION=v0.58.0
+X_CRYPTO_VERSION=v0.59.0
 # renovate: datasource=go depName=golang.org/x/net
-X_NET_VERSION=v0.61.0
+X_NET_VERSION=v0.62.0
 # renovate: datasource=go depName=golang.org/x/oauth2
-OAUTH2_VERSION=v0.37.0
+OAUTH2_VERSION=v0.38.0
 # renovate: datasource=go depName=golang.org/x/sys
-X_SYS_VERSION=v0.49.0
+X_SYS_VERSION=v0.50.0
 # renovate: datasource=go depName=golang.org/x/text
-X_TEXT_VERSION=v0.43.0
+X_TEXT_VERSION=v0.44.0
 # renovate: datasource=go depName=google.golang.org/api
-GOOGLE_API_VERSION=v0.308.0
+GOOGLE_API_VERSION=v0.314.0
 # renovate: datasource=go depName=google.golang.org/grpc
-GRPC_VERSION=v1.84.0
+GRPC_VERSION=v1.85.0
 # renovate: datasource=go depName=gopkg.in/square/go-jose.v1
 JOSE_VERSION=v1.1.2
 

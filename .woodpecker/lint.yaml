@@ -27,13 +27,13 @@ steps:
   # harbor-db's image pins are only built at release time, so without this a
   # PR that moves the PostgreSQL upgrade stage to the wrong major merged green.
   - name: db-upgrade-compatibility
-    image: dhi.io/golang:1.27.3-debian13-dev
+    image: dhi.io/golang:1.27.4-debian13-dev
     commands:
       - bash .ci/test-db-image-pins.sh
 
   # Validate clean Linux npm resolution before release-only image builds.
   - name: portal-lockfiles
-    image: dhi.io/node:26.13.0-0-debian13-dev
+    image: dhi.io/node:26.13.1-0-debian13-dev
     commands:
       - npm install --global --force npm@12.2.0
       - cd src/portal
@@ -42,7 +42,7 @@ steps:
       - npm ci --dry-run --ignore-scripts --no-audit --no-fund
 
   - name: renovate-go-artifacts
-    image: dhi.io/golang:1.27.3-debian13-dev
+    image: dhi.io/golang:1.27.4-debian13-dev
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
@@ -52,7 +52,7 @@ steps:
       - bash .ci/test-renovate-go-artifacts.sh
 
   - name: distribution-build
-    image: dhi.io/golang:1.27.3-debian13-dev
+    image: dhi.io/golang:1.27.4-debian13-dev
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
@@ -73,7 +73,7 @@ steps:
       - python3 .ci/test-distribution-build.py
 
   - name: generate-swagger
-    image: dhi.io/golang:1.27.3-debian13-dev
+    image: dhi.io/golang:1.27.4-debian13-dev
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:
@@ -98,7 +98,7 @@ steps:
         --target src/server/v2.0
 
   - name: build-check
-    image: dhi.io/golang:1.27.3-debian13-dev
+    image: dhi.io/golang:1.27.4-debian13-dev
     volumes:
       - woodpecker-pipeline-cache:/woodpecker/cache
     environment:

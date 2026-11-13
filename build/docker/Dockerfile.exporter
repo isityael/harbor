@@ -1,5 +1,5 @@
 # Multi-stage Dockerfile for harbor-exporter built from isityael/harbor.
-ARG GO_IMAGE=dhi.io/golang:1.27.3-alpine3.24-dev
+ARG GO_IMAGE=dhi.io/golang:1.27.4-alpine3.24-dev
 ARG RUNTIME_IMAGE=dhi.io/alpine-base:3.24-alpine3.24
 
 FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS builder

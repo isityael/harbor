@@ -332,7 +332,7 @@ steps:
 
   - name: trivy-scan
     depends_on: [build-portal, build-core, build-jobservice, build-registryctl, build-exporter, build-registry, build-trivy-adapter, build-db, build-valkey, build-nginx]
-    image: "aquasec/trivy:0.76.1"
+    image: "aquasec/trivy:0.76.2"
     environment:
       TRIVY_USERNAME:
         from_secret: forgejo_public_package_username
