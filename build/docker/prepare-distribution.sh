@@ -11,7 +11,7 @@ PROMETHEUS_VERSION=v1.25.0
 # renovate: datasource=go depName=golang.org/x/crypto
 X_CRYPTO_VERSION=v0.59.0
 # renovate: datasource=go depName=golang.org/x/net
-X_NET_VERSION=v0.62.0
+X_NET_VERSION=v0.63.0
 # renovate: datasource=go depName=golang.org/x/oauth2
 OAUTH2_VERSION=v0.38.0
 # renovate: datasource=go depName=golang.org/x/sys
@@ -19,7 +19,7 @@ X_SYS_VERSION=v0.50.0
 # renovate: datasource=go depName=golang.org/x/text
 X_TEXT_VERSION=v0.44.0
 # renovate: datasource=go depName=google.golang.org/api
-GOOGLE_API_VERSION=v0.314.0
+GOOGLE_API_VERSION=v0.316.0
 # renovate: datasource=go depName=google.golang.org/grpc
 GRPC_VERSION=v1.85.0
 # renovate: datasource=go depName=gopkg.in/square/go-jose.v1
